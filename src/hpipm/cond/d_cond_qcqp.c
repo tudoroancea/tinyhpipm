@@ -6,7 +6,7 @@
 #include "blasfeo/blasfeo_d_blas.h"
 #include "blasfeo/blasfeo_target.h"
 
-#include "hpipm/auxiiliary/aux_mem.h"
+#include "hpipm/auxiliary/aux_mem.h"
 #include "hpipm/cond/d_cond.h"
 #include "hpipm/cond/d_cond_aux.h"
 #include "hpipm/cond/d_cond_qcqp.h"

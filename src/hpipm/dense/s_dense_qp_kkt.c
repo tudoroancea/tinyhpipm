@@ -6,13 +6,13 @@
 #include "blasfeo/blasfeo_s_aux_ext_dep.h"
 #include "blasfeo/blasfeo_s_blas.h"
 #include "blasfeo/blasfeo_target.h"
-#include "hpipm/core/s_core_qp_ipm.h"
-#include "hpipm/core/s_core_qp_ipm_aux.h"
 #include "hpipm/dense/s_dense_qp.h"
 #include "hpipm/dense/s_dense_qp_dim.h"
 #include "hpipm/dense/s_dense_qp_ipm.h"
 #include "hpipm/dense/s_dense_qp_res.h"
 #include "hpipm/dense/s_dense_qp_sol.h"
+#include "hpipm/ipm_core/s_core_qp_ipm.h"
+#include "hpipm/ipm_core/s_core_qp_ipm_aux.h"
 
 
 #define AXPY blasfeo_saxpy
@@ -97,6 +97,4 @@
 #define DENSE_QP_COMPUTE_OBJ s_dense_qp_compute_obj
 
 
-
 #include "x_dense_qp_kkt.c"
-

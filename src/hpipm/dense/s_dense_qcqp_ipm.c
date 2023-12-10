@@ -11,8 +11,8 @@
 
 #include "hpipm/auxiliary/aux_mem.h"
 #include "hpipm/auxiliary/aux_string.h"
-#include "hpipm/ipm_code/s_core_qp_ipm.h"
-#include "hpipm/ipm_code/s_core_qp_ipm_aux.h"
+#include "hpipm/ipm_core/s_core_qp_ipm.h"
+#include "hpipm/ipm_core/s_core_qp_ipm_aux.h"
 #include "hpipm/dense/s_dense_qcqp.h"
 #include "hpipm/dense/s_dense_qcqp_dim.h"
 #include "hpipm/dense/s_dense_qcqp_ipm.h"

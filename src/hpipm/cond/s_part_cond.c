@@ -2,19 +2,18 @@
 #include <stdlib.h>
 
 #include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_d_aux.h"
-#include "blasfeo/blasfeo_d_blas.h"
+#include "blasfeo/blasfeo_s_aux.h"
+#include "blasfeo/blasfeo_s_blas.h"
 #include "blasfeo/blasfeo_target.h"
 
-#include "hpipm/cond/d_cond.h"
-#include "hpipm/cond/d_cond_aux.h"
-#include "hpipm/cond/d_part_cond.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
-
+#include "hpipm/cond/s_cond.h"
+#include "hpipm/cond/s_cond_aux.h"
+#include "hpipm/cond/s_part_cond.h"
+#include "hpipm/dense/s_dense_qp.h"
+#include "hpipm/dense/s_dense_qp_sol.h"
+#include "hpipm/ocp/s_ocp_qp.h"
+#include "hpipm/ocp/s_ocp_qp_dim.h"
+#include "hpipm/ocp/s_ocp_qp_sol.h"
 
 
 #define COND_B s_cond_b
@@ -72,6 +71,4 @@
 #define PART_COND_QP_UPDATE s_part_cond_qp_update
 
 
-
 #include "x_part_cond.c"
-

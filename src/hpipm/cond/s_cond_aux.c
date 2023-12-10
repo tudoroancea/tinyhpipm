@@ -16,10 +16,9 @@
 #define SINGLE_PRECISION
 
 
-
 #define AXPY blasfeo_saxpy
-#define CONs_QP_ARG s_cons_qp_arg
-#define CONs_QP_WS s_cons_qp_ws
+#define COND_QP_ARG s_cond_qp_arg
+#define COND_QP_WS s_cond_qp_ws
 #define DENSE_QP_SOL s_dense_qp_sol
 #define DIAEX blasfeo_sdiaex
 #define GEAD blasfeo_sgead
@@ -48,26 +47,24 @@
 #define TRCP_L blasfeo_strcp_l
 #define TRTR_L blasfeo_strtr_l
 #define TRMM_RLNN blasfeo_strmm_rlnn
-#define VECAs_SP blasfeo_svecas_sp
+#define VECAD_SP blasfeo_svecad_sp
 #define VECCP blasfeo_sveccp
 #define VECSE blasfeo_svecse
 
-#define CONs_BABT s_cons_BAbt
-#define CONs_BAT s_cons_BAt
-#define CONs_B s_cons_b
-#define CONs_RSQRQ s_cons_RSQrq
-#define CONs_RSQ s_cons_RSQ
-#define CONs_RQ s_cons_rq
-#define CONs_DCTD s_cons_DCtd
-#define CONs_DCT s_cons_DCt
-#define CONs_D s_cons_d
-#define EXPANs_SOL s_expans_sol
-#define EXPANs_PRIMAL_SOL s_expans_primal_sol
-#define UPDATE_CONs_BABT s_update_cons_BAbt
-#define UPDATE_CONs_RSQRQ_N2NX3 s_update_cons_RSQrq_N2nx3
-#define UPDATE_CONs_DCTD s_update_cons_DCtd
+#define COND_BABT s_cond_BAbt
+#define COND_BAT s_cond_BAt
+#define COND_B s_cond_b
+#define COND_RSQRQ s_cond_RSQrq
+#define COND_RSQ s_cond_RSQ
+#define COND_RQ s_cond_rq
+#define COND_DCTD s_cond_DCtd
+#define COND_DCT s_cond_DCt
+#define COND_D s_cond_d
+#define EXPAND_SOL s_expand_sol
+#define EXPAND_PRIMAL_SOL s_expand_primal_sol
+#define UPDATE_COND_BABT s_update_cond_BAbt
+#define UPDATE_COND_RSQRQ_N2NX3 s_update_cond_RSQrq_N2nx3
+#define UPDATE_COND_DCTD s_update_cond_DCtd
 
 
-
-#include "x_cons_aux.c"
-
+#include "x_cond_aux.c"
