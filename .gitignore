@@ -1,0 +1,35 @@
+# IDE configuration files
+.vscode
+.idea
+
+# compilation output
+build
+install
+*.o
+*.out
+*.s
+libhpipm.*
+libblasfeo.*
+hpipm_target.h
+blasfeo_target.h
+
+# latex generated files
+*.eps
+*.aux
+*.bbl
+*.blg
+*.toc
+*.log
+*.synctex.gz
+
+
+# python generated files
+__pycache__
+*.pyc
+*egg-info
+
+# misc
+.DS_Store
+*.swp
+*.swo
+change_name.sh

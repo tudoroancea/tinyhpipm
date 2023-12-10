@@ -1,0 +1,7 @@
+add_executable(test_d_blasfeo_api test_d_blasfeo_api.c)
+add_executable(test_s_blasfeo_api test_s_blasfeo_api.c)
+target_link_libraries(test_d_blasfeo_api blasfeo_dynamic m)
+target_link_libraries(test_s_blasfeo_api blasfeo_dynamic m)
+
+add_test(NAME test_d_blasfeo_api COMMAND test/blasfeo/test_d_blasfeo_api)
+add_test(NAME test_s_blasfeo_api COMMAND test/blasfeo/test_s_blasfeo_api)
