@@ -448,9 +448,9 @@ set_target_properties(blasfeo_dynamic PROPERTIES OUTPUT_NAME blasfeo)
 
 # install blasfeo library
 install(TARGETS blasfeo_static EXPORT blasfeo_static_config LIBRARY DESTINATION lib)
-install(EXPORT blasfeo_static_config DESTINATION cmake)
+install(EXPORT blasfeo_static_config DESTINATION lib/cmake/blasfeo)
 install(TARGETS blasfeo_dynamic EXPORT blasfeo_dynamic_config LIBRARY DESTINATION lib)
-install(EXPORT blasfeo_dynamic_config DESTINATION cmake)
+install(EXPORT blasfeo_dynamic_config DESTINATION lib/cmake/blasfeo)
 file(GLOB_RECURSE BLASFEO_HEADERS "include/blasfeo/*.h")
 install(FILES ${BLASFEO_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/blasfeo)
 
@@ -594,9 +594,9 @@ target_link_libraries(hpipm_dynamic blasfeo_dynamic)
 
 install(FILES ${HPIPM_HEADERS} DESTINATION)
 install(TARGETS hpipm_static EXPORT hpipm_static_config LIBRARY DESTINATION lib)
-install(EXPORT hpipm_static_config DESTINATION cmake)
+install(EXPORT hpipm_static_config DESTINATION lib/cmake/hpipm)
 install(TARGETS hpipm_dynamic EXPORT hpipm_dynamic_config LIBRARY DESTINATION lib)
-install(EXPORT hpipm_dynamic_config DESTINATION cmake)
+install(EXPORT hpipm_dynamic_config DESTINATION lib/cmake/hpipm)
 file(GLOB_RECURSE HPIPM_HEADERS "include/hpipm/*.h")
 install(FILES ${HPIPM_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/hpipm)
 
