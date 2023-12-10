@@ -1,75 +1,35 @@
-/**************************************************************************************************
-*                                                                                                 *
-* This file is part of HPIPM.                                                                     *
-*                                                                                                 *
-* HPIPM -- High-Performance Interior Point Method.                                                *
-* Copyright (C) 2019 by Gianluca Frison.                                                          *
-* Developed at IMTEK (University of Freiburg) under the supervision of Moritz Diehl.              *
-* All rights reserved.                                                                            *
-*                                                                                                 *
-* The 2-Clause BSD License                                                                        *
-*                                                                                                 *
-* Redistribution and use in source and binary forms, with or without                              *
-* modification, are permitted provided that the following conditions are met:                     *
-*                                                                                                 *
-* 1. Redistributions of source code must retain the above copyright notice, this                  *
-*    list of conditions and the following disclaimer.                                             *
-* 2. Redistributions in binary form must reproduce the above copyright notice,                    *
-*    this list of conditions and the following disclaimer in the documentation                    *
-*    and/or other materials provided with the distribution.                                       *
-*                                                                                                 *
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND                 *
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED                   *
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE                          *
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR                 *
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES                  *
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;                    *
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND                     *
-* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT                      *
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS                   *
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
-*                                                                                                 *
-* Author: Gianluca Frison, gianluca.frison (at) imtek.uni-freiburg.de                             *
-*                                                                                                 *
-**************************************************************************************************/
-
-
-
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #ifdef USE_C99_MATH
 #include <math.h>
 #endif
 
-#include <blasfeo/blasfeo_target.h>
-#include <blasfeo/blasfeo_common.h>
-#include <blasfeo/blasfeo_s_aux.h>
-#include <blasfeo/blasfeo_s_blas.h>
-
-#include <hpipm_aux_string.h>
-#include <hpipm_aux_mem.h>
-#include <hpipm_s_core_qp_ipm.h>
-#include <hpipm_s_core_qp_ipm_aux.h>
-#include <hpipm_s_ocp_qp_dim.h>
-#include <hpipm_s_ocp_qp.h>
-#include <hpipm_s_ocp_qp_sol.h>
-#include <hpipm_s_ocp_qp_res.h>
-#include <hpipm_s_ocp_qp_ipm.h>
-#include <hpipm_s_ocp_qp_kkt.h>
-#include <hpipm_s_ocp_qp_utils.h>
-#include <hpipm_s_ocp_qcqp_dim.h>
-#include <hpipm_s_ocp_qcqp.h>
-#include <hpipm_s_ocp_qcqp_sol.h>
-#include <hpipm_s_ocp_qcqp_res.h>
-#include <hpipm_s_ocp_qcqp_ipm.h>
-//#include <hpipm_s_ocp_qcqp_utils.h>
-
+#include "blasfeo/blasfeo_common.h"
+#include "blasfeo/blasfeo_s_aux.h"
+#include "blasfeo/blasfeo_s_blas.h"
+#include "blasfeo/blasfeo_target.h"
+#include "hpipm/auxiliary/aux_mem.h"
+#include "hpipm/auxiliary/aux_string.h"
+#include "hpipm/ipm_core/s_core_qp_ipm.h"
+#include "hpipm/ipm_core/s_core_qp_ipm_aux.h"
+#include "hpipm/ocp/s_ocp_qcqp.h"
+#include "hpipm/ocp/s_ocp_qcqp_dim.h"
+#include "hpipm/ocp/s_ocp_qcqp_ipm.h"
+#include "hpipm/ocp/s_ocp_qcqp_res.h"
+#include "hpipm/ocp/s_ocp_qcqp_sol.h"
+#include "hpipm/ocp/s_ocp_qp.h"
+#include "hpipm/ocp/s_ocp_qp_dim.h"
+#include "hpipm/ocp/s_ocp_qp_ipm.h"
+#include "hpipm/ocp/s_ocp_qp_kkt.h"
+#include "hpipm/ocp/s_ocp_qp_res.h"
+#include "hpipm/ocp/s_ocp_qp_sol.h"
+#include "hpipm/ocp/s_ocp_qp_utils.h"
+// #include <hpipm_s_ocp_qcqp_utils.h>
 
 
 #define SINGLE_PRECISION
 #define BLASFEO_VECEL BLASFEO_SVECEL
 #define BLASFEO_MATEL BLASFEO_SMATEL
-
 
 
 #define AXPY blasfeo_saxpy
@@ -82,7 +42,7 @@
 #define COMPUTE_MU_AFF_QCQP s_compute_mu_aff_qcqp
 #define COLIN blasfeo_scolin
 #define CORE_QP_IPM_WORKSPACE s_core_qp_ipm_workspace
-//#define CREATE_CORE_QP_IPM s_create_core_qp_ipm
+// #define CREATE_CORE_QP_IPM s_create_core_qp_ipm
 #define CREATE_STRMAT blasfeo_create_smat
 #define CREATE_STRVEC blasfeo_create_svec
 #define DOT blasfeo_sdot
@@ -96,7 +56,7 @@
 #define GEMV_T blasfeo_sgemv_t
 #define HPIPM_MODE hpipm_mode
 #define INIT_VAR_OCP_QCQP s_init_var_ocp_qcqp
-//#define MEMSIZE_CORE_QP_IPM s_memsize_core_qp_ipm
+// #define MEMSIZE_CORE_QP_IPM s_memsize_core_qp_ipm
 #define OCP_QCQP s_ocp_qcqp
 #define OCP_QCQP_IPM_ARG s_ocp_qcqp_ipm_arg
 #define OCP_QCQP_IPM_WS s_ocp_qcqp_ipm_ws
@@ -167,7 +127,6 @@
 #define VECSE blasfeo_svecse
 
 
-
 // arg
 #define OCP_QCQP_IPM_ARG_STRSIZE s_ocp_qcqp_ipm_arg_strsize
 #define OCP_QCQP_IPM_ARG_MEMSIZE s_ocp_qcqp_ipm_arg_memsize
@@ -218,6 +177,3 @@
 #define OCP_QCQP_IPM_SENS s_ocp_qcqp_ipm_sens
 
 #include "x_ocp_qcqp_ipm.c"
-
-
-

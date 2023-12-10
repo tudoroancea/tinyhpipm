@@ -1,62 +1,25 @@
-/**************************************************************************************************
-*                                                                                                 *
-* This file is part of HPIPM.                                                                     *
-*                                                                                                 *
-* HPIPM -- High-Performance Interior Point Method.                                                *
-* Copyright (C) 2019 by Gianluca Frison.                                                          *
-* Developed at IMTEK (University of Freiburg) under the supervision of Moritz Diehl.              *
-* All rights reserved.                                                                            *
-*                                                                                                 *
-* The 2-Clause BSD License                                                                        *
-*                                                                                                 *
-* Redistribution and use in source and binary forms, with or without                              *
-* modification, are permitted provided that the following conditions are met:                     *
-*                                                                                                 *
-* 1. Redistributions of source code must retain the above copyright notice, this                  *
-*    list of conditions and the following disclaimer.                                             *
-* 2. Redistributions in binary form must reproduce the above copyright notice,                    *
-*    this list of conditions and the following disclaimer in the documentation                    *
-*    and/or other materials provided with the distribution.                                       *
-*                                                                                                 *
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND                 *
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED                   *
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE                          *
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR                 *
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES                  *
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;                    *
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND                     *
-* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT                      *
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS                   *
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
-*                                                                                                 *
-* Author: Gianluca Frison, gianluca.frison (at) imtek.uni-freiburg.de                             *
-*                                                                                                 *
-**************************************************************************************************/
-
 #include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-#include <blasfeo/blasfeo_target.h>
-#include <blasfeo/blasfeo_common.h>
-#include <blasfeo/blasfeo_s_blas.h>
-#include <blasfeo/blasfeo_s_aux.h>
+#include "blasfeo/blasfeo_common.h"
+#include "blasfeo/blasfeo_s_aux.h"
+#include "blasfeo/blasfeo_s_blas.h"
+#include "blasfeo/blasfeo_target.h"
 
-#include "../include/hpipm_s_ocp_qp.h"
-#include "../include/hpipm_s_ocp_qp_sol.h"
-#include "../include/hpipm_s_dense_qp.h"
-#include "../include/hpipm_s_dense_qp_sol.h"
-#include "../include/hpipm_s_cond.h"
-
-
+#include "hpipm/cond/s_cond.h"
+#include "hpipm/dense/s_dense_qp.h"
+#include "hpipm/dense/s_dense_qp_sol.h"
+#include "hpipm/ocp/s_ocp_qp.h"
+#include "hpipm/ocp/s_ocp_qp_sol.h"
 
 #define SINGLE_PRECISION
 
 
 
 #define AXPY blasfeo_saxpy
-#define COND_QP_ARG s_cond_qp_arg
-#define COND_QP_WS s_cond_qp_ws
+#define CONs_QP_ARG s_cons_qp_arg
+#define CONs_QP_WS s_cons_qp_ws
 #define DENSE_QP_SOL s_dense_qp_sol
 #define DIAEX blasfeo_sdiaex
 #define GEAD blasfeo_sgead
@@ -85,26 +48,26 @@
 #define TRCP_L blasfeo_strcp_l
 #define TRTR_L blasfeo_strtr_l
 #define TRMM_RLNN blasfeo_strmm_rlnn
-#define VECAD_SP blasfeo_svecad_sp
+#define VECAs_SP blasfeo_svecas_sp
 #define VECCP blasfeo_sveccp
 #define VECSE blasfeo_svecse
 
-#define COND_BABT s_cond_BAbt
-#define COND_BAT s_cond_BAt
-#define COND_B s_cond_b
-#define COND_RSQRQ s_cond_RSQrq
-#define COND_RSQ s_cond_RSQ
-#define COND_RQ s_cond_rq
-#define COND_DCTD s_cond_DCtd
-#define COND_DCT s_cond_DCt
-#define COND_D s_cond_d
-#define EXPAND_SOL s_expand_sol
-#define EXPAND_PRIMAL_SOL s_expand_primal_sol
-#define UPDATE_COND_BABT s_update_cond_BAbt
-#define UPDATE_COND_RSQRQ_N2NX3 s_update_cond_RSQrq_N2nx3
-#define UPDATE_COND_DCTD s_update_cond_DCtd
+#define CONs_BABT s_cons_BAbt
+#define CONs_BAT s_cons_BAt
+#define CONs_B s_cons_b
+#define CONs_RSQRQ s_cons_RSQrq
+#define CONs_RSQ s_cons_RSQ
+#define CONs_RQ s_cons_rq
+#define CONs_DCTD s_cons_DCtd
+#define CONs_DCT s_cons_DCt
+#define CONs_D s_cons_d
+#define EXPANs_SOL s_expans_sol
+#define EXPANs_PRIMAL_SOL s_expans_primal_sol
+#define UPDATE_CONs_BABT s_update_cons_BAbt
+#define UPDATE_CONs_RSQRQ_N2NX3 s_update_cons_RSQrq_N2nx3
+#define UPDATE_CONs_DCTD s_update_cons_DCtd
 
 
 
-#include "x_cond_aux.c"
+#include "x_cons_aux.c"
 

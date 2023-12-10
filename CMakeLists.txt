@@ -457,6 +457,7 @@ file(GLOB_RECURSE BLASFEO_HEADERS "include/blasfeo/*.h")
 install(FILES ${BLASFEO_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/blasfeo)
 
 # tests
+enable_testing()
 add_subdirectory(test/blasfeo)
 
 ##################################################################################
@@ -600,5 +601,5 @@ file(GLOB_RECURSE HPIPM_HEADERS "include/hpipm/*.h")
 install(FILES ${HPIPM_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/hpipm)
 
 # test problems
-#add_subdirectory(test/hpipm)
+add_subdirectory(test/hpipm)
 #add_subdirectory(examples/hpipm/c)
