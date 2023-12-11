@@ -109,6 +109,9 @@ int main() {
     blasfeo_pack_dmat(n, n, A, n, &sA, 0, 0);
     //	d_cast_mat2strmat(A, &sA);
     blasfeo_print_dmat(n, n, &sA, 0, 0);
+    // printf("d_print_mat:\n");
+    // d_print_mat(n, n, sA.dA, n);
+    // printf("\rd_print_mat:\n");
 
     struct blasfeo_dmat sB;
     //	blasfeo_allocate_dmat(n, n, &sB);
