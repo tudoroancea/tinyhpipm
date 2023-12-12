@@ -1682,14 +1682,14 @@ void OCP_QP_IPM_DELTA_STEP(int kk, struct OCP_QP* qp, struct OCP_QP_SOL* qp_sol,
         // inaccurate factorization: switch to lq
         if (
 #ifdef USE_C99_MATH
-                (itref_qp_norm[0] == 0.0 & isnan(BLASFEO_VECEL(ws->res_itref->res_g + 0, 0))) |
+                ((itref_qp_norm[0] == 0.0) & isnan(BLASFEO_VECEL(ws->res_itref->res_g + 0, 0))) |
 #else
-                (itref_qp_norm[0] == 0.0 & BLASFEO_VECEL(ws->res_itref->res_g + 0, 0) != BLASFEO_VECEL(ws->res_itref->res_g + 0, 0)) |
+                ((itref_qp_norm[0] == 0.0) & (BLASFEO_VECEL(ws->res_itref->res_g + 0, 0) != BLASFEO_VECEL(ws->res_itref->res_g + 0, 0))) |
 #endif
-                itref_qp_norm[0] > 1e-5 |
-                itref_qp_norm[1] > 1e-5 |
-                itref_qp_norm[2] > 1e-5 |
-                itref_qp_norm[3] > 1e-5) {
+                (itref_qp_norm[0] > 1e-5) |
+                (itref_qp_norm[1] > 1e-5) |
+                (itref_qp_norm[2] > 1e-5) |
+                (itref_qp_norm[3] > 1e-5)) {
 
             // refactorize using lq
             OCP_QP_FACT_LQ_SOLVE_KKT_STEP(ws->qp_step, ws->sol_step, arg, ws);

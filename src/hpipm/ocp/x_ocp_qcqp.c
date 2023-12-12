@@ -333,9 +333,6 @@ void OCP_QCQP_CREATE(struct OCP_QCQP_DIM* dim, struct OCP_QCQP* qp, void* mem) {
         exit(1);
     }
 #endif
-
-
-    return;
 }
 
 
@@ -385,8 +382,6 @@ void OCP_QCQP_COPY_ALL(struct OCP_QCQP* qp_orig, struct OCP_QCQP* qp_dest) {
         for (jj = 0; jj < nbue[ii] + nbxe[ii] + nge[ii] + nqe[ii]; jj++)
             qp_dest->idxe[ii][jj] = qp_orig->idxe[ii][jj];
     }
-
-    return;
 }
 
 
@@ -433,8 +428,6 @@ void OCP_QCQP_SET_ALL_ZERO(struct OCP_QCQP* qp) {
         for (jj = 0; jj < nbue[ii] + nbxe[ii] + nge[ii] + nqe[ii]; jj++)
             qp->idxe[ii][jj] = 0;
     }
-
-    return;
 }
 
 
@@ -464,8 +457,6 @@ void OCP_QCQP_SET_RHS_ZERO(struct OCP_QCQP* qp) {
         VECSE(2 * nb[ii] + 2 * ng[ii] + 2 * nq[ii] + 2 * ns[ii], 1.0, qp->d_mask + ii, 0);
         VECSE(2 * nb[ii] + 2 * ng[ii] + 2 * nq[ii] + 2 * ns[ii], 0.0, qp->m + ii, 0);
     }
-
-    return;
 }
 
 
@@ -601,7 +592,6 @@ void OCP_QCQP_SET(char* field, int stage, void* value, struct OCP_QCQP* qp) {
         printf("error: OCP_QCQP_SET: wrong field name '%s'. Exiting.\n", field);
         exit(1);
     }
-    return;
 }
 
 
@@ -618,7 +608,6 @@ void OCP_QCQP_SET_EL(char* field, int stage, int index, void* elem, struct OCP_Q
         printf("error: OCP_QCQP_SET_EL: wrong field%s\n", field);
         exit(1);
     }
-    return;
 }
 
 
@@ -628,8 +617,6 @@ void OCP_QCQP_SET_A(int stage, REAL* A, struct OCP_QCQP* qp) {
     int* nu = qp->dim->nu;
 
     CVT_TRAN_MAT2STRMAT(nx[stage + 1], nx[stage], A, nx[stage + 1], qp->BAbt + stage, nu[stage], 0);
-
-    return;
 }
 
 
@@ -639,8 +626,6 @@ void OCP_QCQP_SET_B(int stage, REAL* B, struct OCP_QCQP* qp) {
     int* nu = qp->dim->nu;
 
     CVT_TRAN_MAT2STRMAT(nx[stage + 1], nu[stage], B, nx[stage + 1], qp->BAbt + stage, 0, 0);
-
-    return;
 }
 
 
@@ -651,8 +636,6 @@ void OCP_QCQP_SET_BVEC(int stage, REAL* b, struct OCP_QCQP* qp) {
 
     CVT_TRAN_MAT2STRMAT(nx[stage + 1], 1, b, nx[stage + 1], &(qp->BAbt[stage]), nu[stage] + nx[stage], 0);  // TODO remove ???
     PACK_VEC(nx[stage + 1], b, 1, qp->b + stage, 0);
-
-    return;
 }
 
 
@@ -662,8 +645,6 @@ void OCP_QCQP_SET_Q(int stage, REAL* Q, struct OCP_QCQP* qp) {
     int* nu = qp->dim->nu;
 
     CVT_MAT2STRMAT(nx[stage], nx[stage], Q, nx[stage], qp->RSQrq + stage, nu[stage], nu[stage]);
-
-    return;
 }
 
 
@@ -673,8 +654,6 @@ void OCP_QCQP_SET_S(int stage, REAL* S, struct OCP_QCQP* qp) {
     int* nu = qp->dim->nu;
 
     CVT_TRAN_MAT2STRMAT(nu[stage], nx[stage], S, nu[stage], qp->RSQrq + stage, nu[stage], 0);
-
-    return;
 }
 
 
@@ -684,8 +663,6 @@ void OCP_QCQP_SET_R(int stage, REAL* R, struct OCP_QCQP* qp) {
     int* nu = qp->dim->nu;
 
     CVT_MAT2STRMAT(nu[stage], nu[stage], R, nu[stage], qp->RSQrq + stage, 0, 0);
-
-    return;
 }
 
 
@@ -696,8 +673,6 @@ void OCP_QCQP_SET_QVEC(int stage, REAL* q, struct OCP_QCQP* qp) {
 
     CVT_TRAN_MAT2STRMAT(nx[stage], 1, q, nx[stage], &(qp->RSQrq[stage]), nu[stage] + nx[stage], nu[stage]);  // TODO remove ???
     PACK_VEC(nx[stage], q, 1, qp->rqz + stage, nu[stage]);
-
-    return;
 }
 
 
@@ -708,8 +683,6 @@ void OCP_QCQP_SET_RVEC(int stage, REAL* r, struct OCP_QCQP* qp) {
 
     CVT_TRAN_MAT2STRMAT(nu[stage], 1, r, nu[stage], &(qp->RSQrq[stage]), nu[stage] + nx[stage], 0);  // TODO remove ???
     PACK_VEC(nu[stage], r, 1, qp->rqz + stage, 0);
-
-    return;
 }
 
 
@@ -718,8 +691,6 @@ void OCP_QCQP_SET_LB(int stage, REAL* lb, struct OCP_QCQP* qp) {
     int* nb = qp->dim->nb;
 
     PACK_VEC(nb[stage], lb, 1, qp->d + stage, 0);
-
-    return;
 }
 
 
@@ -728,8 +699,6 @@ void OCP_QCQP_SET_LB_MASK(int stage, REAL* lb_mask, struct OCP_QCQP* qp) {
     int* nb = qp->dim->nb;
 
     PACK_VEC(nb[stage], lb_mask, 1, qp->d_mask + stage, 0);
-
-    return;
 }
 
 
@@ -739,8 +708,6 @@ void OCP_QCQP_SET_LBX(int stage, REAL* lbx, struct OCP_QCQP* qp) {
     int* nbx = qp->dim->nbx;
 
     PACK_VEC(nbx[stage], lbx, 1, qp->d + stage, nbu[stage]);
-
-    return;
 }
 
 
@@ -750,8 +717,6 @@ void OCP_QCQP_SET_LBX_MASK(int stage, REAL* lbx_mask, struct OCP_QCQP* qp) {
     int* nbx = qp->dim->nbx;
 
     PACK_VEC(nbx[stage], lbx_mask, 1, qp->d_mask + stage, nbu[stage]);
-
-    return;
 }
 
 
@@ -760,8 +725,6 @@ void OCP_QCQP_SET_EL_LBX(int stage, int index, REAL* elem, struct OCP_QCQP* qp) 
     int* nbu = qp->dim->nbu;
 
     BLASFEO_VECEL(qp->d + stage, nbu[stage] + index) = *elem;
-
-    return;
 }
 
 
@@ -770,8 +733,6 @@ void OCP_QCQP_SET_LBU(int stage, REAL* lbu, struct OCP_QCQP* qp) {
     int* nbu = qp->dim->nbu;
 
     PACK_VEC(nbu[stage], lbu, 1, qp->d + stage, 0);
-
-    return;
 }
 
 
@@ -780,8 +741,6 @@ void OCP_QCQP_SET_LBU_MASK(int stage, REAL* lbu_mask, struct OCP_QCQP* qp) {
     int* nbu = qp->dim->nbu;
 
     PACK_VEC(nbu[stage], lbu_mask, 1, qp->d_mask + stage, 0);
-
-    return;
 }
 
 
@@ -793,8 +752,6 @@ void OCP_QCQP_SET_UB(int stage, REAL* ub, struct OCP_QCQP* qp) {
 
     PACK_VEC(nb[stage], ub, 1, qp->d + stage, nb[stage] + ng[stage] + nq[stage]);
     VECSC(nb[stage], -1.0, qp->d + stage, nb[stage] + ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -805,8 +762,6 @@ void OCP_QCQP_SET_UB_MASK(int stage, REAL* ub_mask, struct OCP_QCQP* qp) {
     int* nq = qp->dim->nq;
 
     PACK_VEC(nb[stage], ub_mask, 1, qp->d_mask + stage, nb[stage] + ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -820,8 +775,6 @@ void OCP_QCQP_SET_UBX(int stage, REAL* ubx, struct OCP_QCQP* qp) {
 
     PACK_VEC(nbx[stage], ubx, 1, qp->d + stage, nb[stage] + ng[stage] + nq[stage] + nbu[stage]);
     VECSC(nbx[stage], -1.0, qp->d + stage, nb[stage] + ng[stage] + nq[stage] + nbu[stage]);
-
-    return;
 }
 
 
@@ -834,8 +787,6 @@ void OCP_QCQP_SET_UBX_MASK(int stage, REAL* ubx_mask, struct OCP_QCQP* qp) {
     int* nq = qp->dim->nq;
 
     PACK_VEC(nbx[stage], ubx_mask, 1, qp->d_mask + stage, nb[stage] + ng[stage] + nq[stage] + nbu[stage]);
-
-    return;
 }
 
 
@@ -847,8 +798,6 @@ void OCP_QCQP_SET_EL_UBX(int stage, int index, REAL* elem, struct OCP_QCQP* qp) 
     int* nq = qp->dim->nq;
 
     BLASFEO_VECEL(qp->d + stage, nb[stage] + ng[stage] + nq[stage] + nbu[stage] + index) = -*elem;
-
-    return;
 }
 
 
@@ -861,8 +810,6 @@ void OCP_QCQP_SET_UBU(int stage, REAL* ubu, struct OCP_QCQP* qp) {
 
     PACK_VEC(nbu[stage], ubu, 1, qp->d + stage, nb[stage] + ng[stage] + nq[stage]);
     VECSC(nbu[stage], -1.0, qp->d + stage, nb[stage] + ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -874,8 +821,6 @@ void OCP_QCQP_SET_UBU_MASK(int stage, REAL* ubu_mask, struct OCP_QCQP* qp) {
     int* nq = qp->dim->nq;
 
     PACK_VEC(nbu[stage], ubu_mask, 1, qp->d_mask + stage, nb[stage] + ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -886,8 +831,6 @@ void OCP_QCQP_SET_IDXB(int stage, int* idxb, struct OCP_QCQP* qp) {
     int ii;
     for (ii = 0; ii < nb[stage]; ii++)
         qp->idxb[stage][ii] = idxb[ii];
-
-    return;
 }
 
 
@@ -901,8 +844,6 @@ void OCP_QCQP_SET_IDXBX(int stage, int* idxbx, struct OCP_QCQP* qp) {
     for (ii = 0; ii < nbx[stage]; ii++) {
         qp->idxb[stage][nbu[stage] + ii] = nu[stage] + idxbx[ii];
     }
-
-    return;
 }
 
 
@@ -923,7 +864,6 @@ void OCP_QCQP_SET_JBX(int stage, REAL* Jbx, struct OCP_QCQP* qp) {
             }
         }
     }
-    return;
 }
 
 
@@ -935,8 +875,6 @@ void OCP_QCQP_SET_IDXBU(int stage, int* idxbx, struct OCP_QCQP* qp) {
     for (ii = 0; ii < nbu[stage]; ii++) {
         qp->idxb[stage][ii] = idxbx[ii];
     }
-
-    return;
 }
 
 
@@ -955,7 +893,6 @@ void OCP_QCQP_SET_JBU(int stage, REAL* Jbu, struct OCP_QCQP* qp) {
             }
         }
     }
-    return;
 }
 
 
@@ -966,8 +903,6 @@ void OCP_QCQP_SET_C(int stage, REAL* C, struct OCP_QCQP* qp) {
     int* ng = qp->dim->ng;
 
     CVT_TRAN_MAT2STRMAT(ng[stage], nx[stage], C, ng[stage], qp->DCt + stage, nu[stage], 0);
-
-    return;
 }
 
 
@@ -977,8 +912,6 @@ void OCP_QCQP_SET_D(int stage, REAL* D, struct OCP_QCQP* qp) {
     int* ng = qp->dim->ng;
 
     CVT_TRAN_MAT2STRMAT(ng[stage], nu[stage], D, ng[stage], qp->DCt + stage, 0, 0);
-
-    return;
 }
 
 
@@ -988,8 +921,6 @@ void OCP_QCQP_SET_LG(int stage, REAL* lg, struct OCP_QCQP* qp) {
     int* ng = qp->dim->ng;
 
     PACK_VEC(ng[stage], lg, 1, qp->d + stage, nb[stage]);
-
-    return;
 }
 
 
@@ -999,8 +930,6 @@ void OCP_QCQP_SET_LG_MASK(int stage, REAL* lg_mask, struct OCP_QCQP* qp) {
     int* ng = qp->dim->ng;
 
     PACK_VEC(ng[stage], lg_mask, 1, qp->d_mask + stage, nb[stage]);
-
-    return;
 }
 
 
@@ -1012,8 +941,6 @@ void OCP_QCQP_SET_UG(int stage, REAL* ug, struct OCP_QCQP* qp) {
 
     PACK_VEC(ng[stage], ug, 1, qp->d + stage, 2 * nb[stage] + ng[stage] + nq[stage]);
     VECSC(ng[stage], -1.0, qp->d + stage, 2 * nb[stage] + ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -1024,8 +951,6 @@ void OCP_QCQP_SET_UG_MASK(int stage, REAL* ug_mask, struct OCP_QCQP* qp) {
     int* nq = qp->dim->nq;
 
     PACK_VEC(ng[stage], ug_mask, 1, qp->d_mask + stage, 2 * nb[stage] + ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -1051,8 +976,6 @@ void OCP_QCQP_SET_QQ(int stage, REAL* Qq, struct OCP_QCQP* qp) {
             qp->Hq_nzero[stage][ii] |= 1;
         }
     }
-
-    return;
 }
 
 
@@ -1078,8 +1001,6 @@ void OCP_QCQP_SET_SQ(int stage, REAL* Sq, struct OCP_QCQP* qp) {
             qp->Hq_nzero[stage][ii] |= 2;
         }
     }
-
-    return;
 }
 
 
@@ -1105,8 +1026,6 @@ void OCP_QCQP_SET_RQ(int stage, REAL* Rq, struct OCP_QCQP* qp) {
             qp->Hq_nzero[stage][ii] |= 4;
         }
     }
-
-    return;
 }
 
 
@@ -1120,8 +1039,6 @@ void OCP_QCQP_SET_QQVEC(int stage, REAL* qq, struct OCP_QCQP* qp) {
     int ii;
 
     CVT_MAT2STRMAT(nx[stage], nq[stage], qq, nx[stage], qp->DCt + stage, nu[stage], ng[stage]);
-
-    return;
 }
 
 
@@ -1135,8 +1052,6 @@ void OCP_QCQP_SET_RQVEC(int stage, REAL* rq, struct OCP_QCQP* qp) {
     int ii;
 
     CVT_MAT2STRMAT(nu[stage], nq[stage], rq, nu[stage], qp->DCt + stage, 0, ng[stage]);
-
-    return;
 }
 
 
@@ -1148,8 +1063,6 @@ void OCP_QCQP_SET_UQ(int stage, REAL* value, struct OCP_QCQP* qp) {
 
     PACK_VEC(nq[stage], value, 1, qp->d + stage, 2 * nb[stage] + 2 * ng[stage] + nq[stage]);
     VECSC(nq[stage], -1.0, qp->d + stage, 2 * nb[stage] + 2 * ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -1160,8 +1073,6 @@ void OCP_QCQP_SET_UQ_MASK(int stage, REAL* value, struct OCP_QCQP* qp) {
     int* nq = qp->dim->nq;
 
     PACK_VEC(nq[stage], value, 1, qp->d_mask + stage, 2 * nb[stage] + 2 * ng[stage] + nq[stage]);
-
-    return;
 }
 
 
@@ -1170,8 +1081,6 @@ void OCP_QCQP_SET_ZL(int stage, REAL* Zl, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], Zl, 1, qp->Z + stage, 0);
-
-    return;
 }
 
 
@@ -1180,8 +1089,6 @@ void OCP_QCQP_SET_ZU(int stage, REAL* Zu, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], Zu, 1, qp->Z + stage, ns[stage]);
-
-    return;
 }
 
 
@@ -1192,8 +1099,6 @@ void OCP_QCQP_SET_ZLVEC(int stage, REAL* zl, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], zl, 1, qp->rqz + stage, nu[stage] + nx[stage]);
-
-    return;
 }
 
 
@@ -1204,8 +1109,6 @@ void OCP_QCQP_SET_ZUVEC(int stage, REAL* zu, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], zu, 1, qp->rqz + stage, nu[stage] + nx[stage] + ns[stage]);
-
-    return;
 }
 
 
@@ -1217,8 +1120,6 @@ void OCP_QCQP_SET_IDXS(int stage, int* idxs, struct OCP_QCQP* qp) {
     for (ii = 0; ii < ns[stage]; ii++) {
         qp->idxs_rev[stage][idxs[ii]] = ii;
     }
-
-    return;
 }
 
 
@@ -1232,8 +1133,6 @@ void OCP_QCQP_SET_IDXS_REV(int stage, int* idxs_rev, struct OCP_QCQP* qp) {
     for (ii = 0; ii < nb[stage] + ng[stage] + nq[stage]; ii++) {
         qp->idxs_rev[stage][ii] = idxs_rev[ii];
     }
-
-    return;
 }
 
 
@@ -1258,7 +1157,6 @@ void OCP_QCQP_SET_JSBU(int stage, REAL* Jsbu, struct OCP_QCQP* qp) {
             }
         }
     }
-    return;
 }
 
 
@@ -1283,7 +1181,6 @@ void OCP_QCQP_SET_JSBX(int stage, REAL* Jsbx, struct OCP_QCQP* qp) {
             }
         }
     }
-    return;
 }
 
 
@@ -1308,7 +1205,6 @@ void OCP_QCQP_SET_JSG(int stage, REAL* Jsg, struct OCP_QCQP* qp) {
             }
         }
     }
-    return;
 }
 
 
@@ -1334,7 +1230,6 @@ void OCP_QCQP_SET_JSQ(int stage, REAL* Jsq, struct OCP_QCQP* qp) {
             }
         }
     }
-    return;
 }
 
 
@@ -1346,8 +1241,6 @@ void OCP_QCQP_SET_LLS(int stage, REAL* ls, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], ls, 1, qp->d + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage]);
-
-    return;
 }
 
 
@@ -1359,8 +1252,6 @@ void OCP_QCQP_SET_LLS_MASK(int stage, REAL* ls_mask, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], ls_mask, 1, qp->d_mask + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage]);
-
-    return;
 }
 
 
@@ -1372,8 +1263,6 @@ void OCP_QCQP_SET_LUS(int stage, REAL* us, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], us, 1, qp->d + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage] + ns[stage]);
-
-    return;
 }
 
 
@@ -1385,8 +1274,6 @@ void OCP_QCQP_SET_LUS_MASK(int stage, REAL* lus_mask, struct OCP_QCQP* qp) {
     int* ns = qp->dim->ns;
 
     PACK_VEC(ns[stage], lus_mask, 1, qp->d_mask + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage] + ns[stage]);
-
-    return;
 }
 
 
@@ -1400,8 +1287,6 @@ void OCP_QCQP_SET_IDXE(int stage, int* idxe, struct OCP_QCQP* qp) {
     int ii;
     for (ii = 0; ii < nbxe[stage] + nbue[stage] + nge[stage] + nqe[stage]; ii++)
         qp->idxe[stage][ii] = idxe[ii];
-
-    return;
 }
 
 
@@ -1415,8 +1300,6 @@ void OCP_QCQP_SET_IDXBUE(int stage, int* idxbue, struct OCP_QCQP* qp) {
     int ii;
     for (ii = 0; ii < nbue[stage]; ii++)
         qp->idxe[stage][ii] = idxbue[ii];
-
-    return;
 }
 
 
@@ -1431,8 +1314,6 @@ void OCP_QCQP_SET_IDXBXE(int stage, int* idxbxe, struct OCP_QCQP* qp) {
     int ii;
     for (ii = 0; ii < nbxe[stage]; ii++)
         qp->idxe[stage][nbue[stage] + ii] = nbu[stage] + idxbxe[ii];
-
-    return;
 }
 
 
@@ -1448,8 +1329,6 @@ void OCP_QCQP_SET_IDXGE(int stage, int* idxge, struct OCP_QCQP* qp) {
     int ii;
     for (ii = 0; ii < nge[stage]; ii++)
         qp->idxe[stage][nbue[stage] + nbxe[stage] + ii] = nbu[stage] + nbx[stage] + idxge[ii];
-
-    return;
 }
 
 
@@ -1466,8 +1345,6 @@ void OCP_QCQP_SET_IDXQE(int stage, int* idxqe, struct OCP_QCQP* qp) {
     int ii;
     for (ii = 0; ii < nqe[stage]; ii++)
         qp->idxe[stage][nbue[stage] + nbxe[stage] + nge[stage] + ii] = nbu[stage] + nbx[stage] + ng[stage] + idxqe[ii];
-
-    return;
 }
 
 
@@ -1484,7 +1361,6 @@ void OCP_QCQP_SET_JBUE(int stage, REAL* Jbue, struct OCP_QCQP* qp) {
             idx++;
         }
     }
-    return;
 }
 
 
@@ -1503,7 +1379,6 @@ void OCP_QCQP_SET_JBXE(int stage, REAL* Jbxe, struct OCP_QCQP* qp) {
             idx++;
         }
     }
-    return;
 }
 
 
@@ -1524,7 +1399,6 @@ void OCP_QCQP_SET_JGE(int stage, REAL* Jge, struct OCP_QCQP* qp) {
             idx++;
         }
     }
-    return;
 }
 
 
@@ -1547,7 +1421,6 @@ void OCP_QCQP_SET_JQE(int stage, REAL* Jqe, struct OCP_QCQP* qp) {
             idx++;
         }
     }
-    return;
 }
 
 
@@ -1567,7 +1440,6 @@ void OCP_QCQP_GET(char* field, int stage, struct OCP_QCQP* qp, void* value) {
         printf("error: OCP_QCQP_GET: wrong field %s\n", field);
         exit(1);
     }
-    return;
 }
 
 
@@ -1577,8 +1449,6 @@ void OCP_QCQP_GET_A(int stage, struct OCP_QCQP* qp, REAL* A) {
     int* nu = qp->dim->nu;
 
     CVT_TRAN_STRMAT2MAT(nx[stage], nx[stage + 1], qp->BAbt + stage, nu[stage], 0, A, nx[stage + 1]);
-
-    return;
 }
 
 
@@ -1588,8 +1458,6 @@ void OCP_QCQP_GET_B(int stage, struct OCP_QCQP* qp, REAL* B) {
     int* nu = qp->dim->nu;
 
     CVT_TRAN_STRMAT2MAT(nu[stage], nx[stage + 1], qp->BAbt + stage, 0, 0, B, nx[stage + 1]);
-
-    return;
 }
 
 
@@ -1599,8 +1467,6 @@ void OCP_QCQP_GET_BVEC(int stage, struct OCP_QCQP* qp, REAL* b) {
     int* nu = qp->dim->nu;
 
     UNPACK_VEC(nx[stage + 1], qp->b + stage, 0, b, 1);
-
-    return;
 }
 
 
@@ -1610,8 +1476,6 @@ void OCP_QCQP_GET_Q(int stage, struct OCP_QCQP* qp, REAL* Q) {
     int* nu = qp->dim->nu;
 
     CVT_STRMAT2MAT(nx[stage], nx[stage], qp->RSQrq + stage, nu[stage], nu[stage], Q, nx[stage]);
-
-    return;
 }
 
 
@@ -1621,8 +1485,6 @@ void OCP_QCQP_GET_S(int stage, struct OCP_QCQP* qp, REAL* S) {
     int* nu = qp->dim->nu;
 
     CVT_TRAN_STRMAT2MAT(nx[stage], nu[stage], qp->RSQrq + stage, nu[stage], 0, S, nu[stage]);
-
-    return;
 }
 
 
@@ -1631,8 +1493,6 @@ void OCP_QCQP_GET_R(int stage, struct OCP_QCQP* qp, REAL* R) {
     int* nu = qp->dim->nu;
 
     CVT_STRMAT2MAT(nu[stage], nu[stage], qp->RSQrq + stage, 0, 0, R, nu[stage]);
-
-    return;
 }
 
 
@@ -1642,8 +1502,6 @@ void OCP_QCQP_GET_QVEC(int stage, struct OCP_QCQP* qp, REAL* q) {
     int* nu = qp->dim->nu;
 
     UNPACK_VEC(nx[stage], qp->rqz + stage, nu[stage], q, 1);
-
-    return;
 }
 
 
@@ -1652,8 +1510,6 @@ void OCP_QCQP_GET_RVEC(int stage, struct OCP_QCQP* qp, REAL* r) {
     int* nu = qp->dim->nu;
 
     UNPACK_VEC(nu[stage], qp->rqz + stage, 0, r, 1);
-
-    return;
 }
 
 
@@ -1664,8 +1520,6 @@ void OCP_QCQP_GET_LB(int stage, struct OCP_QCQP* qp, REAL* lb) {
     int i;
 
     UNPACK_VEC(nb[stage], qp->d + stage, 0, lb, 1);
-
-    return;
 }
 
 
@@ -1676,8 +1530,6 @@ void OCP_QCQP_GET_LB_MASK(int stage, struct OCP_QCQP* qp, REAL* lb_mask) {
     int i;
 
     UNPACK_VEC(nb[stage], qp->d_mask + stage, 0, lb_mask, 1);
-
-    return;
 }
 
 
@@ -1693,8 +1545,6 @@ void OCP_QCQP_GET_UB(int stage, struct OCP_QCQP* qp, REAL* ub) {
     for (i = 0; i < nb[stage]; i++) {
         ub[i] = -ub[i];
     }
-
-    return;
 }
 
 
@@ -1707,8 +1557,6 @@ void OCP_QCQP_GET_UB_MASK(int stage, struct OCP_QCQP* qp, REAL* ub_mask) {
     int i;
 
     UNPACK_VEC(nb[stage], qp->d_mask + stage, nb[stage] + ng[stage] + nq[stage], ub_mask, 1);
-
-    return;
 }
 
 
@@ -1718,8 +1566,6 @@ void OCP_QCQP_GET_LBX(int stage, struct OCP_QCQP* qp, REAL* lbx) {
     int* nbx = qp->dim->nbx;
 
     UNPACK_VEC(nbx[stage], qp->d + stage, nbu[stage], lbx, 1);
-
-    return;
 }
 
 
@@ -1729,8 +1575,6 @@ void OCP_QCQP_GET_LBX_MASK(int stage, struct OCP_QCQP* qp, REAL* lbx_mask) {
     int* nbx = qp->dim->nbx;
 
     UNPACK_VEC(nbx[stage], qp->d_mask + stage, nbu[stage], lbx_mask, 1);
-
-    return;
 }
 
 
@@ -1748,8 +1592,6 @@ void OCP_QCQP_GET_UBX(int stage, struct OCP_QCQP* qp, REAL* ubx) {
     for (i = 0; i < nbx[stage]; i++) {
         ubx[i] = -ubx[i];
     }
-
-    return;
 }
 
 
@@ -1764,8 +1606,6 @@ void OCP_QCQP_GET_UBX_MASK(int stage, struct OCP_QCQP* qp, REAL* ubx_mask) {
     int i;
 
     UNPACK_VEC(nbx[stage], qp->d_mask + stage, nb[stage] + ng[stage] + nq[stage] + nbu[stage], ubx_mask, 1);
-
-    return;
 }
 
 
@@ -1774,8 +1614,6 @@ void OCP_QCQP_GET_LBU(int stage, struct OCP_QCQP* qp, REAL* lbu) {
     int* nbu = qp->dim->nbu;
 
     UNPACK_VEC(nbu[stage], qp->d + stage, 0, lbu, 1);
-
-    return;
 }
 
 
@@ -1784,8 +1622,6 @@ void OCP_QCQP_GET_LBU_MASK(int stage, struct OCP_QCQP* qp, REAL* lbu_mask) {
     int* nbu = qp->dim->nbu;
 
     UNPACK_VEC(nbu[stage], qp->d_mask + stage, 0, lbu_mask, 1);
-
-    return;
 }
 
 
@@ -1802,8 +1638,6 @@ void OCP_QCQP_GET_UBU(int stage, struct OCP_QCQP* qp, REAL* ubu) {
     for (i = 0; i < nbu[stage]; i++) {
         ubu[i] = -ubu[i];
     }
-
-    return;
 }
 
 
@@ -1817,8 +1651,6 @@ void OCP_QCQP_GET_UBU_MASK(int stage, struct OCP_QCQP* qp, REAL* ubu_mask) {
     int i;
 
     UNPACK_VEC(nbu[stage], qp->d_mask + stage, nb[stage] + ng[stage] + nq[stage], ubu_mask, 1);
-
-    return;
 }
 
 
@@ -1829,36 +1661,34 @@ void OCP_QCQP_GET_IDXB(int stage, struct OCP_QCQP* qp, int* idxb) {
     int ii;
     for (ii = 0; ii < nb[stage]; ii++)
         idxb[ii] = qp->idxb[stage][ii];
-
-    return;
 }
 
 
 // void OCP_QCQP_GET_IDXBX(int stage, struct OCP_QCQP *qp, int *idxb)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
 // void OCP_QCQP_GET_JBX(int stage, struct OCP_QCQP *qp, int *Jbx)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
 // void OCP_QCQP_GET_IDXBU(int stage, struct OCP_QCQP *qp, int *idxbu)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
 // void OCP_QCQP_GET_JBU(int stage, struct OCP_QCQP *qp, int *Jbu)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
@@ -1869,8 +1699,6 @@ void OCP_QCQP_GET_C(int stage, struct OCP_QCQP* qp, REAL* C) {
     int* ng = qp->dim->ng;
 
     CVT_TRAN_STRMAT2MAT(nx[stage], ng[stage], qp->DCt + stage, nu[stage], 0, C, ng[stage]);
-
-    return;
 }
 
 
@@ -1880,8 +1708,6 @@ void OCP_QCQP_GET_D(int stage, struct OCP_QCQP* qp, REAL* D) {
     int* ng = qp->dim->ng;
 
     CVT_TRAN_STRMAT2MAT(nu[stage], ng[stage], qp->DCt + stage, 0, 0, D, ng[stage]);
-
-    return;
 }
 
 
@@ -1891,8 +1717,6 @@ void OCP_QCQP_GET_LG(int stage, struct OCP_QCQP* qp, REAL* lg) {
     int* ng = qp->dim->ng;
 
     UNPACK_VEC(ng[stage], qp->d + stage, nb[stage], lg, 1);
-
-    return;
 }
 
 
@@ -1902,8 +1726,6 @@ void OCP_QCQP_GET_LG_MASK(int stage, struct OCP_QCQP* qp, REAL* lg_mask) {
     int* ng = qp->dim->ng;
 
     UNPACK_VEC(ng[stage], qp->d_mask + stage, nb[stage], lg_mask, 1);
-
-    return;
 }
 
 
@@ -1919,8 +1741,6 @@ void OCP_QCQP_GET_UG(int stage, struct OCP_QCQP* qp, REAL* ug) {
     for (i = 0; i < ng[stage]; i++) {
         ug[i] = -ug[i];
     }
-
-    return;
 }
 
 
@@ -1933,8 +1753,6 @@ void OCP_QCQP_GET_UG_MASK(int stage, struct OCP_QCQP* qp, REAL* ug_mask) {
     int i;
 
     UNPACK_VEC(ng[stage], qp->d_mask + stage, 2 * nb[stage] + ng[stage] + nq[stage], ug_mask, 1);
-
-    return;
 }
 
 
@@ -1943,8 +1761,6 @@ void OCP_QCQP_GET_ZL(int stage, struct OCP_QCQP* qp, REAL* Zl) {
     int* ns = qp->dim->ns;
 
     UNPACK_VEC(ns[stage], qp->Z + stage, 0, Zl, 1);
-
-    return;
 }
 
 
@@ -1953,8 +1769,6 @@ void OCP_QCQP_GET_ZU(int stage, struct OCP_QCQP* qp, REAL* Zu) {
     int* ns = qp->dim->ns;
 
     UNPACK_VEC(ns[stage], qp->Z + stage, ns[stage], Zu, 1);
-
-    return;
 }
 
 
@@ -1965,8 +1779,6 @@ void OCP_QCQP_GET_ZLVEC(int stage, struct OCP_QCQP* qp, REAL* zl) {
     int* ns = qp->dim->ns;
 
     UNPACK_VEC(ns[stage], qp->rqz + stage, nu[stage] + nx[stage], zl, 1);
-
-    return;
 }
 
 
@@ -1977,8 +1789,6 @@ void OCP_QCQP_GET_ZUVEC(int stage, struct OCP_QCQP* qp, REAL* zu) {
     int* ns = qp->dim->ns;
 
     UNPACK_VEC(ns[stage], qp->rqz + stage, nu[stage] + nx[stage] + ns[stage], zu, 1);
-
-    return;
 }
 
 
@@ -1998,8 +1808,6 @@ void OCP_QCQP_GET_IDXS(int stage, struct OCP_QCQP* qp, int* idxs) {
             idxs[idx_tmp] = ii;
         }
     }
-
-    return;
 }
 
 
@@ -2012,29 +1820,27 @@ void OCP_QCQP_GET_IDXS_REV(int stage, struct OCP_QCQP* qp, int* idxs_rev) {
     int ii;
     for (ii = 0; ii < nb[stage] + ng[stage] + nq[stage]; ii++)
         idxs_rev[ii] = qp->idxs_rev[stage][ii];
-
-    return;
 }
 
 
 // void OCP_QCQP_GET_JSBX(int stage, struct OCP_QCQP *qp, int *Jsbx)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
 // void OCP_QCQP_GET_JSBX(int stage, struct OCP_QCQP *qp, int *Jsbx)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
 // void OCP_QCQP_GET_JSG(int stage, struct OCP_QCQP *qp, int *Jsg)
 //	{
 //	TODO
-//	return;
+//
 //	}
 
 
@@ -2046,8 +1852,6 @@ void OCP_QCQP_GET_LLS(int stage, struct OCP_QCQP* qp, REAL* ls) {
     int* ns = qp->dim->ns;
 
     UNPACK_VEC(ns[stage], qp->d + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage], ls, 1);
-
-    return;
 }
 
 
@@ -2059,8 +1863,6 @@ void OCP_QCQP_GET_LLS_MASK(int stage, struct OCP_QCQP* qp, REAL* ls_mask) {
     int* ns = qp->dim->ns;
 
     UNPACK_VEC(ns[stage], qp->d_mask + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage], ls_mask, 1);
-
-    return;
 }
 
 
@@ -2074,8 +1876,6 @@ void OCP_QCQP_GET_LUS(int stage, struct OCP_QCQP* qp, REAL* us) {
     int i;
 
     UNPACK_VEC(ns[stage], qp->d + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage] + ns[stage], us, 1);
-
-    return;
 }
 
 
@@ -2089,6 +1889,4 @@ void OCP_QCQP_GET_LUS_MASK(int stage, struct OCP_QCQP* qp, REAL* us_mask) {
     int i;
 
     UNPACK_VEC(ns[stage], qp->d_mask + stage, 2 * nb[stage] + 2 * ng[stage] + 2 * nq[stage] + ns[stage], us_mask, 1);
-
-    return;
 }
