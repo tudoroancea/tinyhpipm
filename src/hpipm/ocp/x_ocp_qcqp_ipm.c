@@ -1352,7 +1352,6 @@ void OCP_QCQP_IPM_SOLVE(struct OCP_QCQP* qcqp, struct OCP_QCQP_SOL* qcqp_sol, st
 
     // absolute IPM formulation
     if (qp_arg->abs_form) {
-
         // alias members of qp_step
         qp_ws->qp_step->dim = qp->dim;
         qp_ws->qp_step->RSQrq = qp->RSQrq;
@@ -1425,61 +1424,7 @@ void OCP_QCQP_IPM_SOLVE(struct OCP_QCQP* qcqp, struct OCP_QCQP_SOL* qcqp_sol, st
             }
         }
 
-        goto set_status;
-    }
-
-
-    // compute residuals
-    OCP_QCQP_RES_COMPUTE(qcqp, qcqp_sol, qcqp_res, qcqp_res_ws);
-    if (qp_ws->mask_constr) {
-        // mask out disregarded constraints
-        for (ii = 0; ii <= N; ii++)
-            VECMUL(2 * ns[ii], qp->d_mask + ii, 2 * nb[ii] + 2 * ng[ii] + 2 * nq[ii], qcqp_res->res_g + ii, nu[ii] + nx[ii], qcqp_res->res_g + ii, nu[ii] + nx[ii]);
-        VECMUL(cws->nc, qp->d_mask, 0, qcqp_res->res_d, 0, qcqp_res->res_d, 0);
-        VECMUL(cws->nc, qp->d_mask, 0, qcqp_res->res_m, 0, qcqp_res->res_m, 0);
-    }
-    OCP_QCQP_RES_COMPUTE_INF_NORM(qcqp_res);
-    OCP_QCQP_RES_CONV_QP_RES(qcqp_res, qp_ws->res);
-    cws->mu = qcqp_res->res_mu;
-    // save infinity norm of residuals
-    if (0 < stat_max) {
-        stat[stat_m * (0) + 6] = qcqp_res_max[0];
-        stat[stat_m * (0) + 7] = qcqp_res_max[1];
-        stat[stat_m * (0) + 8] = qcqp_res_max[2];
-        stat[stat_m * (0) + 9] = qcqp_res_max[3];
-        stat[stat_m * (0) + 10] = qcqp_res->obj;
-    }
-
-
-    // relative (delta) IPM formulation
-    for (kk = 0;
-         kk<qcqp_arg->iter_max &
-            cws->alpha>
-                 qcqp_arg->alpha_min &
-         (qcqp_res_max[0] > qcqp_arg->res_g_max |
-          qcqp_res_max[1] > qcqp_arg->res_b_max |
-          qcqp_res_max[2] > qcqp_arg->res_d_max |
-          qcqp_res_max[3] > qcqp_arg->res_m_max);
-         kk++) {
-
-        // hessian is updated with quad constr: can not reuse hessian factorization !!!
-        // XXX is it in ocp ws ?????
-        for (ii = 0; ii <= N; ii++)
-            qp_ws->use_hess_fact[ii] = 0;
-
-        // compute delta step
-        OCP_QP_IPM_DELTA_STEP(kk, qp, qp_sol, qp_arg, qp_ws);
-        // blasfeo_print_exp_tran_dvec(cws->nc, qp_sol->lam, 0);
-        OCP_QP_SOL_CONV_QCQP_SOL(qp_sol, qcqp_sol);
-        // XXX maybe not needed
-        if (qp_ws->mask_constr) {
-            // mask out disregarded constraints
-            VECMUL(cws->nc, qp->d_mask, 0, qcqp_sol->lam, 0, qcqp_sol->lam, 0);
-        }
-
-        // update approximation of qcqp as qp
-        OCP_QCQP_UPDATE_QP(qcqp, qcqp_sol, qp, qcqp_ws);
-
+    } else {
         // compute residuals
         OCP_QCQP_RES_COMPUTE(qcqp, qcqp_sol, qcqp_res, qcqp_res_ws);
         if (qp_ws->mask_constr) {
@@ -1493,17 +1438,65 @@ void OCP_QCQP_IPM_SOLVE(struct OCP_QCQP* qcqp, struct OCP_QCQP_SOL* qcqp_sol, st
         OCP_QCQP_RES_CONV_QP_RES(qcqp_res, qp_ws->res);
         cws->mu = qcqp_res->res_mu;
         // save infinity norm of residuals
-        if (kk + 1 < stat_max) {
-            stat[stat_m * (kk + 1) + 5] = qcqp_res->res_mu;
-            stat[stat_m * (kk + 1) + 6] = qcqp_res_max[0];
-            stat[stat_m * (kk + 1) + 7] = qcqp_res_max[1];
-            stat[stat_m * (kk + 1) + 8] = qcqp_res_max[2];
-            stat[stat_m * (kk + 1) + 9] = qcqp_res_max[3];
-            stat[stat_m * (kk + 1) + 10] = qcqp_res->obj;
+        if (0 < stat_max) {
+            stat[stat_m * (0) + 6] = qcqp_res_max[0];
+            stat[stat_m * (0) + 7] = qcqp_res_max[1];
+            stat[stat_m * (0) + 8] = qcqp_res_max[2];
+            stat[stat_m * (0) + 9] = qcqp_res_max[3];
+            stat[stat_m * (0) + 10] = qcqp_res->obj;
+        }
+
+
+        // relative (delta) IPM formulation
+        for (kk = 0;
+             kk<qcqp_arg->iter_max & cws->alpha> qcqp_arg->alpha_min &
+             (qcqp_res_max[0] > qcqp_arg->res_g_max |
+              qcqp_res_max[1] > qcqp_arg->res_b_max |
+              qcqp_res_max[2] > qcqp_arg->res_d_max |
+              qcqp_res_max[3] > qcqp_arg->res_m_max);
+             kk++) {
+
+            // hessian is updated with quad constr: can not reuse hessian factorization !!!
+            // XXX is it in ocp ws ?????
+            for (ii = 0; ii <= N; ii++)
+                qp_ws->use_hess_fact[ii] = 0;
+
+            // compute delta step
+            OCP_QP_IPM_DELTA_STEP(kk, qp, qp_sol, qp_arg, qp_ws);
+            // blasfeo_print_exp_tran_dvec(cws->nc, qp_sol->lam, 0);
+            OCP_QP_SOL_CONV_QCQP_SOL(qp_sol, qcqp_sol);
+            // XXX maybe not needed
+            if (qp_ws->mask_constr) {
+                // mask out disregarded constraints
+                VECMUL(cws->nc, qp->d_mask, 0, qcqp_sol->lam, 0, qcqp_sol->lam, 0);
+            }
+
+            // update approximation of qcqp as qp
+            OCP_QCQP_UPDATE_QP(qcqp, qcqp_sol, qp, qcqp_ws);
+
+            // compute residuals
+            OCP_QCQP_RES_COMPUTE(qcqp, qcqp_sol, qcqp_res, qcqp_res_ws);
+            if (qp_ws->mask_constr) {
+                // mask out disregarded constraints
+                for (ii = 0; ii <= N; ii++)
+                    VECMUL(2 * ns[ii], qp->d_mask + ii, 2 * nb[ii] + 2 * ng[ii] + 2 * nq[ii], qcqp_res->res_g + ii, nu[ii] + nx[ii], qcqp_res->res_g + ii, nu[ii] + nx[ii]);
+                VECMUL(cws->nc, qp->d_mask, 0, qcqp_res->res_d, 0, qcqp_res->res_d, 0);
+                VECMUL(cws->nc, qp->d_mask, 0, qcqp_res->res_m, 0, qcqp_res->res_m, 0);
+            }
+            OCP_QCQP_RES_COMPUTE_INF_NORM(qcqp_res);
+            OCP_QCQP_RES_CONV_QP_RES(qcqp_res, qp_ws->res);
+            cws->mu = qcqp_res->res_mu;
+            // save infinity norm of residuals
+            if (kk + 1 < stat_max) {
+                stat[stat_m * (kk + 1) + 5] = qcqp_res->res_mu;
+                stat[stat_m * (kk + 1) + 6] = qcqp_res_max[0];
+                stat[stat_m * (kk + 1) + 7] = qcqp_res_max[1];
+                stat[stat_m * (kk + 1) + 8] = qcqp_res_max[2];
+                stat[stat_m * (kk + 1) + 9] = qcqp_res_max[3];
+                stat[stat_m * (kk + 1) + 10] = qcqp_res->obj;
+            }
         }
     }
-
-set_status:
 
     // save info before return
     qcqp_ws->iter = kk;
