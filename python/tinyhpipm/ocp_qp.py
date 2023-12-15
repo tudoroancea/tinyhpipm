@@ -9,79 +9,58 @@ from ctypes import (
     cast,
     create_string_buffer,
 )
+from typing import Union
 
 import numpy as np
 
-from tinyhpipm.common import hpipm_lib_name
+from tinyhpipm.common import FloatOrInt, hpipm_lib_name
 
 
-class hpipm_ocp_qcqp_solver:
-    def __init__(self, qcqp_dims, arg):
+class hpipm_ocp_qp_dim:
+    def __init__(self, N: int):
         # load hpipm shared library
         __hpipm = CDLL(hpipm_lib_name)
         self.__hpipm = __hpipm
 
-        # set up ipm workspace struct
-        sizeof_d_ocp_qcqp_ipm_workspace = __hpipm.d_ocp_qcqp_ipm_ws_strsize()
-        ipm_ws_struct = cast(
-            create_string_buffer(sizeof_d_ocp_qcqp_ipm_workspace), c_void_p
-        )
-        self.ipm_ws_struct = ipm_ws_struct
+        # C dim struct
+        dim_struct_size = __hpipm.d_ocp_qp_dim_strsize()
+        dim_struct = cast(create_string_buffer(dim_struct_size), c_void_p)
+        self.dim_struct = dim_struct
 
-        # allocate memory for ipm workspace
-        ipm_size = __hpipm.d_ocp_qcqp_ipm_ws_memsize(
-            qcqp_dims.dim_struct, arg.arg_struct
-        )
-        ipm_ws_mem = cast(create_string_buffer(ipm_size), c_void_p)
-        self.ipm_ws_mem = ipm_ws_mem
+        # C dim internal memory
+        dim_mem_size = __hpipm.d_ocp_qp_dim_memsize(N)
+        dim_mem = cast(create_string_buffer(dim_mem_size), c_void_p)
+        self.dim_mem = dim_mem
 
-        # create C ws
-        __hpipm.d_ocp_qcqp_ipm_ws_create(
-            qcqp_dims.dim_struct, arg.arg_struct, ipm_ws_struct, ipm_ws_mem
-        )
+        # create C dim
+        __hpipm.d_ocp_qp_dim_create(N, self.dim_struct, self.dim_mem)
 
-        self.arg = arg
-        self.dim_struct = qcqp_dims.dim_struct
-
-    def solve(self, qp, qp_sol):
-        self.__hpipm.d_ocp_qcqp_ipm_solve(
-            qp.qp_struct, qp_sol.qp_sol_struct, self.arg.arg_struct, self.ipm_ws_struct
-        )
-
-    def get(self, field):
-        if field == "stat":
-            # get iters
-            iters = np.zeros((1, 1), dtype=int)
-            tmp = cast(iters.ctypes.data, POINTER(c_int))
-            self.__hpipm.d_ocp_qcqp_ipm_get_iter(self.ipm_ws_struct, tmp)
-            # get stat_m
-            stat_m = np.zeros((1, 1), dtype=int)
-            tmp = cast(stat_m.ctypes.data, POINTER(c_int))
-            self.__hpipm.d_ocp_qcqp_ipm_get_stat_m(self.ipm_ws_struct, tmp)
-            # get stat pointer
-            res = np.zeros((iters[0][0] + 1, stat_m[0][0]))
-            ptr = c_void_p()
-            self.__hpipm.d_ocp_qcqp_ipm_get_stat(self.ipm_ws_struct, byref(ptr))
-            tmp = cast(ptr, POINTER(c_double))
-            for ii in range(iters[0][0] + 1):
-                for jj in range(stat_m[0][0]):
-                    res[ii][jj] = tmp[jj + ii * stat_m[0][0]]
-            return res
-        elif field in {"status", "iter"}:
-            res = np.zeros((1, 1), dtype=int)
-            tmp = cast(res.ctypes.data, POINTER(c_int))
-        elif field in {"max_res_stat", "max_res_eq", "max_res_ineq", "max_res_comp"}:
-            res = np.zeros((1, 1))
-            tmp = cast(res.ctypes.data, POINTER(c_double))
-        else:
-            raise NameError("hpipm_ocp_qcqp_solver.get: wrong field")
+    def set(self, field: str, value: int, idx_start: int, idx_end: int = None):
+        self.__hpipm.d_ocp_qp_dim_set.argtypes = [c_char_p, c_int, c_int, c_void_p]
         field_name_b = field.encode("utf-8")
-        self.__hpipm.d_ocp_qcqp_ipm_get(c_char_p(field_name_b), self.ipm_ws_struct, tmp)
-        return res[0][0]
+        if idx_end is None:
+            self.__hpipm.d_ocp_qp_dim_set(
+                c_char_p(field_name_b), idx_start, value, self.dim_struct
+            )
+        else:
+            for i in range(idx_start, idx_end + 1):
+                self.__hpipm.d_ocp_qp_dim_set(
+                    c_char_p(field_name_b), i, value, self.dim_struct
+                )
+
+    def print_c_struct(self):
+        self.__hpipm.d_ocp_qp_dim_print(self.dim_struct)
+
+    def codegen(self, file_name: str, mode: str):
+        file_name_b = file_name.encode("utf-8")
+        mode_b = mode.encode("utf-8")
+        self.__hpipm.d_ocp_qp_dim_codegen(
+            c_char_p(file_name_b), c_char_p(mode_b), self.dim_struct
+        )
 
 
 class hpipm_ocp_qp:
-    def __init__(self, dim):
+    def __init__(self, dim: hpipm_ocp_qp_dim):
         # save dim internally
         self.dim = dim
 
@@ -102,26 +81,18 @@ class hpipm_ocp_qp:
         # create C qp
         __hpipm.d_ocp_qp_create(dim.dim_struct, qp_struct, qp_mem)
 
-    def set(self, field, value, idx_start, idx_end=None):
+    def set(
+        self,
+        field: str,
+        value: Union[np.ndarray, float, int],
+        idx_start: int,
+        idx_end: int = None,
+    ):
         # cast to np array
-        if not isinstance(value, np.ndarray) and isinstance(value, (int, float)):
-            value_ = value
-            value = np.array((1,))
-            value[0] = value_
+        value = np.atleast_1d(value)
         # convert into column-major
         value_cm = np.ravel(value, "F")
-        # 		if(issubclass(value.dtype.type, np.integer)):
-        if (
-            field == "idxbx"
-            or field == "idxbu"
-            or field == "idxb"
-            or field == "idxs"
-            or field == "idxs_rev"
-            or field == "idxe"
-            or field == "idxbue"
-            or field == "idxbxe"
-            or field == "idxge"
-        ):
+        if field.startswith("idx"):
             value_cm = np.ascontiguousarray(value_cm, dtype=np.int32)
             tmp = cast(value_cm.ctypes.data, POINTER(c_int))
         else:
@@ -150,7 +121,7 @@ class hpipm_ocp_qp:
 
 
 class hpipm_ocp_qp_sol:
-    def __init__(self, dim):
+    def __init__(self, dim: hpipm_ocp_qp_dim):
         # save dim internally
         self.dim = dim
 
@@ -221,7 +192,7 @@ class hpipm_ocp_qp_sol:
 
 
 class hpipm_ocp_qp_solver_arg:
-    def __init__(self, dim, mode):
+    def __init__(self, dim: hpipm_ocp_qp_dim, mode):
         c_mode = 0
         if mode == "speed_abs":
             c_mode = 0
@@ -291,7 +262,7 @@ class hpipm_ocp_qp_solver_arg:
 
 
 class hpipm_ocp_qp_solver:
-    def __init__(self, qp_dims, arg):
+    def __init__(self, dim: hpipm_ocp_qp_dim, arg):
         # load hpipm shared library
         __hpipm = CDLL(hpipm_lib_name)
         self.__hpipm = __hpipm
@@ -304,18 +275,19 @@ class hpipm_ocp_qp_solver:
         self.ipm_ws_struct = ipm_ws_struct
 
         # allocate memory for ipm workspace
-        ipm_size = __hpipm.d_ocp_qp_ipm_ws_memsize(qp_dims.dim_struct, arg.arg_struct)
+        ipm_size = __hpipm.d_ocp_qp_ipm_ws_memsize(dim.dim_struct, arg.arg_struct)
         ipm_ws_mem = cast(create_string_buffer(ipm_size), c_void_p)
         self.ipm_ws_mem = ipm_ws_mem
 
         # create C ws
         __hpipm.d_ocp_qp_ipm_ws_create(
-            qp_dims.dim_struct, arg.arg_struct, ipm_ws_struct, ipm_ws_mem
+            dim.dim_struct, arg.arg_struct, ipm_ws_struct, ipm_ws_mem
         )
 
         self.arg = arg
-        self.dim_struct = qp_dims.dim_struct
+        self.dim_struct = dim.dim_struct
 
+        # TODO: get rid of these getters to harmonize the interface with the get functions
         # getter functions for feedback matrices
         self.__getters = {
             "ric_Lr": {

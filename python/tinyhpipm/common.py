@@ -1,4 +1,5 @@
 from sys import platform
+from typing import Union
 
 
 def dynamic_library_extension():
@@ -13,3 +14,6 @@ def dynamic_library_extension():
 
 
 hpipm_lib_name = "libhpipm_dynamic" + dynamic_library_extension()
+
+
+FloatOrInt = Union[float, int]
