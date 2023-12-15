@@ -1,3 +1,4 @@
+#include <stdio.h>
 void OCP_QCQP_DIM_PRINT(struct OCP_QCQP_DIM* qp_dim) {
     int ii;
 
@@ -1023,6 +1024,7 @@ void OCP_QCQP_CODEGEN(char* file_name, char* mode, struct OCP_QCQP_DIM* dim, str
 #else
         fprintf(file, "static float ug_mask%d[] = {", nn);
 #endif
+        // TODO: why no consideration of floating point precision here?
         for (jj = 0; jj < ng[nn]; jj++) {
             fprintf(file, "%18.15e, ", BLASFEO_DVECEL(qp->d_mask + nn, 2 * nb[nn] + ng[nn] + nq[nn] + jj));
         }
@@ -1252,7 +1254,7 @@ void OCP_QCQP_CODEGEN(char* file_name, char* mode, struct OCP_QCQP_DIM* dim, str
 #else
         fprintf(file, "static float uq_mask%d[] = {", nn);
 #endif
-        for (jj = 0; jj < ng[nn]; jj++) {
+        for (jj = 0; jj < nq[nn]; jj++) {
             fprintf(file, "%18.15e, ", BLASFEO_DVECEL(qp->d_mask + nn, 2 * nb[nn] + 2 * ng[nn] + nq[nn] + jj));
         }
         fprintf(file, "};\n");

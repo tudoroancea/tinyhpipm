@@ -1071,7 +1071,6 @@ void OCP_QCQP_SET_UQ_MASK(int stage, REAL* value, struct OCP_QCQP* qp) {
     int* nb = qp->dim->nb;
     int* ng = qp->dim->ng;
     int* nq = qp->dim->nq;
-
     PACK_VEC(nq[stage], value, 1, qp->d_mask + stage, 2 * nb[stage] + 2 * ng[stage] + nq[stage]);
 }
 

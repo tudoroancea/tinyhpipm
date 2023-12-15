@@ -107,7 +107,7 @@ void OCP_QCQP_SOL_CREATE(struct OCP_QCQP_DIM* dim, struct OCP_QCQP_SOL* qp_sol, 
         tmp_ptr += nx[ii] * sizeof(REAL);  // x
         tmp_ptr += ns[ii] * sizeof(REAL);  // s_ls
         tmp_ptr += ns[ii] * sizeof(REAL);  // s_us
-        //		VECSE(nu[ii]+nx[ii]+2*ns[ii], 0.0, qp_sol->ux+ii, 0);
+        VECSE(nu[ii] + nx[ii] + 2 * ns[ii], 0.0, qp_sol->ux + ii, 0);
     }
     // pi
     tmp_ptr = c_ptr;
@@ -115,7 +115,7 @@ void OCP_QCQP_SOL_CREATE(struct OCP_QCQP_DIM* dim, struct OCP_QCQP_SOL* qp_sol, 
     for (ii = 0; ii < N; ii++) {
         CREATE_STRVEC(nx[ii + 1], qp_sol->pi + ii, tmp_ptr);
         tmp_ptr += nx[ii + 1] * sizeof(REAL);  // pi
-        //		VECSE(nx[ii+1], 0.0, qp_sol->pi+ii, 0);
+        VECSE(nx[ii + 1], 0.0, qp_sol->pi + ii, 0);
     }
     // lam
     tmp_ptr = c_ptr;
@@ -130,7 +130,7 @@ void OCP_QCQP_SOL_CREATE(struct OCP_QCQP_DIM* dim, struct OCP_QCQP_SOL* qp_sol, 
         tmp_ptr += nq[ii] * sizeof(REAL);  // uq
         tmp_ptr += ns[ii] * sizeof(REAL);  // ls
         tmp_ptr += ns[ii] * sizeof(REAL);  // us
-        //		VECSE(2*nb[ii]+2*ng[ii]+2*nq[ii]+2*ns[ii], 0.0, qp_sol->lam+ii, 0);
+        VECSE(2 * nb[ii] + 2 * ng[ii] + 2 * nq[ii] + 2 * ns[ii], 0.0, qp_sol->lam + ii, 0);
     }
     // t
     tmp_ptr = c_ptr;
@@ -145,7 +145,7 @@ void OCP_QCQP_SOL_CREATE(struct OCP_QCQP_DIM* dim, struct OCP_QCQP_SOL* qp_sol, 
         tmp_ptr += nq[ii] * sizeof(REAL);  // uq
         tmp_ptr += ns[ii] * sizeof(REAL);  // ls
         tmp_ptr += ns[ii] * sizeof(REAL);  // us
-        //		VECSE(2*nb[ii]+2*ng[ii]+2*nq[ii]+2*ns[ii], 0.0, qp_sol->t+ii, 0);
+        VECSE(2 * nb[ii] + 2 * ng[ii] + 2 * nq[ii] + 2 * ns[ii], 0.0, qp_sol->t + ii, 0);
     }
 
     qp_sol->dim = dim;

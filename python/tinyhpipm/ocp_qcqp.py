@@ -89,10 +89,7 @@ class hpipm_ocp_qcqp:
         idx_end: int = None,
     ):
         # cast to np array
-        if not isinstance(value, np.ndarray) and isinstance(value, (int, float)):
-            value_ = value
-            value = np.array((1,))
-            value[0] = value_
+        value = np.atleast_1d(value)
         # convert into column-major
         value_cm = np.ravel(value, "F")
         # if ( field == "idxbx" or field == "idxbu" or field == "idxb" or field == "idxs" or field == "idxs_rev"):  # or field=='idxe' or field=='idxbue' or field=='idxbxe' or field=='idxge' or field=='idxqe'):
