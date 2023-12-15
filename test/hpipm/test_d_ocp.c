@@ -27,89 +27,6 @@
 #define PRINT 1
 #endif
 
-
-#if !defined(EXT_DEP)
-/* creates a zero matrix */
-void d_zeros(double** pA, int row, int col) {
-    *pA = malloc((row * col) * sizeof(double));
-    double* A = *pA;
-    int i;
-    for (i = 0; i < row * col; i++) A[i] = 0.0;
-}
-/* frees matrix */
-void d_free(double* pA) {
-    free(pA);
-}
-/* prints a matrix in column-major format */
-void d_print_mat(int m, int n, double* A, int lda) {
-    int i, j;
-    for (i = 0; i < m; i++) {
-        for (j = 0; j < n; j++) {
-            printf("%9.5f ", A[i + lda * j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-/* prints the transposed of a matrix in column-major format */
-void d_print_tran_mat(int row, int col, double* A, int lda) {
-    int i, j;
-    for (j = 0; j < col; j++) {
-        for (i = 0; i < row; i++) {
-            printf("%9.5f ", A[i + lda * j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-/* prints a matrix in column-major format (exponential notation) */
-void d_print_exp_mat(int m, int n, double* A, int lda) {
-    int i, j;
-    for (i = 0; i < m; i++) {
-        for (j = 0; j < n; j++) {
-            printf("%e\t", A[i + lda * j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-/* prints the transposed of a matrix in column-major format (exponential notation) */
-void d_print_exp_tran_mat(int row, int col, double* A, int lda) {
-    int i, j;
-    for (j = 0; j < col; j++) {
-        for (i = 0; i < row; i++) {
-            printf("%e\t", A[i + lda * j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-/* creates a zero matrix aligned */
-void int_zeros(int** pA, int row, int col) {
-    void* temp = malloc((row * col) * sizeof(int));
-    *pA = temp;
-    int* A = *pA;
-    int i;
-    for (i = 0; i < row * col; i++) A[i] = 0;
-}
-/* frees matrix */
-void int_free(int* pA) {
-    free(pA);
-}
-/* prints a matrix in column-major format */
-void int_print_mat(int row, int col, int* A, int lda) {
-    int i, j;
-    for (i = 0; i < row; i++) {
-        for (j = 0; j < col; j++) {
-            printf("%d ", A[i + lda * j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-#endif
-
-
 /************************************************
 Mass-spring system: nx/2 masses connected each other with springs (in a row), and the first and the last one to walls. nu (<=nx) controls act on the first nu masses. The system is sampled with sampling time Ts.
 ************************************************/
@@ -202,26 +119,20 @@ void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double*
 
 
 int main() {
-
     int rep, nrep = 1000;
-
     hpipm_timer timer0;
 
-
     // local variables
-
     int ii, jj;
 
 
     // problem size
-
     int nx_ = 8;  // number of states (it has to be even for the mass-spring system test problem)
     int nu_ = 3;  // number of inputs (controllers) (it has to be at least 1 and at most nx/2 for the mass-spring system test problem)
     int N = 8;  // horizon lenght
 
 
     // stage-wise variant size
-
     int* nx = (int*) malloc((N + 1) * sizeof(int));
     nx[0] = nx_;
     for (ii = 1; ii <= N; ii++)
@@ -1296,9 +1207,9 @@ int main() {
      * codegen QP data
      ************************************************/
 
-    //	d_ocp_qp_dim_codegen("examples/c/data/test_d_ocp_data.c", "w", &dim);
-    //	d_ocp_qp_codegen("examples/c/data/test_d_ocp_data.c", "a", &dim, &qp);
-    //	d_ocp_qp_ipm_arg_codegen("examples/c/data/test_d_ocp_data.c", "a", &dim, &arg);
+    d_ocp_qp_dim_codegen("test_d_ocp_data.c", "w", &dim);
+    d_ocp_qp_codegen("test_d_ocp_data.c", "a", &dim, &qp);
+    d_ocp_qp_ipm_arg_codegen("test_d_ocp_data.c", "a", &dim, &arg);
 
     /************************************************
      * free memory
