@@ -49,12 +49,14 @@ void d_ocp_qcqp_set_rhs_zero(struct d_ocp_qcqp* qp);
 void d_ocp_qcqp_set(char* field_name, int stage, void* value, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_el(char* field_name, int stage, int index, void* value, struct d_ocp_qcqp* qp);
+// inter-stage equality constraints (dynamics)
 //
 void d_ocp_qcqp_set_A(int stage, double* mat, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_B(int stage, double* mat, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_b(int stage, double* vec, struct d_ocp_qcqp* qp);
+// costs
 //
 void d_ocp_qcqp_set_Q(int stage, double* mat, struct d_ocp_qcqp* qp);
 //
@@ -65,6 +67,7 @@ void d_ocp_qcqp_set_R(int stage, double* mat, struct d_ocp_qcqp* qp);
 void d_ocp_qcqp_set_q(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_r(int stage, double* vec, struct d_ocp_qcqp* qp);
+// box constraints
 //
 void d_ocp_qcqp_set_lb(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
@@ -96,13 +99,14 @@ void d_ocp_qcqp_set_ubu_mask(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_idxb(int stage, int* vec, struct d_ocp_qcqp* qp);
 //
-void d_ocp_qcqp_set_idxbx(int stage, int* vec, struct d_ocp_qcqp* qp);
-//
-void d_ocp_qcqp_set_Jbx(int stage, double* vec, struct d_ocp_qcqp* qp);
-//
 void d_ocp_qcqp_set_idxbu(int stage, int* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_Jbu(int stage, double* vec, struct d_ocp_qcqp* qp);
+//
+void d_ocp_qcqp_set_idxbx(int stage, int* vec, struct d_ocp_qcqp* qp);
+//
+void d_ocp_qcqp_set_Jbx(int stage, double* vec, struct d_ocp_qcqp* qp);
+// general linear inequality constraints
 //
 void d_ocp_qcqp_set_C(int stage, double* mat, struct d_ocp_qcqp* qp);
 //
@@ -115,6 +119,7 @@ void d_ocp_qcqp_set_lg_mask(int stage, double* vec, struct d_ocp_qcqp* qp);
 void d_ocp_qcqp_set_ug(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_ug_mask(int stage, double* vec, struct d_ocp_qcqp* qp);
+// quadratic inequality constraints
 //
 void d_ocp_qcqp_set_Qq(int stage, double* mat, struct d_ocp_qcqp* qp);
 //
@@ -129,6 +134,7 @@ void d_ocp_qcqp_set_rq(int stage, double* vec, struct d_ocp_qcqp* qp);
 void d_ocp_qcqp_set_uq(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_uq_mask(int stage, double* vec, struct d_ocp_qcqp* qp);
+// softed constraints
 //
 void d_ocp_qcqp_set_Zl(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
@@ -150,7 +156,11 @@ void d_ocp_qcqp_set_idxs(int stage, int* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_idxs_rev(int stage, int* vec, struct d_ocp_qcqp* qp);
 //
+void d_ocp_qcqp_set_idxsbu(int stage, int* vec, struct d_ocp_qcqp* qp);
+//
 void d_ocp_qcqp_set_Jsbu(int stage, double* vec, struct d_ocp_qcqp* qp);
+//
+void d_ocp_qcqp_set_idxsbx(int stage, int* vec, struct d_ocp_qcqp* qp);
 //
 void d_ocp_qcqp_set_Jsbx(int stage, double* vec, struct d_ocp_qcqp* qp);
 //
