@@ -7,7 +7,6 @@ build
 install
 *.o
 *.out
-*.s
 libhpipm.*
 libblasfeo.*
 hpipm_target.h
