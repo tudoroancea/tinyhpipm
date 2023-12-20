@@ -1,3 +1,4 @@
+// #include "blasfeo/blasfeo_d_aux_ext_dep.h"
 hpipm_size_t OCP_QCQP_STRSIZE() {
     return sizeof(struct OCP_QCQP);
 }
@@ -972,6 +973,8 @@ void OCP_QCQP_SET_QQ(int stage, REAL* Qq, struct OCP_QCQP* qp) {
             }
         }
         CVT_MAT2STRMAT(nx[stage], nx[stage], Qq + ii * nx[stage] * nx[stage], nx[stage], &qp->Hq[stage][ii], nu[stage], nu[stage]);
+        // print to check
+        // blasfeo_print_dmat(nx[stage] + nu[stage], nx[stage] + nu[stage], &qp->Hq[stage][ii], 0, 0);
         if (nzero) {
             qp->Hq_nzero[stage][ii] |= 1;
         }

@@ -1285,15 +1285,15 @@ void DENSE_QP_IPM_DELTA_STEP(int kk, struct DENSE_QP* qp, struct DENSE_QP_SOL* q
 
         // inaccurate factorization: switch to lq
         if (
-#ifdef USE_C99_MATH
-                (itref_qp_norm[0] == 0.0 & isnan(BLASFEO_VECEL(ws->res_itref->res_g, 0))) |
-#else
-                (itref_qp_norm[0] == 0.0 & BLASFEO_VECEL(ws->res_itref->res_g, 0) != BLASFEO_VECEL(ws->res_itref->res_g, 0)) |
-#endif
-                itref_qp_norm[0] > 1e-5 |
-                itref_qp_norm[1] > 1e-5 |
-                itref_qp_norm[2] > 1e-5 |
-                itref_qp_norm[3] > 1e-5) {
+                // #ifdef USE_C99_MATH
+                ((itref_qp_norm[0] == 0.0) & isnan(BLASFEO_VECEL(ws->res_itref->res_g, 0))) |
+                // #else
+                //                 (itref_qp_norm[0] == 0.0 & BLASFEO_VECEL(ws->res_itref->res_g, 0) != BLASFEO_VECEL(ws->res_itref->res_g, 0)) |
+                // #endif
+                (itref_qp_norm[0] > 1e-5) |
+                (itref_qp_norm[1] > 1e-5) |
+                (itref_qp_norm[2] > 1e-5) |
+                (itref_qp_norm[3] > 1e-5)) {
 
             // refactorize using lq
             FACT_LQ_SOLVE_KKT_STEP_DENSE_QP(ws->qp_step, ws->sol_step, arg, ws);
@@ -1757,17 +1757,17 @@ exit(1);
         }
         // save info before return
         ws->iter = 0;
-#ifdef USE_C99_MATH
+        // #ifdef USE_C99_MATH
         if (isnan(BLASFEO_VECEL(qp_sol->v, 0))) {
             // NaN in the solution
             ws->status = NAN_SOL;
         }
-#else
-        if (BLASFEO_VECEL(qp_sol->v, 0) != BLASFEO_VECEL(qp_sol->v, 0)) {
-            // NaN in the solution
-            ws->status = NAN_SOL;
-        }
-#endif
+        // #else
+        //         if (BLASFEO_VECEL(qp_sol->v, 0) != BLASFEO_VECEL(qp_sol->v, 0)) {
+        //             // NaN in the solution
+        //             ws->status = NAN_SOL;
+        //         }
+        // #endif
         else {
             // normal return
             ws->status = SUCCESS;
@@ -1924,17 +1924,17 @@ set_status:
         // min step lenght
         ws->status = MIN_STEP;
     }
-#ifdef USE_C99_MATH
+    // #ifdef USE_C99_MATH
     else if (isnan(cws->mu)) {
         // NaN in the solution
         ws->status = NAN_SOL;
     }
-#else
-    else if (cws->mu != cws->mu) {
-        // NaN in the solution
-        ws->status = NAN_SOL;
-    }
-#endif
+    // #else
+    //     else if (cws->mu != cws->mu) {
+    //         // NaN in the solution
+    //         ws->status = NAN_SOL;
+    //     }
+    // #endif
     else {
         // normal return
         ws->status = SUCCESS;

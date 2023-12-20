@@ -1681,11 +1681,11 @@ void OCP_QP_IPM_DELTA_STEP(int kk, struct OCP_QP* qp, struct OCP_QP_SOL* qp_sol,
 
         // inaccurate factorization: switch to lq
         if (
-#ifdef USE_C99_MATH
+// #ifdef USE_C99_MATH
                 ((itref_qp_norm[0] == 0.0) & isnan(BLASFEO_VECEL(ws->res_itref->res_g + 0, 0))) |
-#else
-                ((itref_qp_norm[0] == 0.0) & (BLASFEO_VECEL(ws->res_itref->res_g + 0, 0) != BLASFEO_VECEL(ws->res_itref->res_g + 0, 0))) |
-#endif
+// #else
+//                 ((itref_qp_norm[0] == 0.0) & (BLASFEO_VECEL(ws->res_itref->res_g + 0, 0) != BLASFEO_VECEL(ws->res_itref->res_g + 0, 0))) |
+// #endif
                 (itref_qp_norm[0] > 1e-5) |
                 (itref_qp_norm[1] > 1e-5) |
                 (itref_qp_norm[2] > 1e-5) |
@@ -2123,17 +2123,17 @@ void OCP_QP_IPM_SOLVE(struct OCP_QP* qp, struct OCP_QP_SOL* qp_sol, struct OCP_Q
             cws->mu = ws->res->res_mu;
         }
         ws->iter = 0;
-#ifdef USE_C99_MATH
+// #ifdef USE_C99_MATH
         if (isnan(BLASFEO_VECEL(qp_sol->ux + 0, 0))) {
             // NaN in the solution
             ws->status = NAN_SOL;
         }
-#else
-        if (BLASFEO_VECEL(qp_sol->ux + 0, 0) != BLASFEO_VECEL(qp_sol->ux + 0, 0)) {
-            // NaN in the solution
-            ws->status = NAN_SOL;
-        }
-#endif
+// #else
+//         if (BLASFEO_VECEL(qp_sol->ux + 0, 0) != BLASFEO_VECEL(qp_sol->ux + 0, 0)) {
+//             // NaN in the solution
+//             ws->status = NAN_SOL;
+//         }
+// #endif
         else {
             // normal return
             ws->status = SUCCESS;
@@ -2300,17 +2300,17 @@ set_status:
         // min step lenght
         ws->status = MIN_STEP;
     }
-#ifdef USE_C99_MATH
+// #ifdef USE_C99_MATH
     else if (isnan(cws->mu)) {
         // NaN in the solution
         ws->status = NAN_SOL;
     }
-#else
-    else if ((cws->mu != cws->mu)) {
-        // NaN in the solution
-        ws->status = NAN_SOL;
-    }
-#endif
+// #else
+//     else if ((cws->mu != cws->mu)) {
+//         // NaN in the solution
+//         ws->status = NAN_SOL;
+//     }
+// #endif
     else {
         // normal return
         ws->status = SUCCESS;

@@ -22,11 +22,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # create a compile_commands.json file
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE STRING "Installation path" FORCE)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -O2") # -Wall -Wextra")
 
-set(USE_C99_MATH ON CACHE BOOL "Use C99 extension to math library")
+# set(USE_C99_MATH ON CACHE BOOL "Use C99 extension to math library")
 
-if(USE_C99_MATH)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_C99_MATH")
-endif()
+# if(USE_C99_MATH)
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_C99_MATH")
+# endif()
 
 # #################################################################################
 # target selection ###############################################################
@@ -584,3 +584,11 @@ install(EXPORT ${PROJECT_NAME}-config NAMESPACE ${PROJECT_NAME}:: DESTINATION li
 enable_testing()
 add_subdirectory(test/blasfeo)
 add_subdirectory(test/hpipm)
+
+# #################################################################################
+# new #############################################################################
+# #################################################################################
+
+# add_library(new_double STATIC)
+# target_sources(new_double)
+# what do we do now?

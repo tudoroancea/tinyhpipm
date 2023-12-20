@@ -828,17 +828,17 @@ void REF_VECCL(int m, struct VEC* sxm, int xim, struct VEC* sx, int xi, struct V
     REAL* z = sz->pa + zi;
     int ii;
     for (ii = 0; ii < m; ii++) {
-#ifdef USE_C99_MATH
+        // #ifdef USE_C99_MATH
         z[ii] = FMAX(FMIN(x[ii], xp[ii]), xm[ii]);
-#else  // no C99
-        if (x[ii] >= xp[ii]) {
-            z[ii] = xp[ii];
-        } else if (x[ii] <= xm[ii]) {
-            z[ii] = xm[ii];
-        } else {
-            z[ii] = x[ii];
-        }
-#endif
+        // #else  // no C99
+        //         if (x[ii] >= xp[ii]) {
+        //             z[ii] = xp[ii];
+        //         } else if (x[ii] <= xm[ii]) {
+        //             z[ii] = xm[ii];
+        //         } else {
+        //             z[ii] = x[ii];
+        //         }
+        // #endif
     }
     return;
 }
@@ -892,13 +892,13 @@ void REF_VECNRM_INF(int m, struct VEC* sx, int xi, REAL* ptr_norm) {
     REAL norm = 0.0;
     REAL tmp;
     for (ii = 0; ii < m; ii++) {
-#if 0  // def USE_C99_MATH // does not propagate NaN !!!
-		norm = FMAX(norm, FABS(x[ii]));
-#else  // no c99
+        // #if 0  // def USE_C99_MATH // does not propagate NaN !!!
+        // 		norm = FMAX(norm, FABS(x[ii]));
+        // #else  // no c99
         tmp = FABS(x[ii]);
         //		norm = tmp>norm ? tmp : norm; // does not propagate NaN !!!
         norm = norm >= tmp ? norm : tmp;
-#endif
+        // #endif
     }
     *ptr_norm = norm;
     return;

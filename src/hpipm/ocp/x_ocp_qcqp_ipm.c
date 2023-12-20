@@ -1328,17 +1328,17 @@ void OCP_QCQP_IPM_SOLVE(struct OCP_QCQP* qcqp, struct OCP_QCQP_SOL* qcqp_sol, st
         }
         // save info before return
         qcqp_ws->iter = 0;
-#ifdef USE_C99_MATH
+        // #ifdef USE_C99_MATH
         if (isnan(BLASFEO_VECEL(qcqp_sol->ux + 0, 0))) {
             // NaN in the solution
             qcqp_ws->status = NAN_SOL;
         }
-#else
-        if (BLASFEO_VECEL(qcqp_sol->ux + 0, 0) != BLASFEO_VECEL(qcqp_sol->ux + 0, 0)) {
-            // NaN in the solution
-            qcqp_ws->status = NAN_SOL;
-        }
-#endif
+        // #else
+        //         if (BLASFEO_VECEL(qcqp_sol->ux + 0, 0) != BLASFEO_VECEL(qcqp_sol->ux + 0, 0)) {
+        //             // NaN in the solution
+        //             qcqp_ws->status = NAN_SOL;
+        //         }
+        // #endif
         else {
             // normal return
             qcqp_ws->status = SUCCESS;
@@ -1508,17 +1508,17 @@ void OCP_QCQP_IPM_SOLVE(struct OCP_QCQP* qcqp, struct OCP_QCQP_SOL* qcqp_sol, st
         // min step lenght
         qcqp_ws->status = MIN_STEP;
     }
-#ifdef USE_C99_MATH
+    // #ifdef USE_C99_MATH
     else if (isnan(cws->mu)) {
         // NaN in the solution
         qcqp_ws->status = NAN_SOL;
     }
-#else
-    else if (cws->mu != cws->mu) {
-        // NaN in the solution
-        qcqp_ws->status = NAN_SOL;
-    }
-#endif
+    // #else
+    //     else if (cws->mu != cws->mu) {
+    //         // NaN in the solution
+    //         qcqp_ws->status = NAN_SOL;
+    //     }
+    // #endif
     else {
         // normal return
         qcqp_ws->status = SUCCESS;
