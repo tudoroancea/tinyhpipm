@@ -34,3 +34,9 @@ __pycache__
 *.swp
 *.swo
 change_name.sh
+.cache
+
+# temporary files/dirs that I have not yet migrated from the original repo
+cmake
+doc
+examples
