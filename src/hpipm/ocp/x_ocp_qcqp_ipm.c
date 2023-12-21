@@ -649,21 +649,15 @@ void OCP_QCQP_INIT_VAR(struct OCP_QCQP* qp, struct OCP_QCQP_SOL* qp_sol, struct 
                 ux[jj] = 0.0;
             }
         }
+    } else {
+        // warm start (keep u and x in solution)
+        for (ii = 0; ii <= N; ii++) {
+            ux = qp_sol->ux[ii].pa;
+            for (jj = nu[ii] + nx[ii]; jj < nu[ii] + nx[ii] + 2 * ns[ii]; jj++) {
+                ux[jj] = 0.0;
+            }
+        }
     }
-    //	else
-    //		{
-    //
-    //		// warm start (keep u and x in solution)
-    //		for(ii=0; ii<=N; ii++)
-    //			{
-    //			ux = qp_sol->ux[ii].pa;
-    //			for(jj=nu[ii]+nx[ii]; jj<nu[ii]+nx[ii]+2*ns[ii]; jj++)
-    //				{
-    //				ux[jj] = 0.0;
-    //				}
-    //			}
-    //
-    //		}
 
     // pi
     for (ii = 0; ii < N; ii++) {
