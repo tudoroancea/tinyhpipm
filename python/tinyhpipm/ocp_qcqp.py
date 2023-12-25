@@ -9,7 +9,7 @@ from ctypes import (
     cast,
     create_string_buffer,
 )
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 
@@ -35,7 +35,9 @@ class hpipm_ocp_qcqp_dim:
         # create C dim
         __hpipm.d_ocp_qcqp_dim_create(N, self.dim_struct, self.dim_mem)
 
-    def set(self, field: str, value: int, idx_start: int, idx_end: int = None):
+    def set(
+        self, field: str, value: int, idx_start: int, idx_end: Optional[int] = None
+    ):
         self.__hpipm.d_ocp_qcqp_dim_set.argtypes = [c_char_p, c_int, c_int, c_void_p]
         field_name_b = field.encode("utf-8")
         if idx_end is None:
@@ -86,13 +88,12 @@ class hpipm_ocp_qcqp:
         field: str,
         value: Union[np.ndarray, int, float],
         idx_start: int,
-        idx_end: int = None,
+        idx_end: Optional[int] = None,
     ):
         # cast to np array
         value = np.atleast_1d(value)
         # convert into column-major
         value_cm = np.ravel(value, "F")
-        # if ( field == "idxbx" or field == "idxbu" or field == "idxb" or field == "idxs" or field == "idxs_rev"):  # or field=='idxe' or field=='idxbue' or field=='idxbxe' or field=='idxge' or field=='idxqe'):
         if field.startswith("idx"):
             value_cm = np.ascontiguousarray(value_cm, dtype=np.int32)
             tmp = cast(value_cm.ctypes.data, POINTER(c_int))
@@ -143,7 +144,7 @@ class hpipm_ocp_qcqp_sol:
         # create C qp
         __hpipm.d_ocp_qcqp_sol_create(dim.dim_struct, qp_sol_struct, qp_sol_mem)
 
-    def get(self, field: str, idx_start: int, idx_end: int = None):
+    def get(self, field: str, idx_start: int, idx_end: Optional[int] = None):
         if field == "u":
             vec = self.__get_u(idx_start, idx_end)
         elif field == "x":
@@ -152,7 +153,7 @@ class hpipm_ocp_qcqp_sol:
             raise NameError("hpipm_ocp_qcqp_sol.get: wrong field")
         return vec
 
-    def __get_u(self, idx_start: int, idx_end: int = None):
+    def __get_u(self, idx_start: int, idx_end: Optional[int] = None):
         nu = np.zeros((1, 1), dtype=int)
         if idx_end is None:
             # get nu at stage
@@ -172,7 +173,7 @@ class hpipm_ocp_qcqp_sol:
                 self.__hpipm.d_ocp_qcqp_sol_get_u(i, self.qp_sol_struct, tmp_ptr)
         return u
 
-    def __get_x(self, idx_start: int, idx_end: int = None):
+    def __get_x(self, idx_start: int, idx_end: Optional[int] = None):
         # nx
         nx = np.zeros((1, 1), dtype=int)
         if idx_end is None:
@@ -201,7 +202,7 @@ class hpipm_ocp_qcqp_sol:
         field: str,
         value: Union[np.ndarray, float],
         idx_start: int,
-        idx_end: int = None,
+        idx_end: Optional[int] = None,
     ):
         value = np.atleast_1d(value)
         assert field in {
