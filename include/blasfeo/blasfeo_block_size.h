@@ -136,6 +136,7 @@
 #define S_KC 512
 #define S_NC 256
 #define S_MC 6000
+
 #elif defined(TARGET_ARMV7A_NEON_VFPV3)
 // common
 #define CACHE_LINE_SIZE 64
@@ -151,10 +152,10 @@
 #define S_KC 256
 #define S_NC 128  // TODO these are just dummy
 #define S_MC 3000  // TODO these are just dummy
+
 #elif defined(TARGET_GENERIC)
 // common
 #define CACHE_LINE_SIZE 64
-#define L1_CACHE_SIZE (32 * 1024)  // L1 data cache size: 32 kB
 // double
 #define D_PS 4  // panel size
 #define D_PLD 4  // 2 // GCD of panel length
