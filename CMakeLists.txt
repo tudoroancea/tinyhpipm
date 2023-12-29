@@ -20,13 +20,10 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # create a compile_commands.json file
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE STRING "Installation path" FORCE)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -O2") # -Wall -Wextra")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC") # -Wall -Wextra")
+# set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -DDEBUG -Wall -Wextra")
+# set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -DNDEBUG")
 
-# set(USE_C99_MATH ON CACHE BOOL "Use C99 extension to math library")
-
-# if(USE_C99_MATH)
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_C99_MATH")
-# endif()
 
 # #################################################################################
 # target selection ###############################################################
