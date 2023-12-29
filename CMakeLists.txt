@@ -20,9 +20,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # create a compile_commands.json file
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE STRING "Installation path" FORCE)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC") # -Wall -Wextra")
-# set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -DDEBUG -Wall -Wextra")
-# set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -DNDEBUG")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC") 
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -DDEBUG -Wall -Wextra")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -DNDEBUG")
 
 
 # #################################################################################
@@ -81,7 +81,7 @@ configure_file(${PROJECT_SOURCE_DIR}/blasfeo_target.h.in
 	${CMAKE_CURRENT_SOURCE_DIR}/include/blasfeo/blasfeo_target.h @ONLY)
 
 # compiler and assembly flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -DTARGET_${TARGET}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DTARGET_${TARGET}")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -DTARGET_${TARGET}")
 
 if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
