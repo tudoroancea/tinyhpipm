@@ -296,7 +296,8 @@ class hpipm_ocp_qcqp_solver_arg:
             self.arg_struct,
         )
 
-
+# TODO: add hpipm_ocp_qcqp attribute (since a solver should not be used with different problem formulations)
+# and even if we do, we could just update everything in the variable create elsewhere or in this attribute)
 class hpipm_ocp_qcqp_solver:
     def __init__(self, dim: hpipm_ocp_qcqp_dim, arg: hpipm_ocp_qcqp_solver_arg):
         # load hpipm shared library
@@ -315,11 +316,12 @@ class hpipm_ocp_qcqp_solver:
         ipm_ws_mem = cast(create_string_buffer(ipm_size), c_void_p)
         self.ipm_ws_mem = ipm_ws_mem
 
-        # create C ws
+        # create ipm workspace
         __hpipm.d_ocp_qcqp_ipm_ws_create(
             dim.dim_struct, arg.arg_struct, ipm_ws_struct, ipm_ws_mem
         )
 
+        # save dim and arg internally
         self.arg = arg
         self.dim_struct = dim.dim_struct
 
