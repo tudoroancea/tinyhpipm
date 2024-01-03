@@ -1,37 +1,37 @@
 /**************************************************************************************************
-*                                                                                                 *
-* This file is part of BLASFEO.                                                                   *
-*                                                                                                 *
-* BLASFEO -- BLAS For Embedded Optimization.                                                      *
-* Copyright (C) 2019 by Gianluca Frison.                                                          *
-* Developed at IMTEK (University of Freiburg) under the supervision of Moritz Diehl.              *
-* All rights reserved.                                                                            *
-*                                                                                                 *
-* The 2-Clause BSD License                                                                        *
-*                                                                                                 *
-* Redistribution and use in source and binary forms, with or without                              *
-* modification, are permitted provided that the following conditions are met:                     *
-*                                                                                                 *
-* 1. Redistributions of source code must retain the above copyright notice, this                  *
-*    list of conditions and the following disclaimer.                                             *
-* 2. Redistributions in binary form must reproduce the above copyright notice,                    *
-*    this list of conditions and the following disclaimer in the documentation                    *
-*    and/or other materials provided with the distribution.                                       *
-*                                                                                                 *
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND                 *
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED                   *
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE                          *
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR                 *
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES                  *
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;                    *
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND                     *
-* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT                      *
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS                   *
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
-*                                                                                                 *
-* Author: Gianluca Frison, gianluca.frison (at) imtek.uni-freiburg.de                             *
-*                                                                                                 *
-**************************************************************************************************/
+ *                                                                                                 *
+ * This file is part of BLASFEO.                                                                   *
+ *                                                                                                 *
+ * BLASFEO -- BLAS For Embedded Optimization.                                                      *
+ * Copyright (C) 2019 by Gianluca Frison.                                                          *
+ * Developed at IMTEK (University of Freiburg) under the supervision of Moritz Diehl.              *
+ * All rights reserved.                                                                            *
+ *                                                                                                 *
+ * The 2-Clause BSD License                                                                        *
+ *                                                                                                 *
+ * Redistribution and use in source and binary forms, with or without                              *
+ * modification, are permitted provided that the following conditions are met:                     *
+ *                                                                                                 *
+ * 1. Redistributions of source code must retain the above copyright notice, this                  *
+ *    list of conditions and the following disclaimer.                                             *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,                    *
+ *    this list of conditions and the following disclaimer in the documentation                    *
+ *    and/or other materials provided with the distribution.                                       *
+ *                                                                                                 *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND                 *
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED                   *
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE                          *
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR                 *
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES                  *
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;                    *
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND                     *
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT                      *
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS                   *
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
+ *                                                                                                 *
+ * Author: Gianluca Frison, gianluca.frison (at) imtek.uni-freiburg.de                             *
+ *                                                                                                 *
+ **************************************************************************************************/
 
 /*
  * auxiliary algebra operations header
@@ -44,6 +44,7 @@
 #define BLASFEO_D_AUX_TEST_H_
 
 #include "blasfeo_common.h"
+#include <stdio.h>
 
 
 #ifdef __cplusplus
@@ -56,39 +57,39 @@ int test_blasfeo_memsize_diag_dmat(int m, int n);
 int test_blasfeo_memsize_dvec(int m);
 
 // --- creation
-void test_blasfeo_create_dmat(int m, int n, struct blasfeo_dmat *sA, void *memory);
-void test_blasfeo_create_dvec(int m, struct blasfeo_dvec *sA, void *memory);
+void test_blasfeo_create_dmat(int m, int n, struct blasfeo_dmat* sA, void* memory);
+void test_blasfeo_create_dvec(int m, struct blasfeo_dvec* sA, void* memory);
 
 // --- conversion
-void test_blasfeo_pack_dmat(int m, int n, double *A, int lda, struct blasfeo_dmat *sA, int ai, int aj);
-void test_blasfeo_pack_dvec(int m, double *x, int xi, struct blasfeo_dvec *sa, int ai);
-void test_blasfeo_pack_tran_dmat(int m, int n, double *A, int lda, struct blasfeo_dmat *sA, int ai, int aj);
-void test_blasfeo_unpack_dmat(int m, int n, struct blasfeo_dmat *sA, int ai, int aj, double *A, int lda);
-void test_blasfeo_unpack_dvec(int m, struct blasfeo_dvec *sa, int ai, double *x, int xi);
-void test_blasfeo_unpack_tran_dmat(int m, int n, struct blasfeo_dmat *sA, int ai, int aj, double *A, int lda);
+void test_blasfeo_pack_dmat(int m, int n, double* A, int lda, struct blasfeo_dmat* sA, int ai, int aj);
+void test_blasfeo_pack_dvec(int m, double* x, int xi, struct blasfeo_dvec* sa, int ai);
+void test_blasfeo_pack_tran_dmat(int m, int n, double* A, int lda, struct blasfeo_dmat* sA, int ai, int aj);
+void test_blasfeo_unpack_dmat(int m, int n, struct blasfeo_dmat* sA, int ai, int aj, double* A, int lda);
+void test_blasfeo_unpack_dvec(int m, struct blasfeo_dvec* sa, int ai, double* x, int xi);
+void test_blasfeo_unpack_tran_dmat(int m, int n, struct blasfeo_dmat* sA, int ai, int aj, double* A, int lda);
 
 // --- cast
-void test_d_cast_mat2strmat(double *A, struct blasfeo_dmat *sA);
-void test_d_cast_diag_mat2strmat(double *dA, struct blasfeo_dmat *sA);
-void test_d_cast_vec2vecmat(double *a, struct blasfeo_dvec *sa);
+void test_d_cast_mat2strmat(double* A, struct blasfeo_dmat* sA);
+void test_d_cast_diag_mat2strmat(double* dA, struct blasfeo_dmat* sA);
+void test_d_cast_vec2vecmat(double* a, struct blasfeo_dvec* sa);
 
 // ------ copy / scale
 
 // B <= A
 void test_blasfeo_dgecp(int m, int n,
-					struct blasfeo_dmat *sA, int ai, int aj,
-					struct blasfeo_dmat *sB, int bi, int bj);
+                        struct blasfeo_dmat* sA, int ai, int aj,
+                        struct blasfeo_dmat* sB, int bi, int bj);
 
 // A <= alpha*A
 void test_blasfeo_dgesc(int m, int n,
-					double alpha,
-					struct blasfeo_dmat *sA, int ai, int aj);
+                        double alpha,
+                        struct blasfeo_dmat* sA, int ai, int aj);
 
 // B <= alpha*A
 void test_blasfeo_dgecpsc(int m, int n,
-					double alpha,
-					struct blasfeo_dmat *sA, int ai, int aj,
-					struct blasfeo_dmat *sB, int bi, int bj);
+                          double alpha,
+                          struct blasfeo_dmat* sA, int ai, int aj,
+                          struct blasfeo_dmat* sB, int bi, int bj);
 
 // // --- insert/extract
 // //
@@ -199,24 +200,23 @@ void test_blasfeo_dgecpsc(int m, int n,
 
 // ext_dep
 
-void test_blasfeo_allocate_dmat(int m, int n, struct blasfeo_dmat *sA);
-void test_blasfeo_allocate_dvec(int m, struct blasfeo_dvec *sa);
+void test_blasfeo_allocate_dmat(int m, int n, struct blasfeo_dmat* sA);
+void test_blasfeo_allocate_dvec(int m, struct blasfeo_dvec* sa);
 
-void test_blasfeo_free_dmat(struct blasfeo_dmat *sA);
-void test_blasfeo_free_dvec(struct blasfeo_dvec *sa);
+void test_blasfeo_free_dmat(struct blasfeo_dmat* sA);
+void test_blasfeo_free_dvec(struct blasfeo_dvec* sa);
 
-void test_blasfeo_print_dmat(int m, int n, struct blasfeo_dmat *sA, int ai, int aj);
-void test_blasfeo_print_dvec(int m, struct blasfeo_dvec *sa, int ai);
-void test_blasfeo_print_tran_dvec(int m, struct blasfeo_dvec *sa, int ai);
+void test_blasfeo_print_dmat(int m, int n, struct blasfeo_dmat* sA, int ai, int aj);
+void test_blasfeo_print_dvec(int m, struct blasfeo_dvec* sa, int ai);
+void test_blasfeo_print_tran_dvec(int m, struct blasfeo_dvec* sa, int ai);
 
-void test_blasfeo_print_to_file_dmat(FILE *file, int m, int n, struct blasfeo_dmat *sA, int ai, int aj);
-void test_blasfeo_print_to_file_dvec(FILE *file, int m, struct blasfeo_dvec *sa, int ai);
-void test_blasfeo_print_to_file_tran_dvec(FILE *file, int m, struct blasfeo_dvec *sa, int ai);
+void test_blasfeo_print_to_file_dmat(FILE* file, int m, int n, struct blasfeo_dmat* sA, int ai, int aj);
+void test_blasfeo_print_to_file_dvec(FILE* file, int m, struct blasfeo_dvec* sa, int ai);
+void test_blasfeo_print_to_file_tran_dvec(FILE* file, int m, struct blasfeo_dvec* sa, int ai);
 
-void test_blasfeo_print_exp_dmat(int m, int n, struct blasfeo_dmat *sA, int ai, int aj);
-void test_blasfeo_print_exp_dvec(int m, struct blasfeo_dvec *sa, int ai);
-void test_blasfeo_print_exp_tran_dvec(int m, struct blasfeo_dvec *sa, int ai);
-
+void test_blasfeo_print_exp_dmat(int m, int n, struct blasfeo_dmat* sA, int ai, int aj);
+void test_blasfeo_print_exp_dvec(int m, struct blasfeo_dvec* sa, int ai);
+void test_blasfeo_print_exp_tran_dvec(int m, struct blasfeo_dvec* sa, int ai);
 
 
 #ifdef __cplusplus
