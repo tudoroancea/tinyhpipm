@@ -296,6 +296,7 @@ class hpipm_ocp_qcqp_solver_arg:
             self.arg_struct,
         )
 
+
 # TODO: add hpipm_ocp_qcqp attribute (since a solver should not be used with different problem formulations)
 # and even if we do, we could just update everything in the variable create elsewhere or in this attribute)
 class hpipm_ocp_qcqp_solver:

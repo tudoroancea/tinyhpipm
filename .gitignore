@@ -3,7 +3,7 @@
 .idea
 
 # compilation output
-build
+build*
 install
 *.o
 *.out
