@@ -1,4 +1,4 @@
-# tinyHPIPM 
+# 🤏 tinyHPIPM 
 <!-- a stripped down version of the HPIPM solver -->
 This project is an opinionated and stripped down version of [HPIPM](https://github.com/giaf/hpipm) packaged with the linear algebra subroutines in [BLASFEO](https://github.com/giaf/blasfeo).
 I created it based on my own personal needs (which were mostly oriented around QCQPs and the Python interface), but if you want me to add something, don't hesitate to open a PR.  
@@ -15,6 +15,6 @@ In the future I would like to add:
 - more testing and code analysis to ensure space grade software quality
     - unit testing (probably with CTest in the beginning but I could switch to a more complete C framework)
     - high MCDC coverage
-    - use static analysis tools like SonarLint, IKOS, COBRA to ensure standards
+    - use static analysis tools like [SonarLint](https://www.sonarsource.com/products/sonarlint/), [IKOS](https://github.com/NASA-SW-VnV/ikos), [COBRA](https://github.com/nimble-code/Cobra) to ensure standards like MISRA-C.
 - more documentation
 
