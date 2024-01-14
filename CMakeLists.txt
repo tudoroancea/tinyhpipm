@@ -565,8 +565,10 @@ file(GLOB_RECURSE HPIPM_HEADERS "include/hpipm/*.h")
 # #################################################################################
 add_library(blasfeo_static STATIC)
 target_sources(blasfeo_static PRIVATE ${BLASFEO_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${BLASFEO_HEADERS})
+target_link_libraries(blasfeo_static m)  # necessary on Linux
 add_library(blasfeo_dynamic SHARED)
 target_sources(blasfeo_dynamic PRIVATE ${BLASFEO_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${BLASFEO_HEADERS})
+target_link_libraries(blasfeo_dynamic m)  # necessary on Linux
 
 add_library(hpipm_static STATIC)
 target_sources(hpipm_static PRIVATE ${HPIPM_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${HPIPM_HEADERS})
