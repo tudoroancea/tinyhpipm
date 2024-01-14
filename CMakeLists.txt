@@ -483,21 +483,29 @@ file(GLOB HPIPM_DENSE_SRC
 	${PROJECT_SOURCE_DIR}/src/hpipm/dense/s_dense_qcqp_utils.c
 )
 
-if(${TARGET} MATCHES AVX)
+if(${TARGET} MATCHES X64_AVX_FMA OR ${TARGET} MATCHES X64_AVX2_FMA OR ${TARGET} MATCHES X64_AVX512_FMA)
 	file(GLOB HPIPM_IPM_CORE_SRC
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm_aux_avx.c
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm.c
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/s_core_qp_ipm_aux_avx.c
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/s_core_qp_ipm.c
 	)
-else(${TARGET} MATCHES AVX)
+elseif(${TARGET} MATCHES ARMV8A_NEON2_VPFV4)
+	file(GLOB HPIPM_IPM_CORE_SRC
+		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm_aux_neon.c
+		# ${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm_aux.c
+		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm.c
+		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/s_core_qp_ipm_aux.c
+		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/s_core_qp_ipm.c
+	)
+else()
 	file(GLOB HPIPM_IPM_CORE_SRC
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm_aux.c
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/d_core_qp_ipm.c
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/s_core_qp_ipm_aux.c
 		${PROJECT_SOURCE_DIR}/src/hpipm/ipm_core/s_core_qp_ipm.c
 	)
-endif(${TARGET} MATCHES AVX)
+endif()
 
 file(GLOB HPIPM_OCP_SRC
 	${PROJECT_SOURCE_DIR}/src/hpipm/ocp/d_ocp_qp.c

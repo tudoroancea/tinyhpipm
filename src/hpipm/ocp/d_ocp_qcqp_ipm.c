@@ -1,8 +1,6 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #ifdef USE_C99_MATH
-#include <math.h>
-// #endif
 
 #include "blasfeo/blasfeo_common.h"
 #include "blasfeo/blasfeo_d_aux.h"
