@@ -7,33 +7,6 @@
 #include <stdlib.h>
 
 
-void ddiaex_lib(int kmax, double alpha, int offset, double* pD, int sdd, double* x) {
-
-    const int bs = 4;
-
-    int kna = (bs - offset % bs) % bs;
-    kna = kmax < kna ? kmax : kna;
-
-    int jj, ll;
-
-    if (kna > 0) {
-        for (ll = 0; ll < kna; ll++) {
-            x[ll] = alpha * pD[ll + bs * ll];
-        }
-        pD += kna + bs * (sdd - 1) + kna * bs;
-        x += kna;
-        kmax -= kna;
-    }
-    for (jj = 0; jj < kmax - 3; jj += 4) {
-        x[jj + 0] = alpha * pD[jj * sdd + (jj + 0) * bs + 0];
-        x[jj + 1] = alpha * pD[jj * sdd + (jj + 1) * bs + 1];
-        x[jj + 2] = alpha * pD[jj * sdd + (jj + 2) * bs + 2];
-        x[jj + 3] = alpha * pD[jj * sdd + (jj + 3) * bs + 3];
-    }
-    for (ll = 0; ll < kmax - jj; ll++) {
-        x[jj + ll] = alpha * pD[jj * sdd + (jj + ll) * bs + ll];
-    }
-}
 // TODO CHECK THE EARLY RETURN CONDITIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 void dgemv_n(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi, double beta, struct vec* sy, int yi, struct vec* sz, int zi) {
@@ -844,7 +817,6 @@ void dtrmv_utn(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
         kernel_dtrmv_ut_4_lib4(idx + 4, pA + idx * bs, sda, x, z + idx);
         idx -= 4;
     }
-
     return;
 }
 

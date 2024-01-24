@@ -1,11 +1,11 @@
 #ifndef HPIPM_COMMON_H_
 #define HPIPM_COMMON_H_
 
-#include <stddef.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <stddef.h>
 
 #define ALIGNED(VEC, BYTES) VEC __attribute__((aligned(BYTES)))
 

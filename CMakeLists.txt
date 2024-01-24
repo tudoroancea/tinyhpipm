@@ -35,7 +35,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=native")
 # target_sources(blasfeo_dynamic PRIVATE ${BLASFEO_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${BLASFEO_HEADERS})
 # target_link_libraries(blasfeo_dynamic m)  # necessary on Linux
 file(GLOB_RECURSE TINYHPIPM_HEADERS "include/hpipm/*.h")
-file(GLOB_RECURSE TINYHPIPM_SRC "src/hpipm/*.c")
+file(GLOB_RECURSE TINYHPIPM_SRC "src/*.c")
 message(STATUS "TINYHPIPM_SRC: ${TINYHPIPM_SRC}")
 add_library(hpipm_static STATIC)
 target_sources(hpipm_static PRIVATE ${TINYHPIPM_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${TINYHPIPM_HEADERS})
