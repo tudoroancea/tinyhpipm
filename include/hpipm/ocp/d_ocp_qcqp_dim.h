@@ -1,5 +1,5 @@
-#ifndef HPIPM_D_OCP_QCQP_DIM_H_
-#define HPIPM_D_OCP_QCQP_DIM_H_
+#ifndef HPIPM_D_OCP_qcqp_DIM_H_
+#define HPIPM_D_OCP_qcqp_DIM_H_
 
 #include "hpipm/common.h"
 
@@ -86,4 +86,4 @@ void d_ocp_qcqp_dim_get_nu(struct d_ocp_qcqp_dim* dim, int stage, int* value);
 #endif
 
 
-#endif  // HPIPM_D_OCP_QCQP_DIM_H_
+#endif  // HPIPM_D_OCP_qcqp_DIM_H_

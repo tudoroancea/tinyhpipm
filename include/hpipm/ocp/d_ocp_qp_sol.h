@@ -1,8 +1,8 @@
-#ifndef HPIPM_D_OCP_QP_SOL_H_
-#define HPIPM_D_OCP_QP_SOL_H_
+#ifndef HPIPM_D_OCP_qp_sol_H_
+#define HPIPM_D_OCP_qp_sol_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 #include "hpipm/ocp/d_ocp_qp_dim.h"
 
 
@@ -13,10 +13,10 @@ extern "C" {
 
 struct d_ocp_qp_sol {
     struct d_ocp_qp_dim* dim;
-    struct blasfeo_dvec* ux;
-    struct blasfeo_dvec* pi;
-    struct blasfeo_dvec* lam;
-    struct blasfeo_dvec* t;
+    struct vec* ux;
+    struct vec* pi;
+    struct vec* lam;
+    struct vec* t;
     void* misc;
     hpipm_size_t memsize;  // memory size in bytes
 };
@@ -81,4 +81,4 @@ void d_ocp_qp_sol_set_su(int stage, double* vec, struct d_ocp_qp_sol* qp_sol);
 #endif
 
 
-#endif  // HPIPM_D_OCP_QP_SOL_H_
+#endif  // HPIPM_D_OCP_qp_sol_H_

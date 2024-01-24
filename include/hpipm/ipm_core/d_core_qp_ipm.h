@@ -1,5 +1,5 @@
-#ifndef HPIPM_D_CORE_QP_IPM_
-#define HPIPM_D_CORE_QP_IPM_
+#ifndef HPIPM_D_CORE_qp_ipm_
+#define HPIPM_D_CORE_qp_ipm_
 
 #include "hpipm/common.h"
 
@@ -61,4 +61,4 @@ void d_core_qp_ipm(struct d_core_qp_ipm_workspace* workspace);
 } /* extern "C" */
 #endif
 
-#endif  // HPIPM_D_CORE_QP_IPM_
+#endif  // HPIPM_D_CORE_qp_ipm_

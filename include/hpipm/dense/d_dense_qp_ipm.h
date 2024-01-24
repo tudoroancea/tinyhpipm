@@ -1,9 +1,8 @@
-#ifndef HPIPM_D_DENSE_QP_IPM_H_
-#define HPIPM_D_DENSE_QP_IPM_H_
+#ifndef HPIPM_D_d_dense_qp_ipm_H_
+#define HPIPM_D_d_dense_qp_ipm_H_
 
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 
 #include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qp.h"
@@ -61,37 +60,37 @@ struct d_dense_qp_ipm_ws {
     struct d_dense_qp_res* res;
     struct d_dense_qp_res* res_itref;
     struct d_dense_qp_res* res_step;
-    struct blasfeo_dvec* Gamma;  //
-    struct blasfeo_dvec* gamma;  //
-    struct blasfeo_dvec* Zs_inv;  //
-    struct blasfeo_dmat* Lv;  //
-    struct blasfeo_dmat* AL;  //
-    struct blasfeo_dmat* Le;  //
-    struct blasfeo_dmat* Ctx;  //
-    struct blasfeo_dvec* lv;  //
-    struct blasfeo_dvec* sv;  // scale for Lv
-    struct blasfeo_dvec* se;  // scale for Le
-    struct blasfeo_dvec* tmp_nbg;  // work space of size nb+ng
-    struct blasfeo_dvec* tmp_ns;  // work space of size ns
-    struct blasfeo_dmat* lq0;
-    struct blasfeo_dmat* lq1;
-    struct blasfeo_dvec* tmp_m;
-    struct blasfeo_dmat* A_LQ;
-    struct blasfeo_dmat* A_Q;
-    struct blasfeo_dmat* Zt;
-    struct blasfeo_dmat* ZtH;
-    struct blasfeo_dmat* ZtHZ;
-    struct blasfeo_dvec* xy;
-    struct blasfeo_dvec* Yxy;
-    struct blasfeo_dvec* xz;
-    struct blasfeo_dvec* tmp_nv;
-    struct blasfeo_dvec* tmp_2ns;
-    struct blasfeo_dvec* tmp_nv2ns;
-    struct blasfeo_dmat* A_li;  // A of linearly independent equality constraints
-    struct blasfeo_dvec* b_li;  // b of linearly independent equality constraints
-    struct blasfeo_dmat* A_bkp;  // pointer to backup A
-    struct blasfeo_dvec* b_bkp;  // pointer to backup b
-    struct blasfeo_dmat* Ab_LU;
+    struct vec* Gamma;  //
+    struct vec* gamma;  //
+    struct vec* Zs_inv;  //
+    struct mat* Lv;  //
+    struct mat* AL;  //
+    struct mat* Le;  //
+    struct mat* Ctx;  //
+    struct vec* lv;  //
+    struct vec* sv;  // scale for Lv
+    struct vec* se;  // scale for Le
+    struct vec* tmp_nbg;  // work space of size nb+ng
+    struct vec* tmp_ns;  // work space of size ns
+    struct mat* lq0;
+    struct mat* lq1;
+    struct vec* tmp_m;
+    struct mat* A_LQ;
+    struct mat* A_Q;
+    struct mat* Zt;
+    struct mat* ZtH;
+    struct mat* ZtHZ;
+    struct vec* xy;
+    struct vec* Yxy;
+    struct vec* xz;
+    struct vec* tmp_nv;
+    struct vec* tmp_2ns;
+    struct vec* tmp_nv2ns;
+    struct mat* A_li;  // A of linearly independent equality constraints
+    struct vec* b_li;  // b of linearly independent equality constraints
+    struct mat* A_bkp;  // pointer to backup A
+    struct vec* b_bkp;  // pointer to backup b
+    struct mat* Ab_LU;
     double* stat;  // convergence statistics
     int* ipiv_v;
     int* ipiv_e;
@@ -218,4 +217,4 @@ void d_dense_qp_compute_step_length(struct d_dense_qp* qp, struct d_dense_qp_sol
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QP_IPM_H_
+#endif  // HPIPM_D_d_dense_qp_ipm_H_

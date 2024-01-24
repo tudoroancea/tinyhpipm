@@ -1,8 +1,8 @@
-#ifndef HPIPM_D_OCP_QCQP_H_
-#define HPIPM_D_OCP_QCQP_H_
+#ifndef HPIPM_D_OCP_qcqp_H_
+#define HPIPM_D_OCP_qcqp_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 #include "hpipm/ocp/d_ocp_qcqp_dim.h"
 
 
@@ -13,16 +13,16 @@ extern "C" {
 
 struct d_ocp_qcqp {
     struct d_ocp_qcqp_dim* dim;
-    struct blasfeo_dmat* BAbt;  // dynamics matrix & vector work space
-    struct blasfeo_dmat* RSQrq;  // hessian of cost & vector work space
-    struct blasfeo_dmat* DCt;  // inequality constraints matrix
-    struct blasfeo_dmat** Hq;  // hessians of quadratic constraints
-    struct blasfeo_dvec* b;  // dynamics vector
-    struct blasfeo_dvec* rqz;  // gradient of cost & gradient of slacks
-    struct blasfeo_dvec* d;  // inequality constraints vector
-    struct blasfeo_dvec* d_mask;  // inequality constraints mask vector
-    struct blasfeo_dvec* m;  // rhs of complementarity condition
-    struct blasfeo_dvec* Z;  // (diagonal) hessian of slacks
+    struct mat* BAbt;  // dynamics matrix & vector work space
+    struct mat* RSQrq;  // hessian of cost & vector work space
+    struct mat* DCt;  // inequality constraints matrix
+    struct mat** Hq;  // hessians of quadratic constraints
+    struct vec* b;  // dynamics vector
+    struct vec* rqz;  // gradient of cost & gradient of slacks
+    struct vec* d;  // inequality constraints vector
+    struct vec* d_mask;  // inequality constraints mask vector
+    struct vec* m;  // rhs of complementarity condition
+    struct vec* Z;  // (diagonal) hessian of slacks
     int** idxb;  // indices of box constrained variables within [u; x]
     int** idxs_rev;  // index of soft constraints (reverse storage)
     int** idxe;  // indices of constraints within [bu, bx, g, q] that are equalities, subset of [0, ..., nbu+nbx+ng+nq-1]
@@ -284,4 +284,4 @@ void d_ocp_qcqp_get_idxs_rev(int stage, struct d_ocp_qcqp* qp, int* vec);
 #endif
 
 
-#endif  // HPIPM_D_OCP_QCQP_H_
+#endif  // HPIPM_D_OCP_qcqp_H_

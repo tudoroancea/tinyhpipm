@@ -1,8 +1,8 @@
 #ifndef HPIPM_D_PART_COND_H_
 #define HPIPM_D_PART_COND_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 
 #include "hpipm/common.h"
 #include "hpipm/cond/d_cond.h"

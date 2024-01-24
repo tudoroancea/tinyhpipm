@@ -1,9 +1,8 @@
-#ifndef HPIPM_D_DENSE_QP_RES_H_
-#define HPIPM_D_DENSE_QP_RES_H_
+#ifndef HPIPM_D_d_dense_qp_res_H_
+#define HPIPM_D_d_dense_qp_res_H_
 
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 #include "hpipm/dense/d_dense_qp.h"
 #include "hpipm/dense/d_dense_qp_dim.h"
 #include "hpipm/dense/d_dense_qp_sol.h"
@@ -16,10 +15,10 @@ extern "C" {
 
 struct d_dense_qp_res {
     struct d_dense_qp_dim* dim;
-    struct blasfeo_dvec* res_g;  // q-residuals
-    struct blasfeo_dvec* res_b;  // b-residuals
-    struct blasfeo_dvec* res_d;  // d-residuals
-    struct blasfeo_dvec* res_m;  // m-residuals
+    struct vec* res_g;  // q-residuals
+    struct vec* res_b;  // b-residuals
+    struct vec* res_d;  // d-residuals
+    struct vec* res_m;  // m-residuals
     double res_max[4];  // max of residuals
     double res_mu;  // mu-residual
     double obj;  // (primal) objective
@@ -28,8 +27,8 @@ struct d_dense_qp_res {
 
 
 struct d_dense_qp_res_ws {
-    struct blasfeo_dvec* tmp_nbg;  // work space of size nbM+ngM
-    struct blasfeo_dvec* tmp_ns;  // work space of size nsM
+    struct vec* tmp_nbg;  // work space of size nbM+ngM
+    struct vec* tmp_ns;  // work space of size nsM
     hpipm_size_t memsize;
 };
 
@@ -57,4 +56,4 @@ void d_dense_qp_res_get_all(struct d_dense_qp_res* res, double* res_g, double* r
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QP_RES_H_
+#endif  // HPIPM_D_d_dense_qp_res_H_

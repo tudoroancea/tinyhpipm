@@ -1,5 +1,5 @@
-#ifndef HPIPM_D_OCP_QP_DIM_H_
-#define HPIPM_D_OCP_QP_DIM_H_
+#ifndef HPIPM_D_OCP_qp_DIM_H_
+#define HPIPM_D_OCP_qp_DIM_H_
 
 #include "hpipm/common.h"
 
@@ -98,4 +98,4 @@ void d_ocp_qp_dim_get_nge(struct d_ocp_qp_dim* dim, int stage, int* value);
 #endif
 
 
-#endif  // HPIPM_D_OCP_QP_DIM_H_
+#endif  // HPIPM_D_OCP_qp_DIM_H_

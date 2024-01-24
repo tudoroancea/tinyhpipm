@@ -1,8 +1,7 @@
-#ifndef HPIPM_D_OCP_QP_IPM_H_
-#define HPIPM_D_OCP_QP_IPM_H_
+#ifndef HPIPM_D_OCP_qp_ipm_H_
+#define HPIPM_D_OCP_qp_ipm_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 
 #include "hpipm/common.h"
 #include "hpipm/ocp/d_ocp_qp.h"
@@ -59,22 +58,22 @@ struct d_ocp_qp_ipm_ws {
     struct d_ocp_qp* qp_itref;
     struct d_ocp_qp_res* res_itref;
     struct d_ocp_qp_res* res;
-    struct blasfeo_dvec* Gamma;  // hessian update
-    struct blasfeo_dvec* gamma;  // hessian update
-    struct blasfeo_dvec* tmp_nuxM;  // work space of size nxM
-    struct blasfeo_dvec* tmp_nbgM;  // work space of size nbM+ngM
-    struct blasfeo_dvec* tmp_nsM;  // work space of size nsM
-    struct blasfeo_dvec* Pb;  // Pb
-    struct blasfeo_dvec* Zs_inv;
-    struct blasfeo_dvec* tmp_m;
-    struct blasfeo_dvec* l;  // cache linear part for _get_ric_xxx
-    struct blasfeo_dmat* L;
-    struct blasfeo_dmat* Ls;
-    struct blasfeo_dmat* P;
-    struct blasfeo_dmat* Lh;
-    struct blasfeo_dmat* AL;
-    struct blasfeo_dmat* lq0;
-    struct blasfeo_dmat* tmp_nxM_nxM;
+    struct vec* Gamma;  // hessian update
+    struct vec* gamma;  // hessian update
+    struct vec* tmp_nuxM;  // work space of size nxM
+    struct vec* tmp_nbgM;  // work space of size nbM+ngM
+    struct vec* tmp_nsM;  // work space of size nsM
+    struct vec* Pb;  // Pb
+    struct vec* Zs_inv;
+    struct vec* tmp_m;
+    struct vec* l;  // cache linear part for _get_ric_xxx
+    struct mat* L;
+    struct mat* Ls;
+    struct mat* P;
+    struct mat* Lh;
+    struct mat* AL;
+    struct mat* lq0;
+    struct mat* tmp_nxM_nxM;
     double* stat;  // convergence statistics
     int* use_hess_fact;
     void* lq_work0;
@@ -182,9 +181,9 @@ void d_ocp_qp_ipm_get_ric_lr(struct d_ocp_qp* qp, struct d_ocp_qp_ipm_arg* arg, 
 //
 void d_ocp_qp_ipm_get_ric_p(struct d_ocp_qp* qp, struct d_ocp_qp_ipm_arg* arg, struct d_ocp_qp_ipm_ws* ws, int stage, double* p);
 // feedback control gain in the form u = K x + k
-void d_ocp_qp_ipm_get_ric_K(struct d_ocp_qp* qp, struct d_ocp_qp_ipm_arg* arg, struct d_ocp_qp_ipm_ws* ws, int stage, double* K);
+// void d_ocp_qp_ipm_get_ric_K(struct d_ocp_qp* qp, struct d_ocp_qp_ipm_arg* arg, struct d_ocp_qp_ipm_ws* ws, int stage, double* K);
 // feedback control gain in the form u = K x + k
-void d_ocp_qp_ipm_get_ric_k(struct d_ocp_qp* qp, struct d_ocp_qp_ipm_arg* arg, struct d_ocp_qp_ipm_ws* ws, int stage, double* k);
+// void d_ocp_qp_ipm_get_ric_k(struct d_ocp_qp* qp, struct d_ocp_qp_ipm_arg* arg, struct d_ocp_qp_ipm_ws* ws, int stage, double* k);
 //
 void d_ocp_qp_init_var(struct d_ocp_qp* qp, struct d_ocp_qp_sol* qp_sol, struct d_ocp_qp_ipm_arg* arg, struct d_ocp_qp_ipm_ws* ws);
 //
@@ -204,4 +203,4 @@ void d_ocp_qp_ipm_sens(struct d_ocp_qp* qp, struct d_ocp_qp_sol* qp_sol, struct 
 #endif
 
 
-#endif  // HPIPM_D_OCP_QP_IPM_H_
+#endif  // HPIPM_D_OCP_qp_ipm_H_

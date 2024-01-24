@@ -1,9 +1,8 @@
-#ifndef HPIPM_D_CAST_QCQP_H_
-#define HPIPM_D_CAST_QCQP_H_
+#ifndef HPIPM_D_CAST_qcqp_H_
+#define HPIPM_D_CAST_qcqp_H_
 
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 #include "hpipm/dense/d_dense_qcqp.h"
 #include "hpipm/dense/d_dense_qcqp_sol.h"
 #include "hpipm/ocp/d_ocp_qcqp.h"
@@ -26,4 +25,4 @@ void d_cast_qcqp_cond(struct d_ocp_qcqp* ocp_qp, struct d_dense_qcqp* dense_qp);
 #endif
 
 
-#endif  // HPIPM_D_CAST_QCQP_H_
+#endif  // HPIPM_D_CAST_qcqp_H_

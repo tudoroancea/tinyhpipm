@@ -1,8 +1,7 @@
-#ifndef HPIPM_D_OCP_QCQP_IPM_H_
-#define HPIPM_D_OCP_QCQP_IPM_H_
+#ifndef HPIPM_D_OCP_qcqp_ipm_H_
+#define HPIPM_D_OCP_qcqp_ipm_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 #include "hpipm/common.h"
 #include "hpipm/ocp/d_ocp_qcqp_dim.h"
 #include "hpipm/ocp/d_ocp_qcqp_res.h"
@@ -52,7 +51,7 @@ struct d_ocp_qcqp_ipm_ws {
     struct d_ocp_qp_sol* qp_sol;
     struct d_ocp_qcqp_res_ws* qcqp_res_ws;
     struct d_ocp_qcqp_res* qcqp_res;
-    struct blasfeo_dvec* tmp_nuxM;
+    struct vec* tmp_nuxM;
     int iter;  // iteration number
     int status;
     hpipm_size_t memsize;
@@ -143,4 +142,4 @@ void d_ocp_qcqp_ipm_solve(struct d_ocp_qcqp* qp, struct d_ocp_qcqp_sol* qp_sol, 
 #endif
 
 
-#endif  // HPIPM_D_OCP_QCQP_IPM_H_
+#endif  // HPIPM_D_OCP_qcqp_ipm_H_

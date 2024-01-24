@@ -1,8 +1,8 @@
-#ifndef HPIPM_D_DENSE_QCQP_RES_H_
-#define HPIPM_D_DENSE_QCQP_RES_H_
+#ifndef HPIPM_D_d_dense_qcqp_res_H_
+#define HPIPM_D_d_dense_qcqp_res_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qcqp.h"
 #include "hpipm/dense/d_dense_qcqp_dim.h"
 #include "hpipm/dense/d_dense_qcqp_sol.h"
@@ -15,10 +15,10 @@ extern "C" {
 
 struct d_dense_qcqp_res {
     struct d_dense_qcqp_dim* dim;
-    struct blasfeo_dvec* res_g;  // q-residuals
-    struct blasfeo_dvec* res_b;  // b-residuals
-    struct blasfeo_dvec* res_d;  // d-residuals
-    struct blasfeo_dvec* res_m;  // m-residuals
+    struct vec* res_g;  // q-residuals
+    struct vec* res_b;  // b-residuals
+    struct vec* res_d;  // d-residuals
+    struct vec* res_m;  // m-residuals
     double res_max[4];  // infinity norm of residuals
     double res_mu;  // mu-residual
     double obj;  // (primal) objective
@@ -27,11 +27,11 @@ struct d_dense_qcqp_res {
 
 
 struct d_dense_qcqp_res_ws {
-    struct blasfeo_dvec* tmp_nv;  // work space of size nv
-    struct blasfeo_dvec* tmp_nbgq;  // work space of size nbM+ngM+nqM
-    struct blasfeo_dvec* tmp_ns;  // work space of size nsM
-    struct blasfeo_dvec* q_fun;  // value for evaluation of quadr constr
-    struct blasfeo_dvec* q_adj;  // value for adjoint of quadr constr
+    struct vec* tmp_nv;  // work space of size nv
+    struct vec* tmp_nbgq;  // work space of size nbM+ngM+nqM
+    struct vec* tmp_ns;  // work space of size nsM
+    struct vec* q_fun;  // value for evaluation of quadr constr
+    struct vec* q_adj;  // value for adjoint of quadr constr
     int use_q_fun;  // reuse cached value for evaluation of quadr constr
     int use_q_adj;  // reuse cached value for adjoint of quadr constr
     hpipm_size_t memsize;
@@ -57,4 +57,4 @@ void d_dense_qcqp_res_compute_inf_norm(struct d_dense_qcqp_res* res);
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QCQP_RES_H_
+#endif  // HPIPM_D_d_dense_qcqp_res_H_

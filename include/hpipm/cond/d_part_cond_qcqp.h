@@ -1,8 +1,8 @@
-#ifndef HPIPM_D_PART_COND_QCQP_H_
-#define HPIPM_D_PART_COND_QCQP_H_
+#ifndef HPIPM_D_PART_COND_qcqp_H_
+#define HPIPM_D_PART_COND_qcqp_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 
 #include "hpipm/cond/d_cond_qcqp.h"
 

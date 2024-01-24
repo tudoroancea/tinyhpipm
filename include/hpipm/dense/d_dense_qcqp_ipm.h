@@ -1,8 +1,7 @@
-#ifndef HPIPM_D_DENSE_QCQP_IPM_H_
-#define HPIPM_D_DENSE_QCQP_IPM_H_
+#ifndef HPIPM_D_d_dense_qcqp_ipm_H_
+#define HPIPM_D_d_dense_qcqp_ipm_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 #include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qcqp.h"
 #include "hpipm/dense/d_dense_qcqp_dim.h"
@@ -52,7 +51,7 @@ struct d_dense_qcqp_ipm_ws {
     struct d_dense_qp_sol* qp_sol;
     struct d_dense_qcqp_res_ws* qcqp_res_ws;
     struct d_dense_qcqp_res* qcqp_res;
-    struct blasfeo_dvec* tmp_nv;
+    struct vec* tmp_nv;
     int iter;  // iteration number
     int status;
     hpipm_size_t memsize;  // memory size (in bytes) of workspace
@@ -150,4 +149,4 @@ void d_dense_qcqp_ipm_sens(struct d_dense_qcqp *qp, struct d_dense_qcqp_sol *qp_
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QCQP_IPM_H_
+#endif  // HPIPM_D_d_dense_qcqp_ipm_H_

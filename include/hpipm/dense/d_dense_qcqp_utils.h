@@ -1,8 +1,7 @@
-#ifndef HPIPM_D_DENSE_QCQP_UTILS_H_
-#define HPIPM_D_DENSE_QCQP_UTILS_H_
+#ifndef HPIPM_D_d_dense_qcqp_UTILS_H_
+#define HPIPM_D_d_dense_qcqp_UTILS_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 
 #include "hpipm/dense/d_dense_qcqp.h"
 #include "hpipm/dense/d_dense_qcqp_dim.h"
@@ -36,4 +35,4 @@ void d_dense_qcqp_res_print(struct d_dense_qcqp_dim* qp_dim, struct d_dense_qcqp
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QCQP_UTILS_H_
+#endif  // HPIPM_D_d_dense_qcqp_UTILS_H_

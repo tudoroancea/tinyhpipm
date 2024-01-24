@@ -1,8 +1,8 @@
-#ifndef HPIPM_D_COND_QCQP_H_
-#define HPIPM_D_COND_QCQP_H_
+#ifndef HPIPM_D_COND_qcqp_H_
+#define HPIPM_D_COND_qcqp_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 
 #include "hpipm/dense/d_dense_qcqp.h"
 #include "hpipm/dense/d_dense_qcqp_sol.h"
@@ -29,17 +29,17 @@ struct d_cond_qcqp_arg {
 
 struct d_cond_qcqp_ws {
     struct d_cond_qp_ws* qp_ws;
-    struct blasfeo_dmat* hess_array;  // TODO remove
-    struct blasfeo_dmat* zero_hess;  // TODO remove
-    struct blasfeo_dvec* grad_array;  // TODO remove
-    struct blasfeo_dvec* zero_grad;  // TODO remove
-    struct blasfeo_dvec* tmp_nvc;
-    struct blasfeo_dvec* tmp_nuxM;
-    struct blasfeo_dmat* GammaQ;
-    struct blasfeo_dmat* tmp_DCt;
-    struct blasfeo_dmat* tmp_nuM_nxM;
-    //	struct blasfeo_dvec *d_qp;
-    //	struct blasfeo_dvec *d_mask_qp;
+    struct mat* hess_array;  // TODO remove
+    struct mat* zero_hess;  // TODO remove
+    struct vec* grad_array;  // TODO remove
+    struct vec* zero_grad;  // TODO remove
+    struct vec* tmp_nvc;
+    struct vec* tmp_nuxM;
+    struct mat* GammaQ;
+    struct mat* tmp_DCt;
+    struct mat* tmp_nuM_nxM;
+    //	struct vec *d_qp;
+    //	struct vec *d_mask_qp;
     hpipm_size_t memsize;
 };
 
@@ -62,11 +62,11 @@ hpipm_size_t d_cond_qcqp_ws_memsize(struct d_ocp_qcqp_dim* ocp_dim, struct d_con
 //
 void d_cond_qcqp_ws_create(struct d_ocp_qcqp_dim* ocp_dim, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws, void* mem);
 //
-void d_cond_qcqp_qc(struct d_ocp_qcqp* ocp_qp, struct blasfeo_dmat* Hq2, int* Hq_nzero2, struct blasfeo_dmat* Ct2, struct blasfeo_dvec* d2, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
+void d_cond_qcqp_qc(struct d_ocp_qcqp* ocp_qp, struct mat* Hq2, int* Hq_nzero2, struct mat* Ct2, struct vec* d2, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
 //
-void d_cond_qcqp_qc_lhs(struct d_ocp_qcqp* ocp_qp, struct blasfeo_dmat* Hq2, int* Hq_nzero2, struct blasfeo_dmat* Ct2, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
+void d_cond_qcqp_qc_lhs(struct d_ocp_qcqp* ocp_qp, struct mat* Hq2, int* Hq_nzero2, struct mat* Ct2, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
 //
-void d_cond_qcqp_qc_rhs(struct d_ocp_qcqp* ocp_qp, struct blasfeo_dvec* d2, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
+void d_cond_qcqp_qc_rhs(struct d_ocp_qcqp* ocp_qp, struct vec* d2, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
 //
 void d_cond_qcqp_cond(struct d_ocp_qcqp* ocp_qp, struct d_dense_qcqp* dense_qp, struct d_cond_qcqp_arg* cond_arg, struct d_cond_qcqp_ws* cond_ws);
 //
@@ -82,4 +82,4 @@ void d_cond_qcqp_expand_sol(struct d_ocp_qcqp* ocp_qp, struct d_dense_qcqp_sol* 
 #endif
 
 
-#endif  // HPIPM_D_COND_QCQP_H_
+#endif  // HPIPM_D_COND_qcqp_H_

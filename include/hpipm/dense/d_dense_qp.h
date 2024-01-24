@@ -1,9 +1,8 @@
-#ifndef HPIPM_D_DENSE_QP_H_
-#define HPIPM_D_DENSE_QP_H_
+#ifndef HPIPM_D_d_dense_qp_H_
+#define HPIPM_D_d_dense_qp_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
-
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qp_dim.h"
 
 
@@ -14,15 +13,15 @@ extern "C" {
 
 struct d_dense_qp {
     struct d_dense_qp_dim* dim;
-    struct blasfeo_dmat* Hv;  // hessian of cost & vector work space
-    struct blasfeo_dmat* A;  // equality constraint matrix
-    struct blasfeo_dmat* Ct;  // inequality constraints matrix
-    struct blasfeo_dvec* gz;  // gradient of cost & gradient of slacks
-    struct blasfeo_dvec* b;  // equality constraint vector
-    struct blasfeo_dvec* d;  // inequality constraints vector
-    struct blasfeo_dvec* d_mask;  // inequality constraints mask vector
-    struct blasfeo_dvec* m;  // rhs of complementarity condition
-    struct blasfeo_dvec* Z;  // (diagonal) hessian of slacks
+    struct mat* Hv;  // hessian of cost & vector work space
+    struct mat* A;  // equality constraint matrix
+    struct mat* Ct;  // inequality constraints matrix
+    struct vec* gz;  // gradient of cost & gradient of slacks
+    struct vec* b;  // equality constraint vector
+    struct vec* d;  // inequality constraints vector
+    struct vec* d_mask;  // inequality constraints mask vector
+    struct vec* m;  // rhs of complementarity condition
+    struct vec* Z;  // (diagonal) hessian of slacks
     int* idxb;  // indices of box constrained variables within [u; x]
     int* idxs_rev;  // index of soft constraints (reverse storage)
     hpipm_size_t memsize;  // memory size in bytes
@@ -162,4 +161,4 @@ void d_dense_qp_get_all_rowmaj(struct d_dense_qp* qp, double* H, double* g, doub
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QP_H_
+#endif  // HPIPM_D_d_dense_qp_H_

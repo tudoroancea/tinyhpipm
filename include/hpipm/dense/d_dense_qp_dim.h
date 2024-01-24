@@ -1,5 +1,5 @@
-#ifndef HPIPM_D_DENSE_QP_DIM_H_
-#define HPIPM_D_DENSE_QP_DIM_H_
+#ifndef HPIPM_D_d_dense_qp_dim_H_
+#define HPIPM_D_d_dense_qp_dim_H_
 
 #include "hpipm/common.h"
 
@@ -61,4 +61,4 @@ void d_dense_qp_dim_get_ng(struct d_dense_qp_dim* dim, int* value);
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QP_DIM_H_
+#endif  // HPIPM_D_d_dense_qp_dim_H_

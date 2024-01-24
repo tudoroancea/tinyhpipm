@@ -1,8 +1,8 @@
-#ifndef HPIPM_D_DENSE_QCQP_SOL_H_
-#define HPIPM_D_DENSE_QCQP_SOL_H_
+#ifndef HPIPM_D_d_dense_qcqp_sol_H_
+#define HPIPM_D_d_dense_qcqp_sol_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qcqp_dim.h"
 
 
@@ -13,10 +13,10 @@ extern "C" {
 
 struct d_dense_qcqp_sol {
     struct d_dense_qcqp_dim* dim;
-    struct blasfeo_dvec* v;
-    struct blasfeo_dvec* pi;
-    struct blasfeo_dvec* lam;
-    struct blasfeo_dvec* t;
+    struct vec* v;
+    struct vec* pi;
+    struct vec* lam;
+    struct vec* t;
     void* misc;
     hpipm_size_t memsize;
 };
@@ -51,4 +51,4 @@ void d_dense_qcqp_sol_set_v(double* v, struct d_dense_qcqp_sol* qp_sol);
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QCQP_SOL_H_
+#endif  // HPIPM_D_d_dense_qcqp_sol_H_

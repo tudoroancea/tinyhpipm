@@ -1,8 +1,7 @@
-#ifndef HPIPM_D_OCP_QCQP_RED_H_
-#define HPIPM_D_OCP_QCQP_RED_H_
+#ifndef HPIPM_D_OCP_qcqp_RED_H_
+#define HPIPM_D_OCP_qcqp_RED_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 #include "hpipm/ocp/d_ocp_qcqp_dim.h"
 #include "hpipm/ocp/d_ocp_qcqp_sol.h"
 #include "hpipm/ocp/d_ocp_qp.h"
@@ -25,8 +24,8 @@ struct d_ocp_qcqp_reduce_eq_dof_arg {
 
 
 struct d_ocp_qcqp_reduce_eq_dof_ws {
-    struct blasfeo_dvec* tmp_nuxM;
-    struct blasfeo_dvec* tmp_nbgqM;
+    struct vec* tmp_nuxM;
+    struct vec* tmp_nbgqM;
     int* e_imask_ux;
     int* e_imask_d;
     hpipm_size_t memsize;  // memory size in bytes
@@ -68,4 +67,4 @@ void d_ocp_qcqp_restore_eq_dof(struct d_ocp_qcqp* qp, struct d_ocp_qcqp_sol* qp_
 #endif
 
 
-#endif  // HPIPM_D_OCP_QCQP_RED_H_
+#endif  // HPIPM_D_OCP_qcqp_RED_H_

@@ -1,8 +1,7 @@
-#ifndef HPIPM_D_OCP_QCQP_UTILS_H_
-#define HPIPM_D_OCP_QCQP_UTILS_H_
+#ifndef HPIPM_D_OCP_qcqp_UTILS_H_
+#define HPIPM_D_OCP_qcqp_UTILS_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
+#include "hpipm/blas.h"
 #include "hpipm/ocp/d_ocp_qcqp_dim.h"
 #include "hpipm/ocp/d_ocp_qcqp_ipm.h"
 #include "hpipm/ocp/d_ocp_qcqp_sol.h"
@@ -35,4 +34,4 @@ void d_ocp_qcqp_res_print(struct d_ocp_qcqp_dim* qcqp_dim, struct d_ocp_qcqp_res
 #endif
 
 
-#endif  // HPIPM_D_OCP_QCQP_UTILS_H_
+#endif  // HPIPM_D_OCP_qcqp_UTILS_H_

@@ -1,9 +1,8 @@
 #ifndef HPIPM_D_COND_H_
 #define HPIPM_D_COND_H_
 
-#include "blasfeo/blasfeo_common.h"
-#include "blasfeo/blasfeo_target.h"
-
+#include "hpipm/blas.h"
+#include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qp.h"
 #include "hpipm/dense/d_dense_qp_sol.h"
 #include "hpipm/ocp/d_ocp_qp.h"
@@ -27,15 +26,15 @@ struct d_cond_qp_arg {
 
 
 struct d_cond_qp_ws {
-    struct blasfeo_dmat* Gamma;
-    struct blasfeo_dmat* GammaQ;
-    struct blasfeo_dmat* L;
-    struct blasfeo_dmat* Lx;
-    struct blasfeo_dmat* AL;
-    struct blasfeo_dvec* Gammab;
-    struct blasfeo_dvec* l;
-    struct blasfeo_dvec* tmp_nbgM;
-    struct blasfeo_dvec* tmp_nuxM;
+    struct mat* Gamma;
+    struct mat* GammaQ;
+    struct mat* L;
+    struct mat* Lx;
+    struct mat* AL;
+    struct vec* Gammab;
+    struct vec* l;
+    struct vec* tmp_nbgM;
+    struct vec* tmp_nuxM;
     int bs;  // block size
     hpipm_size_t memsize;
 };

@@ -1,5 +1,5 @@
-#ifndef HPIPM_D_DENSE_QP_KKT_H_
-#define HPIPM_D_DENSE_QP_KKT_H_
+#ifndef HPIPM_D_d_dense_qp_KKT_H_
+#define HPIPM_D_d_dense_qp_KKT_H_
 
 #include "hpipm/common.h"
 #include "hpipm/dense/d_dense_qp.h"
@@ -33,4 +33,4 @@ void d_dense_qp_compute_obj(struct d_dense_qp* qp, struct d_dense_qp_sol* qp_sol
 #endif
 
 
-#endif  // HPIPM_D_DENSE_QP_KKT_H_
+#endif  // HPIPM_D_d_dense_qp_KKT_H_
