@@ -46,6 +46,5 @@ install(EXPORT ${PROJECT_NAME}-config NAMESPACE ${PROJECT_NAME}:: DESTINATION li
 # #################################################################################
 
 # tests
-# enable_testing()
-# add_subdirectory(test/blasfeo)
-# add_subdirectory(test/hpipm)
+enable_testing()
+add_subdirectory(test)

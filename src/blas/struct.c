@@ -3,18 +3,11 @@
 #include <stdlib.h>
 
 size_t memsize_mat(int m, int n) {
-    const int al = D_PS * D_PLD;
-    int pm = (m + D_PS - 1) & ~(D_PS - 1);  // require  pm % D_PS == 0
-    int cn = (n + D_PLD - 1) & ~(D_PLD - 1);  // require  cn % D_PLD == 0
-    int tmp = m < n ? (m + al - 1) & ~(al - 1) : (n + al - 1) & ~(al - 1);  // al(min(m,n)) // XXX max ???
-    size_t memsize = (pm * cn + tmp) * sizeof(double);
-    // TODO: check if we don't need to include cache line alignment
-    return memsize;
-}
-size_t memsize_diag_mat(int m, int n) {
-    const int al = D_PS * D_PLD;
-    int tmp = m < n ? (m + al - 1) / al * al : (n + al - 1) / al * al;  // al(min(m,n)) // XXX max ???
-    size_t memsize = tmp * sizeof(double);
+    const int pm = (m + D_PS - 1) & ~(D_PS - 1);  // number of packed rows, require  pm % D_PS == 0
+    const int cn = (n + D_PLD - 1) & ~(D_PLD - 1);  // number of packed columns, require  cn % D_PLD == 0
+    const int block_size = D_PS * D_PLD;
+    int diag_size = m < n ? (m + block_size - 1) & ~(block_size - 1) : (n + block_size - 1) & ~(block_size - 1);
+    size_t memsize = (pm * cn + diag_size) * sizeof(double);
     return memsize;
 }
 
@@ -25,21 +18,24 @@ size_t memsize_vec(int m) {
 }
 
 void create_mat(int m, int n, struct mat* sA, void* memory) {
-    sA->mem = memory;  // the memory has been created using mem_size
-    int al = D_PS * D_PLD;
+    // all the necessary memory allocation has been done,
+    // we just split it between the actual matrix and its diagonal
+    sA->mem = memory;
     sA->m = m;
     sA->n = n;
-    int pm = (m + D_PS - 1) & ~(D_PS - 1);  // require  pm % D_PS == 0
-    int cn = (n + D_PLD - 1) & ~(D_PLD - 1);  // require  cn % D_PLD == 0
+    int pm = (m + D_PS - 1) & ~(D_PS - 1);  // number of packed rows, require  pm % D_PS == 0
+    int cn = (n + D_PLD - 1) & ~(D_PLD - 1);  // number of packed columns, require  cn % D_PLD == 0
     sA->pm = pm;
     sA->cn = cn;
     double* ptr = (double*) memory;
     sA->pA = ptr;
     ptr += pm * cn;
-    int tmp = m < n ? (m + al - 1) / al * al : (n + al - 1) / al * al;  // al(min(m,n)) // XXX max ???
+
+    const int block_size = D_PS * D_PLD;
+    int diag_size = m < n ? (m + block_size - 1) & ~(block_size - 1) : (n + block_size - 1) & ~(block_size - 1);
     sA->dA = ptr;
-    ptr += tmp;
-    sA->memsize = (pm * cn + tmp) * sizeof(double);
+    ptr += diag_size;
+    sA->memsize = (pm * cn + diag_size) * sizeof(double);
     sA->use_dA = 0;  // invalidate stored inverse diagonal
 }
 void create_vec(int m, struct vec* sa, void* memory) {

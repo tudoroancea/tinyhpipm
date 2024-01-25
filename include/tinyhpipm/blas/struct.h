@@ -7,8 +7,9 @@ extern "C" {
 
 #include "tinyhpipm/common.h"
 
-#define D_PS 4  // panel size
-#define D_PLD 4  // GCD of panel length
+#define D_PS 4  // panel size, i.e. number of rows in a panel
+#define D_PLD 4  // GCD of panel length, i.e. number of columns in a block
+#define D_BLOCK_SIZE 16  // block size, i.e. number of numbers in a block (D_PLD*D_PS)
 #define CACHE_LINE_SIZE 64  // bytes, holds 8 double precision numbers (on ARM Cortex A76 we have 64B, on Apple M2 we have 128B)
 #define K_MAX_STACK 300  // Maximum inner product length K for buffer allocation on stack (decrease this value if stack size is exceeded)
 
