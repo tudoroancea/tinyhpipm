@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_ipm.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_ipm.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
 
 
 void d_ocp_qp_dim_print(struct d_ocp_qp_dim* qp_dim) {

@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_red.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_red.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
 
 void d_ocp_qp_dim_reduce_eq_dof(struct d_ocp_qp_dim* dim, struct d_ocp_qp_dim* dim_red) {
     int ii;

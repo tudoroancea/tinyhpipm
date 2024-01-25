@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 #include <math.h>
 
 void kernel_dgemm_nt_4x4_lib4(int kmax, double* alpha, double* A, double* B, double* beta, double* C, double* D) {

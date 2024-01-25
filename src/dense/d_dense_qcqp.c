@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/dense/d_dense_qcqp.h"
-#include "hpipm/dense/d_dense_qcqp_dim.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/dense/d_dense_qcqp.h"
+#include "tinyhpipm/dense/d_dense_qcqp_dim.h"
 
 
 hpipm_size_t d_dense_qcqp_strsize() {

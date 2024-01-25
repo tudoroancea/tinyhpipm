@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_dim.h"
-#include "hpipm/dense/d_dense_qp_ipm.h"
-#include "hpipm/dense/d_dense_qp_res.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_dim.h"
+#include "tinyhpipm/dense/d_dense_qp_ipm.h"
+#include "tinyhpipm/dense/d_dense_qp_res.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
 
 
 void d_dense_qp_dim_print(struct d_dense_qp_dim* qp_dim) {

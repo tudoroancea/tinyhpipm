@@ -1,6 +1,6 @@
 
-#include "hpipm/blas/print.h"
-#include "hpipm/blas/struct.h"
+#include "tinyhpipm/blas/print.h"
+#include "tinyhpipm/blas/struct.h"
 
 // print a matrix structure
 void print_mat(int m, int n, struct mat* sA, int ai, int aj) {

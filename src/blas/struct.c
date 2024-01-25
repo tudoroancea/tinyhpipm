@@ -1,4 +1,4 @@
-#include "hpipm/blas/struct.h"
+#include "tinyhpipm/blas/struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 

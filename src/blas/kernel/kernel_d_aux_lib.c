@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 void kernel_dvecld_inc1(int k, double* x) {
     int ii;

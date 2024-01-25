@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
 
-#include "hpipm/cond/d_cond.h"
-#include "hpipm/cond/d_cond_aux.h"
-#include "hpipm/cond/d_part_cond.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/cond/d_cond.h"
+#include "tinyhpipm/cond/d_cond_aux.h"
+#include "tinyhpipm/cond/d_part_cond.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
 
 
 void d_part_cond_qp_compute_block_size(int N, int N2, int* block_size) {

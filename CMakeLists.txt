@@ -21,30 +21,21 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # create a compile_commands.json file
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE STRING "Installation path" FORCE)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
-# set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -DDEBUG -Wall -Wextra")
-# set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -DNDEBUG")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=native")
 
 # #################################################################################
 # create targets and install them #################################################
 # #################################################################################
-# add_library(blasfeo_static STATIC)
-# target_sources(blasfeo_static PRIVATE ${BLASFEO_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${BLASFEO_HEADERS})
-# target_link_libraries(blasfeo_static m)  # necessary on Linux
-# add_library(blasfeo_dynamic SHARED)
-# target_sources(blasfeo_dynamic PRIVATE ${BLASFEO_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${BLASFEO_HEADERS})
-# target_link_libraries(blasfeo_dynamic m)  # necessary on Linux
-file(GLOB_RECURSE TINYHPIPM_HEADERS "include/hpipm/*.h")
+file(GLOB_RECURSE TINYHPIPM_HEADERS "include/tinyhpipm/*.h")
 file(GLOB_RECURSE TINYHPIPM_SRC "src/*.c")
-message(STATUS "TINYHPIPM_SRC: ${TINYHPIPM_SRC}")
-add_library(hpipm_static STATIC)
-target_sources(hpipm_static PRIVATE ${TINYHPIPM_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${TINYHPIPM_HEADERS})
-target_link_libraries(hpipm_static m)
-add_library(hpipm_dynamic SHARED)
-target_sources(hpipm_dynamic PRIVATE ${TINYHPIPM_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${TINYHPIPM_HEADERS})
-target_link_libraries(hpipm_dynamic m)
+add_library(tinyhpipm_static STATIC)
+target_sources(tinyhpipm_static PRIVATE ${TINYHPIPM_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${TINYHPIPM_HEADERS})
+target_link_libraries(tinyhpipm_static m)
+add_library(tinyhpipm_dynamic SHARED)
+target_sources(tinyhpipm_dynamic PRIVATE ${TINYHPIPM_SRC} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${TINYHPIPM_HEADERS})
+target_link_libraries(tinyhpipm_dynamic m)
 
-install(TARGETS hpipm_static hpipm_dynamic
+install(TARGETS tinyhpipm_static tinyhpipm_dynamic
 	EXPORT ${PROJECT_NAME}-config
 	FILE_SET HEADERS
 	LIBRARY DESTINATION lib)

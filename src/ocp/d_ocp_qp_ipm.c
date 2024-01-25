@@ -2,17 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_ipm.h"
-#include "hpipm/ocp/d_ocp_qp_kkt.h"
-#include "hpipm/ocp/d_ocp_qp_res.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
-#include "hpipm/ocp/d_ocp_qp_utils.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_ipm.h"
+#include "tinyhpipm/ocp/d_ocp_qp_kkt.h"
+#include "tinyhpipm/ocp/d_ocp_qp_res.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qp_utils.h"
 
 
 hpipm_size_t d_ocp_qp_ipm_arg_strsize() {
@@ -2087,7 +2087,7 @@ void d_ocp_qp_ipm_solve(struct d_ocp_qp* qp, struct d_ocp_qp_sol* qp_sol, struct
 
         if (isnan(VECEL(qp_sol->ux + 0, 0))) {
             // NaN in the solution
-            ws->status = NAN_sol;
+            ws->status = NAN_SOL;
         }
         // #else
         //         if (VECEL(qp_sol->ux + 0, 0) != VECEL(qp_sol->ux + 0, 0)) {
@@ -2255,7 +2255,7 @@ set_status:
 
     if (kk == arg->iter_max) {
         // max iteration number reached
-        ws->status = MAX_iter;
+        ws->status = MAX_ITER;
     } else if (cws->alpha <= arg->alpha_min) {
         // min step lenght
         ws->status = MIN_STEP;
@@ -2263,7 +2263,7 @@ set_status:
 
     else if (isnan(cws->mu)) {
         // NaN in the solution
-        ws->status = NAN_sol;
+        ws->status = NAN_SOL;
     }
     // #else
     //     else if ((cws->mu != cws->mu)) {

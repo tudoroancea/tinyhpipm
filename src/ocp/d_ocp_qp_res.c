@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_res.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_res.h"
 
 
 #define d_ocp_qp_res_memsize d_ocp_qp_res_memsize

@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 
 // swap two rows

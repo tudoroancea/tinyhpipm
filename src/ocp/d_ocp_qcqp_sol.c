@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/ocp/d_ocp_qcqp_dim.h"
-#include "hpipm/ocp/d_ocp_qcqp_sol.h"
-#include "hpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
 
 
 hpipm_size_t d_ocp_qcqp_sol_strsize() {

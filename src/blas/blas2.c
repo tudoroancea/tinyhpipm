@@ -1,8 +1,8 @@
-#include "hpipm/blas/blas2.h"
-#include "hpipm/blas/blas1.h"
-#include "hpipm/blas/kernel.h"
-#include "hpipm/blas/misc.h"
-#include "hpipm/blas/struct.h"
+#include "tinyhpipm/blas/blas2.h"
+#include "tinyhpipm/blas/blas1.h"
+#include "tinyhpipm/blas/kernel.h"
+#include "tinyhpipm/blas/misc.h"
+#include "tinyhpipm/blas/struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 

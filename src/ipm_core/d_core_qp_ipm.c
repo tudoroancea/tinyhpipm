@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #endif
 
-#include "hpipm/common.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
 
 
 hpipm_size_t d_memsize_core_qp_ipm(int nv, int ne, int nc) {

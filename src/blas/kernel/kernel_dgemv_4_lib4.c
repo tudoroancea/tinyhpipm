@@ -34,7 +34,7 @@
  **************************************************************************************************/
 
 
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 
 void kernel_dgemv_n_4_lib4(int kmax, double* alpha, double* A, double* x, double* beta, double* y, double* z) {

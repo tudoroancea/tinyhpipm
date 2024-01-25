@@ -2,22 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/dense/d_dense_qcqp.h"
-#include "hpipm/dense/d_dense_qcqp_dim.h"
-#include "hpipm/dense/d_dense_qcqp_ipm.h"
-#include "hpipm/dense/d_dense_qcqp_res.h"
-#include "hpipm/dense/d_dense_qcqp_sol.h"
-#include "hpipm/dense/d_dense_qcqp_utils.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_dim.h"
-#include "hpipm/dense/d_dense_qp_ipm.h"
-#include "hpipm/dense/d_dense_qp_kkt.h"
-#include "hpipm/dense/d_dense_qp_res.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
-#include "hpipm/dense/d_dense_qp_utils.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/dense/d_dense_qcqp.h"
+#include "tinyhpipm/dense/d_dense_qcqp_dim.h"
+#include "tinyhpipm/dense/d_dense_qcqp_ipm.h"
+#include "tinyhpipm/dense/d_dense_qcqp_res.h"
+#include "tinyhpipm/dense/d_dense_qcqp_sol.h"
+#include "tinyhpipm/dense/d_dense_qcqp_utils.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_dim.h"
+#include "tinyhpipm/dense/d_dense_qp_ipm.h"
+#include "tinyhpipm/dense/d_dense_qp_kkt.h"
+#include "tinyhpipm/dense/d_dense_qp_res.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/dense/d_dense_qp_utils.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
 
 
 hpipm_size_t d_dense_qcqp_ipm_arg_strsize() {
@@ -1051,17 +1051,17 @@ void d_dense_qcqp_ipm_solve(struct d_dense_qcqp* qcqp, struct d_dense_qcqp_sol* 
         }
         // save info before return
         qcqp_ws->iter = 0;
-        
+
         if (isnan(VECEL(qcqp_sol->v, 0))) {
             // NaN in the solution
-            qcqp_ws->status = NAN_sol;
+            qcqp_ws->status = NAN_SOL;
         }
         // #else
         //         if (VECEL(qcqp_sol->v, 0) != VECEL(qcqp_sol->v, 0)) {
         //             // NaN in the solution
         //             qcqp_ws->status = NAN_sol;
         //         }
-        
+
         else {
             // normal return
             qcqp_ws->status = SUCCESS;
@@ -1225,22 +1225,22 @@ set_status:
 
     if (kk == qcqp_arg->iter_max) {
         // max iteration number reached
-        qcqp_ws->status = MAX_iter;
+        qcqp_ws->status = MAX_ITER;
     } else if (cws->alpha <= qcqp_arg->alpha_min) {
         // min step lenght
         qcqp_ws->status = MIN_STEP;
     }
-    
+
     else if (isnan(cws->mu)) {
         // NaN in the solution
-        qcqp_ws->status = NAN_sol;
+        qcqp_ws->status = NAN_SOL;
     }
     // #else
     //     else if (cws->mu != cws->mu) {
     //         // NaN in the solution
     //         qcqp_ws->status = NAN_sol;
     //     }
-    
+
     else {
         // normal return
         qcqp_ws->status = SUCCESS;

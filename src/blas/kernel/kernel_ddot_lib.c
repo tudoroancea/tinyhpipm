@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 #include <stdio.h>
 #include <stdlib.h>
 

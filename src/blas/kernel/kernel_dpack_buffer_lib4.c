@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 // full non-transposed
 void kernel_dpack_buffer_fn(int m, int n, double* A, int lda, double* pA, int sda) {

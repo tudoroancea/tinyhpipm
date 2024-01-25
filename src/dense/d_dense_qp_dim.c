@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/common.h"
-#include "hpipm/dense/d_dense_qp_dim.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/dense/d_dense_qp_dim.h"
 
 
 hpipm_size_t d_dense_qp_dim_strsize() {

@@ -1,8 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "hpipm/blas/kernel.h"
-#include "hpipm/blas/struct.h"
+#include "tinyhpipm/blas/kernel.h"
+#include "tinyhpipm/blas/struct.h"
 
 
 // swap two rows

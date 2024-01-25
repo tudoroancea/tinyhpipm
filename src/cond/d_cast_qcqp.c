@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/dense/d_dense_qcqp.h"
-#include "hpipm/dense/d_dense_qcqp_dim.h"
-#include "hpipm/dense/d_dense_qcqp_sol.h"
-#include "hpipm/ocp/d_ocp_qcqp.h"
-#include "hpipm/ocp/d_ocp_qcqp_dim.h"
-#include "hpipm/ocp/d_ocp_qcqp_sol.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/dense/d_dense_qcqp.h"
+#include "tinyhpipm/dense/d_dense_qcqp_dim.h"
+#include "tinyhpipm/dense/d_dense_qcqp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_sol.h"
 
 void d_cast_qcqp_compute_dim(struct d_ocp_qcqp_dim* ocp_dim, struct d_dense_qcqp_dim* dense_dim) {
 

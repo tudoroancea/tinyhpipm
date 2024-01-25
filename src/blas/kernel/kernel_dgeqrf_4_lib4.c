@@ -36,8 +36,8 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
 
 
 void kernel_dgeqrf_4_lib4(int m, double* pD, int sdd, double* dD) {

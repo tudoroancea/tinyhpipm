@@ -1,14 +1,14 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_ipm.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_ipm.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
 
 
 // backward Riccati recursion

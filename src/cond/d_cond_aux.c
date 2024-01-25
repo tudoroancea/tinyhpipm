@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
 
-#include "hpipm/cond/d_cond.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/cond/d_cond.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
 
 
 void d_cond_BAbt(struct d_ocp_qp* ocp_qp, struct mat* BAbt2, struct vec* b2, struct d_cond_qp_arg* cond_arg, struct d_cond_qp_ws* cond_ws) {

@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 
 void kernel_dgetr_tn_4_lib(int kmax, double* A, int lda, double* C, int ldc) {

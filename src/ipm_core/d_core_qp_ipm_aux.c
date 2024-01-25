@@ -1,4 +1,4 @@
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
 
 
 #define d_core_qp_ipm_workspace d_core_qp_ipm_workspace

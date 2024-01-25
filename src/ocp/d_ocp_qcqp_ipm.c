@@ -2,22 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
-#include "hpipm/ocp/d_ocp_qcqp.h"
-#include "hpipm/ocp/d_ocp_qcqp_dim.h"
-#include "hpipm/ocp/d_ocp_qcqp_ipm.h"
-#include "hpipm/ocp/d_ocp_qcqp_res.h"
-#include "hpipm/ocp/d_ocp_qcqp_sol.h"
-#include "hpipm/ocp/d_ocp_qp.h"
-#include "hpipm/ocp/d_ocp_qp_dim.h"
-#include "hpipm/ocp/d_ocp_qp_ipm.h"
-#include "hpipm/ocp/d_ocp_qp_kkt.h"
-#include "hpipm/ocp/d_ocp_qp_res.h"
-#include "hpipm/ocp/d_ocp_qp_sol.h"
-#include "hpipm/ocp/d_ocp_qp_utils.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_ipm.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_res.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qp.h"
+#include "tinyhpipm/ocp/d_ocp_qp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qp_ipm.h"
+#include "tinyhpipm/ocp/d_ocp_qp_kkt.h"
+#include "tinyhpipm/ocp/d_ocp_qp_res.h"
+#include "tinyhpipm/ocp/d_ocp_qp_sol.h"
+#include "tinyhpipm/ocp/d_ocp_qp_utils.h"
 // #include <hpipm_d_ocp_qcqp_utils.h>
 
 
@@ -1295,17 +1295,17 @@ void d_ocp_qcqp_ipm_solve(struct d_ocp_qcqp* qcqp, struct d_ocp_qcqp_sol* qcqp_s
         }
         // save info before return
         qcqp_ws->iter = 0;
-        
+
         if (isnan(VECEL(qcqp_sol->ux + 0, 0))) {
             // NaN in the solution
-            qcqp_ws->status = NAN_sol;
+            qcqp_ws->status = NAN_SOL;
         }
         // #else
         //         if (VECEL(qcqp_sol->ux + 0, 0) != VECEL(qcqp_sol->ux + 0, 0)) {
         //             // NaN in the solution
         //             qcqp_ws->status = NAN_sol;
         //         }
-        
+
         else {
             // normal return
             qcqp_ws->status = SUCCESS;
@@ -1469,22 +1469,22 @@ void d_ocp_qcqp_ipm_solve(struct d_ocp_qcqp* qcqp, struct d_ocp_qcqp_sol* qcqp_s
 
     if (kk == qcqp_arg->iter_max) {
         // max iteration number reached
-        qcqp_ws->status = MAX_iter;
+        qcqp_ws->status = MAX_ITER;
     } else if (cws->alpha <= qcqp_arg->alpha_min) {
         // min step lenght
         qcqp_ws->status = MIN_STEP;
     }
-    
+
     else if (isnan(cws->mu)) {
         // NaN in the solution
-        qcqp_ws->status = NAN_sol;
+        qcqp_ws->status = NAN_SOL;
     }
     // #else
     //     else if (cws->mu != cws->mu) {
     //         // NaN in the solution
     //         qcqp_ws->status = NAN_sol;
     //     }
-    
+
     else {
         // normal return
         qcqp_ws->status = SUCCESS;

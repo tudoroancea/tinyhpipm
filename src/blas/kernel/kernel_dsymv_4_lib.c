@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 
 void kernel_dsymv_l_4_libc(int kmax, double* alpha, double* A, int lda, double* x_n, double* z_n) {

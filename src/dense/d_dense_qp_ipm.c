@@ -2,17 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_dim.h"
-#include "hpipm/dense/d_dense_qp_ipm.h"
-#include "hpipm/dense/d_dense_qp_kkt.h"
-#include "hpipm/dense/d_dense_qp_res.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
-#include "hpipm/dense/d_dense_qp_utils.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_dim.h"
+#include "tinyhpipm/dense/d_dense_qp_ipm.h"
+#include "tinyhpipm/dense/d_dense_qp_kkt.h"
+#include "tinyhpipm/dense/d_dense_qp_res.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/dense/d_dense_qp_utils.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
 
 hpipm_size_t d_dense_qp_ipm_arg_strsize() {
     return sizeof(struct d_dense_qp_ipm_arg);
@@ -1604,7 +1604,7 @@ void d_dense_qp_ipm_solve(struct d_dense_qp* qp, struct d_dense_qp_sol* qp_sol, 
 
     if (arg->remove_lin_dep_eq) {
         d_dense_qp_remove_lin_dep_eq(qp, arg, ws);
-        if (ws->status == INCONS_eq) {
+        if (ws->status == INCONS_EQ) {
             ws->iter = 0;
             goto call_return;
         }
@@ -1721,7 +1721,7 @@ void d_dense_qp_ipm_solve(struct d_dense_qp* qp, struct d_dense_qp_sol* qp_sol, 
 
         if (isnan(VECEL(qp_sol->v, 0))) {
             // NaN in the solution
-            ws->status = NAN_sol;
+            ws->status = NAN_SOL;
         }
         // #else
         //         if (VECEL(qp_sol->v, 0) != VECEL(qp_sol->v, 0)) {
@@ -1880,7 +1880,7 @@ set_status:
 
     if (kk == arg->iter_max) {
         // max iteration number reached
-        ws->status = MAX_iter;
+        ws->status = MAX_ITER;
     } else if (cws->alpha <= arg->alpha_min) {
         // min step lenght
         ws->status = MIN_STEP;
@@ -1888,7 +1888,7 @@ set_status:
 
     else if (isnan(cws->mu)) {
         // NaN in the solution
-        ws->status = NAN_sol;
+        ws->status = NAN_SOL;
     }
     // #else
     //     else if (cws->mu != cws->mu) {

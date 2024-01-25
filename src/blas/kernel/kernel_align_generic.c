@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 #include <stdint.h>
 
 void align_4096_byte(void* ptr, void** ptr_align) {

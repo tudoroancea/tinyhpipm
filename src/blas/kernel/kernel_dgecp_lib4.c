@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 // both A and B are aligned to 256-bit boundaries
 void kernel_dgecp_4_0_lib4(int tri, int kmax, double* A, double* B) {

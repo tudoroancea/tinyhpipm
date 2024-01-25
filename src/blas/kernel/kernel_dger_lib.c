@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 
 void kernel_dger_4_libc(int kmax, double* alpha, double* x, double* y, double* C, int ldc, double* D, int ldd) {

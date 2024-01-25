@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 // XXX copy and scale y_n into z_n outside the kernel !!!!!
 void kernel_dgemv_n_4_libc(int kmax, double* alpha, double* A, int lda, double* x, double* z) {

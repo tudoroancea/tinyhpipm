@@ -1,4 +1,4 @@
-#include "hpipm/common.h"
+#include "tinyhpipm/common.h"
 #include <stdint.h>
 
 int hpipm_strcmp(char* str1, char* str2) {

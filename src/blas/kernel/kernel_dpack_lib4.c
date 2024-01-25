@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 
 // void kernel_dpack_nn_12_vs_lib4(int kmax, double* A, int lda, double* C, int sdc, int m1) {

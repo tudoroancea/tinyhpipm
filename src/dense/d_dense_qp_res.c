@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_dim.h"
-#include "hpipm/dense/d_dense_qp_res.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_dim.h"
+#include "tinyhpipm/dense/d_dense_qp_res.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
 
 
 hpipm_size_t d_dense_qp_res_memsize(struct d_dense_qp_dim* dim) {

@@ -1,15 +1,15 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "hpipm/blas.h"
-#include "hpipm/common.h"
-#include "hpipm/dense/d_dense_qp.h"
-#include "hpipm/dense/d_dense_qp_dim.h"
-#include "hpipm/dense/d_dense_qp_ipm.h"
-#include "hpipm/dense/d_dense_qp_res.h"
-#include "hpipm/dense/d_dense_qp_sol.h"
-#include "hpipm/ipm_core/d_core_qp_ipm.h"
-#include "hpipm/ipm_core/d_core_qp_ipm_aux.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/common.h"
+#include "tinyhpipm/dense/d_dense_qp.h"
+#include "tinyhpipm/dense/d_dense_qp_dim.h"
+#include "tinyhpipm/dense/d_dense_qp_ipm.h"
+#include "tinyhpipm/dense/d_dense_qp_res.h"
+#include "tinyhpipm/dense/d_dense_qp_sol.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm.h"
+#include "tinyhpipm/ipm_core/d_core_qp_ipm_aux.h"
 
 // range-space (Schur complement) method
 void d_fact_solve_kkt_unconstr_dense_qp(struct d_dense_qp* qp, struct d_dense_qp_sol* qp_sol, struct d_dense_qp_ipm_arg* arg, struct d_dense_qp_ipm_ws* ws) {
@@ -1388,7 +1388,7 @@ void d_fact_solve_lu_kkt_step_dense_qp(struct d_dense_qp *qp, struct d_dense_qp_
 		d_compute_lam_t_qp(qp->d->pa, qp->m->pa, qp_sol->lam->pa, qp_sol->t->pa, cws);
 		}
 
-	
+
 
 	}
 #endif
@@ -1661,7 +1661,7 @@ void d_dense_qp_remove_lin_dep_eq(struct d_dense_qp* qp, struct d_dense_qp_ipm_a
                     for (ll = ii; ll < ne; ll++) {
                         tmp = fabs(MATEL(Ab_LU, ll, nv));
                         if (tmp > thr) {
-                            ws->status = INCONS_eq;
+                            ws->status = INCONS_EQ;
                         }
                     }
                     goto swap_A_b;

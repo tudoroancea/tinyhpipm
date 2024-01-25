@@ -1,4 +1,4 @@
-#include "hpipm/blas/kernel.h"
+#include "tinyhpipm/blas/kernel.h"
 
 void kernel_dgemm_nt_4x4_libcccc(int kmax, double* alpha, double* A, int lda, double* B, int ldb, double* beta, double* C, int ldc, double* D, int ldd) {
     const int bs = 4;
