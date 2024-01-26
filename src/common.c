@@ -85,13 +85,13 @@ void hpipm_zero_memset(hpipm_size_t memsize, void* mem) {
 // #else  // ANSI C Mode
 
 /* read current time */
-void tic(struct timer* t) {
+void tic(struct tinyhpipm_timer* t) {
     clock_gettime(CLOCK_MONOTONIC, &t->tic);
 }
 
 
 /* return time passed since last call to tic on this timer */
-double toc(struct timer* t) {
+double toc(struct tinyhpipm_timer* t) {
     struct timespec temp;
 
     clock_gettime(CLOCK_MONOTONIC, &t->toc);

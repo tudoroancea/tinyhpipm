@@ -273,7 +273,7 @@ void d_ocp_qcqp_reduce_eq_dof(struct d_ocp_qcqp* qp, struct d_ocp_qcqp* qp_red, 
                             for (ll = 0; ll < nq[ii]; ll++) {
                                 MATEL(qp_red->Hq[ii] + ll, idx1, idx0) = MATEL(qp->Hq[ii] + ll, kk, jj);
                             }
-                            
+
                             idx1++;
                         }
                     }
@@ -481,7 +481,7 @@ void d_ocp_qcqp_reduce_eq_dof_lhs(struct d_ocp_qcqp* qp, struct d_ocp_qcqp* qp_r
                             for (ll = 0; ll < nq[ii]; ll++) {
                                 MATEL(qp_red->Hq[ii] + ll, idx1, idx0) = MATEL(qp->Hq[ii] + ll, kk, jj);
                             }
-                            
+
                             idx1++;
                         }
                     }

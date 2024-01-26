@@ -12,14 +12,14 @@ extern "C" {
 typedef size_t hpipm_size_t;
 
 
-enum hpipm_mode {
+enum tinyhpipm_mode {
     SPEED_ABS,  // focus on speed, absolute IPM formulation
     SPEED,  // focus on speed, relative IPM formulation
     BALANCE,  // balanced mode, relative IPM formulation
     ROBUST,  // focus on robustness, relative IPM formulation
 };
 
-enum hpipm_status {
+enum tinyhpipm_status {
     SUCCESS,  // found solution satisfying accuracy tolerance
     MAX_ITER,  // maximum iteration number reached
     MIN_STEP,  // minimum step length reached
@@ -57,7 +57,7 @@ void hpipm_zero_memset(hpipm_size_t memsize, void* mem);
 
 // #else  // ANSI C Mode
 
-struct timer {
+struct tinyhpipm_timer {
     struct timespec tic;
     struct timespec toc;
 };
@@ -66,10 +66,10 @@ struct timer {
 // #endif // __APPLE__
 
 /** A function for measurement of the current time. */
-void tic(struct timer* t);
+void tic(struct tinyhpipm_timer* t);
 
 /** A function which returns the elapsed time. */
-double toc(struct timer* t);
+double toc(struct tinyhpipm_timer* t);
 
 #ifdef __cplusplus
 } /* extern "C" */

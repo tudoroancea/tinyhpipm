@@ -75,7 +75,7 @@ void d_dense_qcqp_ipm_arg_create(struct d_dense_qcqp_dim* dim, struct d_dense_qc
 }
 
 
-void d_dense_qcqp_ipm_arg_set_default(enum hpipm_mode mode, struct d_dense_qcqp_ipm_arg* arg) {
+void d_dense_qcqp_ipm_arg_set_default(enum tinyhpipm_mode mode, struct d_dense_qcqp_ipm_arg* arg) {
 
     d_dense_qp_ipm_arg_set_default(mode, arg->qp_arg);
 

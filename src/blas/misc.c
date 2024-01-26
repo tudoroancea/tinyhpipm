@@ -7,7 +7,6 @@
 
 // add scaled vector to diagonal
 void ddiaad_lib(int kmax, double alpha, double* x, int offset, double* pD, int sdd) {
-
     const int bs = D_PS;
 
     int kna = (bs - offset % bs) % bs;
@@ -197,7 +196,6 @@ void vecad_libsp(int kmax, int* idx, double alpha, double* x, double* y) {
 
 // insert element into strmat
 void dgein1(double a, struct mat* sA, int ai, int aj) {
-
     if (ai == aj) {
         // invalidate stored inverse diagonal
         sA->use_dA = 0;

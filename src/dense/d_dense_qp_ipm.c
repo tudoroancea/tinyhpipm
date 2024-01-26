@@ -34,7 +34,7 @@ void d_dense_qp_ipm_arg_create(struct d_dense_qp_dim* dim, struct d_dense_qp_ipm
 }
 
 
-void d_dense_qp_ipm_arg_set_default(enum hpipm_mode mode, struct d_dense_qp_ipm_arg* arg) {
+void d_dense_qp_ipm_arg_set_default(enum tinyhpipm_mode mode, struct d_dense_qp_ipm_arg* arg) {
 
     double mu0, alpha_min, res_g, res_b, res_d, res_m, reg_prim, reg_dual, lam_min, t_min, tau_min;
     int iter_max, stat_max, pred_corr, cond_pred_corr, itref_pred_max, itref_corr_max, lq_fact, scale, warm_start, abs_form, comp_res_exit, comp_res_pred, kkt_fact_alg, remove_lin_dep_eq, compute_obj, split_step, t_lam_min;

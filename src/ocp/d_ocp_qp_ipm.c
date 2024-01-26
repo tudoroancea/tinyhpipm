@@ -36,7 +36,7 @@ void d_ocp_qp_ipm_arg_create(struct d_ocp_qp_dim* dim, struct d_ocp_qp_ipm_arg* 
 }
 
 
-void d_ocp_qp_ipm_arg_set_default(enum hpipm_mode mode, struct d_ocp_qp_ipm_arg* arg) {
+void d_ocp_qp_ipm_arg_set_default(enum tinyhpipm_mode mode, struct d_ocp_qp_ipm_arg* arg) {
 
     double mu0, alpha_min, res_g_max, res_b_max, res_d_max, res_m_max, reg_prim, lam_min, t_min, tau_min;
     int iter_max, stat_max, pred_corr, cond_pred_corr, itref_pred_max, itref_corr_max, lq_fact, warm_start, abs_form, comp_res_exit, comp_res_pred, square_root_alg, comp_dual_sol_eq, split_step, var_init_scheme, t_lam_min;

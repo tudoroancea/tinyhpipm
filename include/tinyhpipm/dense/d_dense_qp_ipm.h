@@ -121,7 +121,7 @@ hpipm_size_t d_dense_qp_ipm_arg_memsize(struct d_dense_qp_dim* dim);
 //
 void d_dense_qp_ipm_arg_create(struct d_dense_qp_dim* dim, struct d_dense_qp_ipm_arg* arg, void* mem);
 //
-void d_dense_qp_ipm_arg_set_default(enum hpipm_mode mode, struct d_dense_qp_ipm_arg* arg);
+void d_dense_qp_ipm_arg_set_default(enum tinyhpipm_mode mode, struct d_dense_qp_ipm_arg* arg);
 //
 void d_dense_qp_ipm_arg_set(char* field, void* value, struct d_dense_qp_ipm_arg* arg);
 //

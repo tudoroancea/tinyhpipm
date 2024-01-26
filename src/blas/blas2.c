@@ -1,5 +1,4 @@
 #include "tinyhpipm/blas/blas2.h"
-#include "tinyhpipm/blas/blas1.h"
 #include "tinyhpipm/blas/kernel.h"
 #include "tinyhpipm/blas/misc.h"
 #include "tinyhpipm/blas/struct.h"

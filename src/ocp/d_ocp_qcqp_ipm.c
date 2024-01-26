@@ -77,7 +77,7 @@ void d_ocp_qcqp_ipm_arg_create(struct d_ocp_qcqp_dim* dim, struct d_ocp_qcqp_ipm
 }
 
 
-void d_ocp_qcqp_ipm_arg_set_default(enum hpipm_mode mode, struct d_ocp_qcqp_ipm_arg* arg) {
+void d_ocp_qcqp_ipm_arg_set_default(enum tinyhpipm_mode mode, struct d_ocp_qcqp_ipm_arg* arg) {
 
     d_ocp_qp_ipm_arg_set_default(mode, arg->qp_arg);
 

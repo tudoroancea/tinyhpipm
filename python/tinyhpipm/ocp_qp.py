@@ -9,12 +9,11 @@ from ctypes import (
     cast,
     create_string_buffer,
 )
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 
 from tinyhpipm.common import FloatOrInt, tinyhpipm_lib_name
-
 
 class ocp_qp_dim:
     def __init__(self, N: int):
@@ -35,7 +34,7 @@ class ocp_qp_dim:
         # create C dim
         __tinyhpipm.d_ocp_qp_dim_create(N, self.dim_struct, self.dim_mem)
 
-    def set(self, field: str, value: int, idx_start: int, idx_end: int = None):
+    def set(self, field: str, value: int, idx_start: int, idx_end: Optional[int] = None):
         self.__tinyhpipm.d_ocp_qp_dim_set.argtypes = [c_char_p, c_int, c_int, c_void_p]
         field_name_b = field.encode("utf-8")
         if idx_end is None:
@@ -86,7 +85,7 @@ class ocp_qp:
         field: str,
         value: Union[np.ndarray, float, int],
         idx_start: int,
-        idx_end: int = None,
+        idx_end: Optional[int] = None,
     ):
         # cast to np array
         value = np.atleast_1d(value)

@@ -98,7 +98,7 @@ hpipm_size_t d_ocp_qp_ipm_arg_memsize(struct d_ocp_qp_dim* ocp_dim);
 //
 void d_ocp_qp_ipm_arg_create(struct d_ocp_qp_dim* ocp_dim, struct d_ocp_qp_ipm_arg* arg, void* mem);
 //
-void d_ocp_qp_ipm_arg_set_default(enum hpipm_mode mode, struct d_ocp_qp_ipm_arg* arg);
+void d_ocp_qp_ipm_arg_set_default(enum tinyhpipm_mode mode, struct d_ocp_qp_ipm_arg* arg);
 //
 void d_ocp_qp_ipm_arg_set(char* field, void* value, struct d_ocp_qp_ipm_arg* arg);
 // set maximum number of iterations

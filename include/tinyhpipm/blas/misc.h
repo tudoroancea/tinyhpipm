@@ -34,33 +34,48 @@ void dgead(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct ma
 
 // --- traspositions
 // B <= A'
-void dgetr(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj); // to keep
+void dgetr(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
+
 // B <= A', A lower triangular
 void dtrtr_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
+
 // B <= A', A upper triangular
 // void dtrtr_u(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
 
-// dia
+/********************************************************************
+ * operations on diagonal
+ ********************************************************************/
+
 // diag(A) += alpha
 void ddiare(int kmax, double alpha, struct mat* sA, int ai, int aj);  // to keep
+
 // diag(A) <= alpha*x
 // void ddiain(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+
 // diag(A)[idx] <= alpha*x
 // void ddiain_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj);
+
 // x <= diag(A)
-void ddiaex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
 void ddiaex_lib(int kmax, double alpha, int offset, double* pD, int sdd, double* x);
+void ddiaex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
+
 // x <= diag(A)[idx]
 // void ddiaex_sp(int kmax, double alpha, int* idx, struct mat* sD, int di, int dj, struct vec* sx, int xi);
+
 // diag(A) += alpha*x
 // void ddiaad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+
 // diag(A)[idx] += alpha*x
 void ddiaex_libsp(int kmax, int* idx, double alpha, double* pD, int sdd, double* x);
 void ddiaad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj);  // to keep
+
 // diag(A)[idx] = y + alpha*x
 // void ddiaadin_sp(int kmax, double alpha, struct vec* sx, int xi, struct vec* sy, int yi, int* idx, struct mat* sD, int di, int dj);
 
-// row
+/********************************************************************
+ * operations on rows
+ ********************************************************************/
+
 void drowin(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
 void drowex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
 void drowad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
@@ -69,7 +84,10 @@ void drowsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sC, int ci, in
 // void drowpe(int kmax, int* ipiv, struct mat* sA);
 // void drowpei(int kmax, int* ipiv, struct mat* sA);
 
-// col
+/********************************************************************
+ * operations on columns
+ ********************************************************************/
+
 void dcolex(int kmax, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
 void dcolin(int kmax, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
 void dcolad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
@@ -78,7 +96,10 @@ void dcolsc(int kmax, double alpha, struct mat* sA, int ai, int aj);  // to keep
 // void dcolpe(int kmax, int* ipiv, struct mat* sA);
 // void dcolpei(int kmax, int* ipiv, struct mat* sA);
 
-// vec
+/********************************************************************
+ * operations on vectors
+ ********************************************************************/
+
 // a <= alpha
 void dvecse(int m, double alpha, struct vec* sx, int xi);  // to keep
 // sx[xi] <= a
@@ -103,10 +124,16 @@ void dvecex_sp(int m, double alpha, int* idx, struct vec* sx, int xi, struct vec
 // void dveccl(int m, struct vec* sxm, int xim, struct vec* sx, int xi, struct vec* sxp, int xip, struct vec* sz, int zi);
 // void dveccl_mask(int m, struct vec* sxm, int xim, struct vec* sx, int xi, struct vec* sxp, int xip, struct vec* sz, int zi, struct vec* sm, int mi);
 
+// zero out strvec to strvec with mask
 // void dvecze(int m, struct vec* sm, int mi, struct vec* sv, int vi, struct vec* se, int ei);
+
+// compute inf norm of vector
 void dvecnrm_inf(int m, struct vec* sx, int xi, double* ptr_norm);  // to keep
+
 // void dvecnrm_2(int m, struct vec* sx, int xi, double* ptr_norm);
+
 // void dvecpe(int kmax, int* ipiv, struct vec* sx, int xi);
+
 // void dvecpei(int kmax, int* ipiv, struct vec* sx, int xi);
 
 #endif  // TINYHPIPM_BLAS_MISC_H
