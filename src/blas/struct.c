@@ -5,7 +5,7 @@
 size_t memsize_mat(int m, int n) {
     const int pm = (m + D_PS - 1) & ~(D_PS - 1);  // number of packed rows, require  pm % D_PS == 0
     const int cn = (n + D_PLD - 1) & ~(D_PLD - 1);  // number of packed columns, require  cn % D_PLD == 0
-    const int block_size = D_PS * D_PLD;
+    const int block_size = D_BLOCK_SIZE;
     int diag_size = m < n ? (m + block_size - 1) & ~(block_size - 1) : (n + block_size - 1) & ~(block_size - 1);
     size_t memsize = (pm * cn + diag_size) * sizeof(double);
     return memsize;
@@ -31,7 +31,7 @@ void create_mat(int m, int n, struct mat* sA, void* memory) {
     sA->pA = ptr;
     ptr += pm * cn;
 
-    const int block_size = D_PS * D_PLD;
+    const int block_size = D_BLOCK_SIZE;
     int diag_size = m < n ? (m + block_size - 1) & ~(block_size - 1) : (n + block_size - 1) & ~(block_size - 1);
     sA->dA = ptr;
     ptr += diag_size;
@@ -536,15 +536,15 @@ void pack_tran_mat(int m, int n, double* A, int lda, struct mat* sA, int ai, int
 
 
 // convert a vector into a vector structure
-void pack_vec(int m, double* x, int xi, struct vec* sa, int ai) {
-    double* pa = sa->pa + ai;
+void pack_vec(int m, double* x, int incx, struct vec* sx, int xi) {
+    double* pa = sx->pa + xi;
     int ii;
     if (xi == 1) {
         for (ii = 0; ii < m; ii++)
             pa[ii] = x[ii];
     } else {
         for (ii = 0; ii < m; ii++)
-            pa[ii] = x[ii * xi];
+            pa[ii] = x[ii * incx];
     }
 }
 
@@ -731,14 +731,14 @@ void unpack_tran_mat(int m, int n, struct mat* sA, int ai, int aj, double* A, in
 
 
 // convert a vector structure into a vector
-void unpack_vec(int m, struct vec* sa, int ai, double* x, int xi) {
-    double* pa = sa->pa + ai;
+void unpack_vec(int m, struct vec* sx, int xi, double* x, int incx) {
+    double* pa = sx->pa + xi;
     int ii;
     if (xi == 1) {
         for (ii = 0; ii < m; ii++)
             x[ii] = pa[ii];
     } else {
         for (ii = 0; ii < m; ii++)
-            x[ii * xi] = pa[ii];
+            x[ii * incx] = pa[ii];
     }
 }
