@@ -1,11 +1,21 @@
+#include "../utils/munit.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "tinyhpipm/common.h"
 #include "tinyhpipm/ocp/d_ocp_qcqp.h"
 #include "tinyhpipm/ocp/d_ocp_qcqp_dim.h"
 #include "tinyhpipm/ocp/d_ocp_qcqp_ipm.h"
 #include "tinyhpipm/ocp/d_ocp_qcqp_sol.h"
+
+#define NULL_TEST \
+    { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
+
+#define NULL_SUITE \
+    { NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE }
+
+#ifndef TEST_NAME
+#define TEST_NAME "/generic_ocp_qcqp_test"
+#endif
 
 /************************************************
  * import dims data
@@ -70,18 +80,16 @@ extern int pred_corr;
 extern int ric_alg;
 extern int split_step;
 
-int main(int argc, char** argv) {
+
+MunitResult test_generic_ocp_qcqp(const MunitParameter params[], void* fixture) {
     int ii;  // stage index reused between initialization loops
-    int hpipm_status;  // return flag from HPIPM functions
-    int rep, nrep = 50, nwarmup = 5;  // repetitions of each timing experiment
-                                      // (partial conditioning, solving, expanding)
-    struct tinyhpipm_timer timer;  // tic-toc style timer used to time HPIPM functions
+    int status;  // return flag from HPIPM functions
 
     /********************************************************
      * QCQP initialization **********************************
      ********************************************************/
     // create qcqp_dim
-    void* dim_mem = malloc(d_ocp_qcqp_dim_memsize(N));
+    void* dim_mem = munit_malloc(d_ocp_qcqp_dim_memsize(N));
     struct d_ocp_qcqp_dim qcqp_dim;
     d_ocp_qcqp_dim_create(N, &qcqp_dim, dim_mem);
     for (ii = 0; ii <= N; ii++) {
@@ -98,7 +106,7 @@ int main(int argc, char** argv) {
     }
 
     // create qcqp
-    void* qcqp_mem = malloc(d_ocp_qcqp_memsize(&qcqp_dim));
+    void* qcqp_mem = munit_malloc(d_ocp_qcqp_memsize(&qcqp_dim));
     struct d_ocp_qcqp qcqp;
     d_ocp_qcqp_create(&qcqp_dim, &qcqp, qcqp_mem);
     for (ii = 0; ii <= N; ii++) {
@@ -141,12 +149,12 @@ int main(int argc, char** argv) {
     }
 
     // create qcqp_sol
-    void* qcqp_sol_mem = malloc(d_ocp_qcqp_sol_memsize(&qcqp_dim));
+    void* qcqp_sol_mem = munit_malloc(d_ocp_qcqp_sol_memsize(&qcqp_dim));
     struct d_ocp_qcqp_sol qcqp_sol;
     d_ocp_qcqp_sol_create(&qcqp_dim, &qcqp_sol, qcqp_sol_mem);
 
     // create qcqp_ipm_arg
-    void* ipm_arg_mem = malloc(d_ocp_qcqp_ipm_arg_memsize(&qcqp_dim));
+    void* ipm_arg_mem = munit_malloc(d_ocp_qcqp_ipm_arg_memsize(&qcqp_dim));
     struct d_ocp_qcqp_ipm_arg qcqp_ipm_arg;
     d_ocp_qcqp_ipm_arg_create(&qcqp_dim, &qcqp_ipm_arg, ipm_arg_mem);
 
@@ -170,86 +178,30 @@ int main(int argc, char** argv) {
 
     // create qcqp_ipm_ws (based on the partially condensed problem)
     hpipm_size_t ipm_size = d_ocp_qcqp_ipm_ws_memsize(&qcqp_dim, &qcqp_ipm_arg);
-    void* ipm_mem = malloc(ipm_size);
+    void* ipm_mem = munit_malloc(ipm_size);
     struct d_ocp_qcqp_ipm_ws qcqp_ipm_ws;
     d_ocp_qcqp_ipm_ws_create(&qcqp_dim, &qcqp_ipm_arg, &qcqp_ipm_ws, ipm_mem);
 
     // perform solving
-    hpipm_timer timer2;
-
-    double xinit[16] = {0., 0., 0.28, 0., 0., 0., 0., 0.,
-                        -0.001, 0., 0., 0., 0.0, 0.0, 0.0, 0.0};
-    double uinit[4] = {0.0, 0.0, 0.0, 0.0};
-    for (rep = 0; rep < nrep; rep++) {
-        if (rep == nwarmup) {
-            hpipm_tic(&timer);
-        }
-        // reset initial guess
-        for (int ii = 0; ii < N; ii++) {
-            d_ocp_qcqp_sol_set_x(ii, xinit, &qcqp_sol);
-            d_ocp_qcqp_sol_set_u(ii, uinit, &qcqp_sol);
-        }
-        d_ocp_qcqp_sol_set_x(N, xinit, &qcqp_sol);
-        hpipm_tic(&timer2);
-        d_ocp_qcqp_ipm_solve(&qcqp, &qcqp_sol, &qcqp_ipm_arg, &qcqp_ipm_ws);
-        printf("ipm time = %.3f ms\n", 1000 * hpipm_toc(&timer2));
-        d_ocp_qcqp_ipm_get_status(&qcqp_ipm_ws, &hpipm_status);
-    }
-    double time_ipm = hpipm_toc(&timer) / nrep;
+    d_ocp_qcqp_ipm_solve(&qcqp, &qcqp_sol, &qcqp_ipm_arg, &qcqp_ipm_ws);
+    d_ocp_qcqp_ipm_get_status(&qcqp_ipm_ws, &status);
 
     /*****************************************************************
-     * Print solution and info
+     * check status
      *****************************************************************/
-
-#ifndef NDEBUG
-    printf("\nHPIPM returned with flag %i ", hpipm_status);
-#endif
-    if (hpipm_status == 0) {
-#ifndef NDEBUG
-        printf("-> QP solved!\n");
-
-        // print solution
-        // u
-        int nu_max = nu[0];
-        for (ii = 1; ii <= N; ii++) {
-            if (nu[ii] > nu_max) {
-                nu_max = nu[ii];
-            }
-        }
-        double* u = malloc(nu_max * sizeof(double));
-        printf("\nu = \n");
-        for (ii = 0; ii <= N; ii++) {
-            d_ocp_qcqp_sol_get_u(ii, &qcqp_sol, u);
-            d_print_mat(1, nu[ii], u, 1);
-        }
-        // x
-        int nx_max = nx[0];
-        for (ii = 1; ii <= N; ii++) {
-            if (nx[ii] > nx_max) {
-                nx_max = nx[ii];
-            }
-        }
-        double* x = malloc(nx_max * sizeof(double));
-        printf("\nx = \n");
-        for (ii = 0; ii <= N; ii++) {
-            d_ocp_qcqp_sol_get_x(ii, &qcqp_sol, x);
-            d_print_mat(1, nx[ii], x, 1);
-        }
-        free(u);
-        free(x);
-#endif
-    } else {
-        if (hpipm_status == 1) {
+    if (status != 0) {
+        if (status == 1) {
             printf("-> Solver failed! Maximum number of iterations reached\n");
-        } else if (hpipm_status == 2) {
-            printf("-> Solver failed! Minimum step lenght reached\n");
-        } else if (hpipm_status == 3) {
+        } else if (status == 2) {
+            printf("-> Solver failed! Minimum step length reached\n");
+        } else if (status == 3) {
             printf("-> Solver failed! NaN in computations\n");
-        } else if (hpipm_status == 4) {
+        } else if (status == 4) {
             printf("-> Solver failed! Inconsistent inequality constraints\n");
         } else {
             printf("-> Solver failed! Unknown return flag\n");
         }
+
         // print ipm statistics
         int iter;
         d_ocp_qcqp_ipm_get_iter(&qcqp_ipm_ws, &iter);
@@ -266,28 +218,54 @@ int main(int argc, char** argv) {
         int stat_m;
         d_ocp_qcqp_ipm_get_stat_m(&qcqp_ipm_ws, &stat_m);
 
-        printf(
-                "\nipm residuals max: res_g = %e, res_b = %e, res_d = %e, res_m = %e\n",
-                res_stat, res_eq, res_ineq, res_comp);
         printf("ipm iter = %d\n", iter);
-        printf("\niteration stats:"
-               "\nalpha_aff\tmu_aff\tsigma\talpha_prim\talpha_dual\tmu\t"
-               "res_stat\tres_eq\tres_ineq\tres_comp\tobj\tlq_fact\t"
-               "itref_pred\titref_corr\tlin_res_stat\tlin_res_eq\t"
-               "lin_res_ineq\tlin_res_comp\n");
-        d_print_exp_tran_mat(stat_m, iter + 1, stat, stat_m);
+        printf("ipm residuals max: res_stat = %e, res_eq = %e, res_ineq = %e, res_comp = %e\n", res_stat, res_eq, res_ineq, res_comp);
+        // printf("\niteration stats:\nalpha_aff\tmu_aff\tsigma\talpha_prim\talpha_dual\tmu\tres_stat\tres_eq\tres_ineq\tres_comp\tobj\tlq_fact\titref_pred\titref_corr\tlin_res_stat\tlin_res_eq\tlin_res_ineq\tlin_res_comp\n");
+        printf("\n");
+        const char* stat_names[] = {
+                "alpha_aff",
+                "mu_aff",
+                "sigma",
+                "alpha_prim",
+                "alpha_dual",
+                "mu",
+                "res_stat",
+                "res_eq",
+                "res_ineq",
+                "res_comp",
+                "obj",
+                "lq_fact",
+                "itref_pred",
+                "itref_corr",
+                "lin_res_stat",
+                "lin_res_eq",
+                "lin_res_ineq",
+                "lin_res_comp"};
+        for (int i = 0; i < 18; i++) {
+            printf("%12s\t", stat_names[i]);
+        }
+        printf("\n");
+        // print_exp_tran_mat(stat_m, iter + 1, stat, stat_m);
+        for (int j = 0; j < iter + 1; j++) {
+            for (int i = 0; i < stat_m; i++) {
+                printf("%e\t", stat[j * stat_m + i]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+        return MUNIT_FAIL;
+    } else {
+        return MUNIT_OK;
     }
-    // print timing info
-    printf("\nAverage solution time over %i runs: %.3f ms\n", nrep,
-           1000 * time_ipm);
-    printf("ocp ipm time = %.3f ms\n", 1000 * time_ipm);
+}
 
-    // free memory
-    free(dim_mem);
-    free(qcqp_mem);
-    free(qcqp_sol_mem);
-    free(ipm_arg_mem);
-    free(ipm_mem);
 
-    return 0;
+static MunitTest tests[] = {
+        {TEST_NAME, test_generic_ocp_qcqp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        NULL_TEST,
+};
+static MunitSuite suite = {"/ocp/qcqp", tests, NULL, 1, MUNIT_SUITE_OPTION_NONE};
+
+int main(int argc, char* argv[]) {
+    return munit_suite_main(&suite, NULL, argc, argv);
 }
