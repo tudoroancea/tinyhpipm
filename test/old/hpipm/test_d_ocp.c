@@ -56,10 +56,10 @@ void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double*
     for (ii = 0; ii < pp; ii++) I[ii * (pp + 1)] = 1.0;  // = eye(pp);
     double* Ac;
     d_zeros(&Ac, nx, nx);
-    dmcopy(pp, pp, Z, pp, Ac, nx);
-    dmcopy(pp, pp, T, pp, Ac + pp, nx);
-    dmcopy(pp, pp, I, pp, Ac + pp * nx, nx);
-    dmcopy(pp, pp, Z, pp, Ac + pp * (nx + 1), nx);
+    naive_dmcopy(pp, pp, Z, pp, Ac, nx);
+    naive_dmcopy(pp, pp, T, pp, Ac + pp, nx);
+    naive_dmcopy(pp, pp, I, pp, Ac + pp * nx, nx);
+    naive_dmcopy(pp, pp, Z, pp, Ac + pp * (nx + 1), nx);
     free(T);
     free(Z);
     free(I);
@@ -68,7 +68,7 @@ void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double*
     for (ii = 0; ii < nu; ii++) I[ii * (nu + 1)] = 1.0;  // I = eye(nu);
     double* Bc;
     d_zeros(&Bc, nx, nu);
-    dmcopy(nu, nu, I, nu, Bc + pp, nx);
+    naive_dmcopy(nu, nu, I, nu, Bc + pp, nx);
     free(I);
 
     /************************************************
@@ -77,23 +77,23 @@ void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double*
 
     double* bb;
     d_zeros(&bb, nx, 1);
-    dmcopy(nx, 1, bb, nx, b, nx);
+    naive_dmcopy(nx, 1, bb, nx, b, nx);
 
-    dmcopy(nx, nx, Ac, nx, A, nx);
-    dscal_3l(nx2, Ts, A);
+    naive_dmcopy(nx, nx, Ac, nx, A, nx);
+    naive_dscal(nx2, Ts, A);
     expm(nx, A);
 
     d_zeros(&T, nx, nx);
     d_zeros(&I, nx, nx);
     for (ii = 0; ii < nx; ii++) I[ii * (nx + 1)] = 1.0;  // I = eye(nx);
-    dmcopy(nx, nx, A, nx, T, nx);
-    daxpy_3l(nx2, -1.0, I, T);
-    dgemm_nn_3l(nx, nu, nx, T, nx, Bc, nx, B, nx);
+    naive_dmcopy(nx, nx, A, nx, T, nx);
+    naive_daxpy(nx2, -1.0, I, T);
+    naive_dgemm_nn(nx, nu, nx, T, nx, Bc, nx, B, nx);
     free(T);
     free(I);
 
     int* ipiv = (int*) malloc(nx * sizeof(int));
-    dgesv_3l(nx, nu, Ac, nx, ipiv, B, nx, &info);
+    naive_dgesv(nx, nu, Ac, nx, ipiv, B, nx, &info);
     free(ipiv);
 
     free(Ac);

@@ -1,15 +1,8 @@
-// tests for struct.h
-#include "../munit.h"  // TODO: make it non-relative
-#include "tinyhpipm/blas/print.h"
+#include "../utils/munit.h"  // TODO: make it non-relative
 #include "tinyhpipm/blas/struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-// one suite per function, several tests per suite for different mat/vec sizes.
-// after the first tests for matrix creation, we create setup and teardown functions
-// to create and destroy mat and vec structs.
-// suite naming: /blas/struct/<function name>
-// test naming: /blas/struct/<function name>/<mat or vec size>
 
 #define NULL_TEST \
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
@@ -351,13 +344,11 @@ MunitResult test_unpack_tran_mat(const MunitParameter params[], void* fiture) {
             MATEL(&sA, i, j) = (double) (j * m + i);
         }
     }
-    print_mat(m, n, &sA, 0, 0);
     double* A = (double*) munit_malloc(m * n);  // A is to be understood of dims m x n
     unpack_tran_mat(m, n, &sA, 0, 0, A, m);
     struct vec sv;
     create_vec(m * n, &sv, munit_malloc(memsize_vec(m * n)));
     pack_vec(m * n, A, 1, &sv, 0);
-    print_vec(m * n, &sv, 0);
 
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {

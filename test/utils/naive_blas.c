@@ -2,10 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <blasfeo/blasfeo_d_aux_ext_dep.h>
-
-
-// matrix-vector multiplication
 void naive_dgemv_n(int m, int n, double* A, int lda, double* x, double* z) {
     for (int ii = 0; ii < m; ii++) {
         z[ii] = 0.0;
@@ -16,7 +12,6 @@ void naive_dgemv_n(int m, int n, double* A, int lda, double* x, double* z) {
 }
 
 
-// matrix-matrix multiplication
 void naive_dgemm_nn(int m, int n, int k, double* A, int lda, double* B, int ldb, double* C, int ldc) {
     for (int jj = 0; jj < n; jj++) {
         for (int ii = 0; ii < m; ii++) {
@@ -42,10 +37,13 @@ void naive_dscal(int n, double da, double* dx) {
     }
 }
 
+void naive_dzeros(int m, int n, double* A) {
+    for (int i; i < m * n; i++) {
+        A[i] = 0.0;
+    }
+}
 
-/************************************************
- Routine that copies a matrix
-************************************************/
+
 void naive_dmcopy(int row, int col, double* A, int lda, double* B, int ldb) {
     int i, j;
     for (j = 0; j < col; j++) {
@@ -57,12 +55,8 @@ void naive_dmcopy(int row, int col, double* A, int lda, double* B, int ldb) {
 
 
 int idamax_3l(int n, double* x) {
-
-    if (n <= 0)
-        return 0;
-    if (n == 1)
-        return 0;
-
+    if (n <= 0) return 0;
+    if (n == 1) return 0;
     double dabs;
     double dmax = (x[0] > 0 ? x[0] : -x[0]);
     int idmax = 0;
@@ -74,16 +68,12 @@ int idamax_3l(int n, double* x) {
             idmax = jj;
         }
     }
-
     return idmax;
 }
 
 
 void dswap_3l(int n, double* x, int incx, double* y, int incy) {
-
-    if (n <= 0)
-        return;
-
+    if (n <= 0) return;
     double temp;
     int jj;
     for (jj = 0; jj < n; jj++) {
@@ -97,13 +87,9 @@ void dswap_3l(int n, double* x, int incx, double* y, int incy) {
 
 
 void dger_3l(int m, int n, double alpha, double* x, int incx, double* y, int incy, double* A, int lda) {
-
-    if (m == 0 || n == 0 || alpha == 0.0)
-        return;
-
+    if (m == 0 || n == 0 || alpha == 0.0) return;
     int i, j;
     double *px, *py, temp;
-
     py = y;
     for (j = 0; j < n; j++) {
         temp = alpha * py[0];
@@ -114,25 +100,15 @@ void dger_3l(int m, int n, double alpha, double* x, int incx, double* y, int inc
         }
         py += incy;
     }
-
-    return;
 }
 
 
 void dgetf2_3l(int m, int n, double* A, int lda, int* ipiv, int* info) {
-
-    if (m <= 0 || n <= 0)
-        return;
-
+    if (m <= 0 || n <= 0) return;
     int i, j, jp;
-
     double Ajj;
-
     int size_min = (m < n ? m : n);
-
-    for (j = 0; j < size_min; j++)
-    // find the pivot and test for singularity
-    {
+    for (j = 0; j < size_min; j++) {  // find the pivot and test for singularity
         jp = j + idamax_3l(m - j, &A[j + lda * j]);
         ipiv[j] = jp;
         if (A[jp + lda * j] != 0) {
@@ -160,20 +136,15 @@ void dgetf2_3l(int m, int n, double* A, int lda, int* ipiv, int* info) {
             dger_3l(m - j - 1, n - j - 1, -1.0, &A[j + 1 + lda * j], 1, &A[j + lda * (j + 1)], lda, &A[j + 1 + lda * (j + 1)], lda);
         }
     }
-
-    return;
 }
 
 
 void dlaswp_3l(int n, double* A, int lda, int k1, int k2, int* ipiv) {
-
     int i, j, k, ix, ix0, i1, i2, n32, ip;
     double temp;
-
     ix0 = k1;
     i1 = k1;
     i2 = k2;
-
     n32 = (n / 32) * 32;
     if (n32 != 0) {
         for (j = 0; j < n32; j += 32) {
@@ -205,19 +176,13 @@ void dlaswp_3l(int n, double* A, int lda, int k1, int k2, int* ipiv) {
             ix++;
         }
     }
-
-    return;
 }
 
 
 // left lower no-transp unit
 void dtrsm_l_l_n_u_3l(int m, int n, double* A, int lda, double* B, int ldb) {
-
-    if (m == 0 || n == 0)
-        return;
-
+    if (m == 0 || n == 0) return;
     int i, j, k;
-
     for (j = 0; j < n; j++) {
         for (k = 0; k < m; k++) {
             for (i = k + 1; i < m; i++) {
@@ -225,19 +190,13 @@ void dtrsm_l_l_n_u_3l(int m, int n, double* A, int lda, double* B, int ldb) {
             }
         }
     }
-
-    return;
 }
 
 
 // left upper no-transp non-unit
 void dtrsm_l_u_n_n_3l(int m, int n, double* A, int lda, double* B, int ldb) {
-
-    if (m == 0 || n == 0)
-        return;
-
+    if (m == 0 || n == 0) return;
     int i, j, k;
-
     for (j = 0; j < n; j++) {
         for (k = m - 1; k >= 0; k--) {
             B[k + ldb * j] /= A[k + lda * k];
@@ -246,44 +205,29 @@ void dtrsm_l_u_n_n_3l(int m, int n, double* A, int lda, double* B, int ldb) {
             }
         }
     }
-
-    return;
 }
 
 
 void dgetrs_3l(int n, int nrhs, double* A, int lda, int* ipiv, double* B, int ldb, int* info) {
-
-    if (n == 0 || nrhs == 0)
-        return;
-
+    if (n == 0 || nrhs == 0) return;
     // solve A * X = B
-
     // apply row interchanges to the rhs
     dlaswp_3l(nrhs, B, ldb, 0, n, ipiv);
-
     // solve L*X = B, overwriting B with X
     dtrsm_l_l_n_u_3l(n, nrhs, A, lda, B, ldb);
-
     // solve U*X = B, overwriting B with X
     dtrsm_l_u_n_n_3l(n, nrhs, A, lda, B, ldb);
-
-    return;
 }
 
 
 void naive_dgesv(int n, int nrhs, double* A, int lda, int* ipiv, double* B, int ldb, int* info) {
-
     *info = 0;
-
     // compute the LU factorization of A
     dgetf2_3l(n, n, A, lda, ipiv, info);
-
     if (*info == 0) {
         // solve the system A*X = B, overwriting B with X
         dgetrs_3l(n, nrhs, A, lda, ipiv, B, ldb, info);
     }
-
-    return;
 }
 
 
@@ -305,19 +249,16 @@ double onenorm(int row, int col, double* ptrA) {
 }
 
 
-/* computes the Pade approximation of degree m of the matrix A */
+// computes the Pade approximation of degree m of the matrix A, used in expm
 void padeapprox(int m, int row, double* A) {
     int row2 = row * row;
     /*	int i1 = 1;*/
     /*	double d0 = 0;*/
     /*	double d1 = 1;*/
     /*	double dm1 = -1;*/
-
     int ii;
-
     double* U = malloc(row * row * sizeof(double));
     double* V = malloc(row * row * sizeof(double));
-
     if (m == 3) {
         double c[] = {120, 60, 12, 1};
         double* A0 = malloc(row * row * sizeof(double));
@@ -549,15 +490,11 @@ void padeapprox(int m, int row, double* A) {
 
 
 void expm(int row, double* A) {
-
     int i;
-
     int m_vals[] = {3, 5, 7, 9, 13};
     double theta[] = {0.01495585217958292, 0.2539398330063230, 0.9504178996162932, 2.097847961257068, 5.371920351148152};
     int lentheta = 5;
-
     double normA = onenorm(row, row, A);
-
     if (normA <= theta[4]) {
         for (i = 0; i < lentheta; i++) {
             if (normA <= theta[i]) {

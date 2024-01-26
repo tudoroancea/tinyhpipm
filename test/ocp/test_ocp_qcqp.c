@@ -1,65 +1,45 @@
-#include <math.h>
+#include "../utils/munit.h"  // TODO: make it non-relative
+#include "../utils/naive_blas.h"
+#include "tinyhpipm/blas.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_dim.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_ipm.h"
+#include "tinyhpipm/ocp/d_ocp_qcqp_sol.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 
-#include <blasfeo/blasfeo_common.h>
-#include <blasfeo/blasfeo_d_aux.h>
-#include <blasfeo/blasfeo_d_aux_ext_dep.h>
-#include <blasfeo/blasfeo_i_aux_ext_dep.h>
-#include <blasfeo/blasfeo_target.h>
-#include <blasfeo/blasfeo_v_aux_ext_dep.h>
+#define NULL_TEST \
+    { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 
-#include <hpipm_d_ocp_qcqp.h>
-#include <hpipm_d_ocp_qcqp_dim.h>
-#include <hpipm_d_ocp_qcqp_ipm.h>
-#include <hpipm_d_ocp_qcqp_red.h>
-#include <hpipm_d_ocp_qcqp_sol.h>
-#include <hpipm_d_ocp_qcqp_utils.h>
-#include <hpipm_timing.h>
-
-#include "d_tools.h"
-
-
-// printing
-#ifndef PRINT
+#define NULL_SUITE \
+    { NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE }
 #define PRINT 0
-#endif
-
-
-// remove initial state x0 from optimization variables
-#define REMOVE_X0 1
-
 
 /************************************************
 Mass-spring system: nx/2 masses connected each other with springs (in a row), and the first and the last one to walls. nu (<=nx) controls act on the first nu masses. The system is sampled with sampling time Ts.
 ************************************************/
 void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double* b, double* x0) {
-
     int nx2 = nx * nx;
-
     int info = 0;
-
     int pp = nx / 2;  // number of masses
 
     /************************************************
      * build the continuous time system
      ************************************************/
-
     double* T;
-    d_zeros(&T, pp, pp);
+    naive_dzeros(pp, pp, T);
     int ii;
     for (ii = 0; ii < pp; ii++) T[ii * (pp + 1)] = -2;
     for (ii = 0; ii < pp - 1; ii++) T[ii * (pp + 1) + 1] = 1;
     for (ii = 1; ii < pp; ii++) T[ii * (pp + 1) - 1] = 1;
 
     double* Z;
-    d_zeros(&Z, pp, pp);
+    naive_dzeros(pp, pp, Z);
     double* I;
-    d_zeros(&I, pp, pp);
+    naive_dzeros(pp, pp, I);
     for (ii = 0; ii < pp; ii++) I[ii * (pp + 1)] = 1.0;  // = eye(pp);
     double* Ac;
-    d_zeros(&Ac, nx, nx);
+    naive_dzeros(nx, nx, Ac);
     naive_dmcopy(pp, pp, Z, pp, Ac, nx);
     naive_dmcopy(pp, pp, T, pp, Ac + pp, nx);
     naive_dmcopy(pp, pp, I, pp, Ac + pp * nx, nx);
@@ -68,11 +48,11 @@ void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double*
     free(Z);
     free(I);
 
-    d_zeros(&I, nu, nu);
+    naive_dzeros(nu, nu, I);
     for (ii = 0; ii < nu; ii++) I[ii * (nu + 1)] = 1.0;  // I = eye(nu);
     double* Bc;
-    d_zeros(&Bc, nx, nu);
-    naive_dmcopy(nu, nu, I, nu, Bc + pp, nx);
+    naive_dzeros(nx, nu, Bc);
+    dmcopy(nu, nu, I, nu, Bc + pp, nx);
     free(I);
 
     /************************************************
@@ -81,23 +61,23 @@ void mass_spring_system(double Ts, int nx, int nu, double* A, double* B, double*
 
     double* bb;
     d_zeros(&bb, nx, 1);
-    naive_dmcopy(nx, 1, bb, nx, b, nx);
+    dmcopy(nx, 1, bb, nx, b, nx);
 
-    naive_dmcopy(nx, nx, Ac, nx, A, nx);
-    naive_dscal(nx2, Ts, A);
+    dmcopy(nx, nx, Ac, nx, A, nx);
+    dscal_3l(nx2, Ts, A);
     expm(nx, A);
 
     d_zeros(&T, nx, nx);
     d_zeros(&I, nx, nx);
     for (ii = 0; ii < nx; ii++) I[ii * (nx + 1)] = 1.0;  // I = eye(nx);
-    naive_dmcopy(nx, nx, A, nx, T, nx);
-    naive_daxpy(nx2, -1.0, I, T);
-    naive_dgemm_nn(nx, nu, nx, T, nx, Bc, nx, B, nx);
+    dmcopy(nx, nx, A, nx, T, nx);
+    daxpy_3l(nx2, -1.0, I, T);
+    dgemm_nn_3l(nx, nu, nx, T, nx, Bc, nx, B, nx);
     free(T);
     free(I);
 
     int* ipiv = (int*) malloc(nx * sizeof(int));
-    naive_dgesv(nx, nu, Ac, nx, ipiv, B, nx, &info);
+    dgesv_3l(nx, nu, Ac, nx, ipiv, B, nx, &info);
     free(ipiv);
 
     free(Ac);
@@ -210,26 +190,24 @@ int main() {
     /************************************************
      * dynamical system
      ************************************************/
-
     double* A;
-    d_zeros(&A, nx_, nx_);  // states update matrix
-
+    naive_dzeros(nx_, nx_, A);  // states update matrix
     double* B;
-    d_zeros(&B, nx_, nu_);  // inputs matrix
-
+    naive_dzeros(nx_, nu_, B);  // inputs matrix
     double* b;
-    d_zeros(&b, nx_, 1);  // states offset
+    naive_dzeros(nx_, 1, b);  // states offset
     double* x0;
-    d_zeros(&x0, nx_, 1);  // initial state
-
+    naive_dzeros(nx_, 1, x0);  // initial state
     double Ts = 0.5;  // sampling time
     mass_spring_system(Ts, nx_, nu_, A, B, b, x0);
 
-    for (jj = 0; jj < nx_; jj++)
+    for (jj = 0; jj < nx_; jj++) {
         b[jj] = 0.0;
+    }
 
-    for (jj = 0; jj < nx_; jj++)
+    for (jj = 0; jj < nx_; jj++) {
         x0[jj] = 0;
+    }
     x0[0] = 2.5;
     x0[1] = 2.5;
 
@@ -824,7 +802,7 @@ int main() {
     d_ocp_qcqp_ipm_arg_create(&dim2, &ipm_arg, ipm_arg_mem);
 
     //	enum hpipm_mode mode = SPEED_ABS;
-    enum hpipm_mode mode = SPEED;
+    enum tinyhpipm_mode mode = SPEED;
     //	enum hpipm_mode mode = BALANCE;
     //	enum hpipm_mode mode = ROBUST;
     d_ocp_qcqp_ipm_arg_set_default(mode, &ipm_arg);
@@ -1112,4 +1090,17 @@ int main() {
      ************************************************/
 
     return hpipm_status;
+}
+
+/***************************************************************************************
+ *  main
+ ***************************************************************************************/
+static MunitSuite all_suites[] = {
+        NULL_SUITE,
+};
+
+static const MunitSuite giga_suite = {"/ocp/qcqp", NULL, all_suites, 1, MUNIT_SUITE_OPTION_NONE};
+
+int main(int argc, char* argv[]) {
+    return munit_suite_main(&giga_suite, NULL, argc, argv);
 }
