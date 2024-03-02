@@ -51,7 +51,7 @@ void dgemm_nn(int m, int n, int k, double alpha, struct mat* sA, int ai, int aj,
         offsetD = ps + di0;
     }
 
-    int i, j, l;
+    int i, j;
 
 
     // algorithm scheme
@@ -398,188 +398,46 @@ void dtrmm_rlnn(int m, int n, double alpha, struct mat* sB, int bi, int bj, stru
 
     // algorithm scheme
     if (air != 0) {
-        goto clear_air;
+        jj = 0;
+        for (; jj < n; jj += 4) {
+            kernel_dtrmm_nn_rl_4x4_gen_lib4(n - jj, &alpha, &pA[jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[jj * ps], sdd, air, air + m, 0, n - jj);
+        }
+        m -= ps - air;
+        pA += ps * sda;
+        pD += ps * sdd;
+        goto select_loop;
     }
 select_loop:
     if (offsetD == 0) {
-        goto loop_0;
+        ii = 0;
+        for (; ii < m - 3; ii += 4) {
+            jj = 0;
+            for (; jj < n - 5; jj += 4) {
+                kernel_dtrmm_nn_rl_4x4_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps]);
+            }
+            for (; jj < n; jj += 4) {
+                kernel_dtrmm_nn_rl_4x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], 4, n - jj);
+            }
+        }
     } else {
-        goto loop_D;
-    }
-    // should never get here
-    return;
-
-
-clear_air:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_4x4_gen_lib4(n - jj, &alpha, &pA[jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[jj * ps], sdd, air, air + m, 0, n - jj);
-    }
-    m -= ps - air;
-    pA += ps * sda;
-    pD += ps * sdd;
-    goto select_loop;
-
-
-loop_0:
-    ii = 0;
-#if defined(TARGET_X64_AVX2_FMA)
-    for (; ii < m - 11; ii += 12) {
-        jj = 0;
-        for (; jj < n - 5; jj += 4) {
-            kernel_dtrmm_nn_rl_12x4_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], sdd);  // n-j>=6 !!!!!
-        }
-        for (; jj < n; jj += 4) {
-            kernel_dtrmm_nn_rl_12x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], sdd, 12, n - jj);
-        }
-    }
-    if (ii < m) {
-        if (ii < m - 8)
-            goto left_12;
-        else if (ii < m - 4)
-            goto left_8;
-        else
-            goto left_4;
-    }
-#elif defined(TARGET_X64_AVX)
-    for (; ii < m - 7; ii += 8) {
-        jj = 0;
-        for (; jj < n - 5; jj += 4) {
-            kernel_dtrmm_nn_rl_8x4_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], sdd);
-        }
-        for (; jj < n; jj += 4) {
-            kernel_dtrmm_nn_rl_8x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], sdd, 8, n - jj);
-        }
-    }
-    if (ii < m) {
-        if (ii < m - 4)
-            goto left_8;
-        else
-            goto left_4;
-    }
-#elif defined(TARGET_X86_SSE3)
-    for (; ii < m - 3; ii += 4) {
-        jj = 0;
-        for (; jj < n - 3; jj += 4) {
-            kernel_dtrmm_nn_rl_4x2_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps]);
-            if (offsetB + 2 < 4)
-                kernel_dtrmm_nn_rl_4x2_lib4(n - (jj + 2), &alpha, &pA[ii * sda + (jj + 2) * ps], offsetB + 2, &pB[jj * sdb + (jj + 2) * ps], sdb, &pD[ii * sdd + (jj + 2) * ps]);
-            else
-                kernel_dtrmm_nn_rl_4x2_lib4(n - (jj + 2), &alpha, &pA[ii * sda + (jj + 2) * ps], offsetB + 2 - ps, &pB[(jj + ps) * sdb + (jj + 2) * ps], sdb, &pD[ii * sdd + (jj + 2) * ps]);
-        }
-        for (; jj < n; jj += 4) {
-            kernel_dtrmm_nn_rl_4x2_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], 4, n - jj);
-            if (jj < n - 2) {
-                if (offsetB + 2 < 4)
-                    kernel_dtrmm_nn_rl_4x2_vs_lib4(n - (jj + 2), &alpha, &pA[ii * sda + (jj + 2) * ps], offsetB + 2, &pB[jj * sdb + (jj + 2) * ps], sdb, &pD[ii * sdd + (jj + 2) * ps], 4, n - (jj + 2));
-                else
-                    kernel_dtrmm_nn_rl_4x2_vs_lib4(n - (jj + 2), &alpha, &pA[ii * sda + (jj + 2) * ps], offsetB + 2 - ps, &pB[(jj + ps) * sdb + (jj + 2) * ps], sdb, &pD[ii * sdd + (jj + 2) * ps], 4, n - (jj + 2));
+        // main loop C, D not aligned
+        ii = 0;
+        for (; ii < m; ii += 4) {
+            jj = 0;
+            for (; jj < n; jj += 4) {
+                kernel_dtrmm_nn_rl_4x4_gen_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[ii * sdd + jj * ps], sdd, 0, m - ii, 0, n - jj);
             }
         }
     }
-    if (ii < m) {
-        goto left_4;
-    }
-#else
-    for (; ii < m - 3; ii += 4) {
-        jj = 0;
-        for (; jj < n - 5; jj += 4) {
-            kernel_dtrmm_nn_rl_4x4_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps]);
-        }
-        for (; jj < n; jj += 4) {
-            kernel_dtrmm_nn_rl_4x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], 4, n - jj);
-        }
-    }
-    if (ii < m) {
-        goto left_4;
-    }
-#endif
-    // common return if i==m
-    return;
 
 
-    // main loop C, D not aligned
-loop_D:
-    ii = 0;
-#if defined(TARGET_X64_AVX2_FMA) || defined(TARGET_X64_AVX)
-    for (; ii < m - 4; ii += 8) {
+    // clear
+    if (ii < m) {
         jj = 0;
         for (; jj < n; jj += 4) {
-            kernel_dtrmm_nn_rl_8x4_gen_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[ii * sdd + jj * ps], sdd, 0, m - ii, 0, n - jj);
+            kernel_dtrmm_nn_rl_4x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], m - ii, n - jj);
         }
     }
-    if (ii < m) {
-        goto left_4_gen;
-    }
-#else
-    for (; ii < m; ii += 4) {
-        jj = 0;
-        for (; jj < n; jj += 4) {
-            kernel_dtrmm_nn_rl_4x4_gen_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[ii * sdd + jj * ps], sdd, 0, m - ii, 0, n - jj);
-        }
-    }
-#endif
-    // common return if i==m
-    return;
-
-
-    // clean up loops definitions
-
-#if defined(TARGET_X64_AVX2_FMA)
-left_12:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_12x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], sdd, m - ii, n - jj);
-    }
-    return;
-#endif
-
-#if defined(TARGET_X64_AVX2_FMA) || defined(TARGET_X64_AVX)
-left_8:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_8x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], sdd, m - ii, n - jj);
-    }
-    return;
-#endif
-
-#if defined(TARGET_X64_AVX2_FMA) || defined(TARGET_X64_AVX)
-left_8_gen:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_8x4_gen_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], sda, offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[ii * sdd + jj * ps], sdd, 0, m - ii, 0, n - jj);
-    }
-    return;
-#endif
-
-#if defined(TARGET_X86_SSE3)
-left_4:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_4x2_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], m - ii, n - jj);
-        if (jj < n - 2) {
-            if (offsetB + 2 < 4)
-                kernel_dtrmm_nn_rl_4x2_vs_lib4(n - (jj + 2), &alpha, &pA[ii * sda + (jj + 2) * ps], offsetB + 2, &pB[jj * sdb + (jj + 2) * ps], sdb, &pD[ii * sdd + (jj + 2) * ps], m - ii, n - (jj + 2));
-            else
-                kernel_dtrmm_nn_rl_4x2_vs_lib4(n - (jj + 2), &alpha, &pA[ii * sda + (jj + 2) * ps], offsetB + 2 - ps, &pB[(jj + ps) * sdb + (jj + 2) * ps], sdb, &pD[ii * sdd + (jj + 2) * ps], m - ii, n - (jj + 2));
-        }
-    }
-    return;
-#else
-left_4:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_4x4_vs_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, &pD[ii * sdd + jj * ps], m - ii, n - jj);
-    }
-    return;
-#endif
-
-left_4_gen:
-    jj = 0;
-    for (; jj < n; jj += 4) {
-        kernel_dtrmm_nn_rl_4x4_gen_lib4(n - jj, &alpha, &pA[ii * sda + jj * ps], offsetB, &pB[jj * sdb + jj * ps], sdb, offsetD, &pD[ii * sdd + jj * ps], sdd, 0, m - ii, 0, n - jj);
-    }
-    return;
 }
 
 void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj, double beta, struct mat* sC, int ci, int cj, struct mat* sD, int di, int dj) {
@@ -627,7 +485,6 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
     char* mem_align;
 
     double *pU, *pA2;
-    int sdu, sda2;
 
     double pU0[1 * 4 * K_MAX_STACK];
     int sdu0 = (k + 3) / 4 * 4;
@@ -640,14 +497,12 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
         align_64_byte(mem, (void**) &mem_align);
         create_mat(12, k, &sAt, (void*) mem_align);
         pU = sAt.pA;
-        sdu = sAt.cn;
     } else {
         pU = pU0;
-        sdu = sdu0;
     }
 
 
-    int i, j, n1;
+    int i, j;
 
     int idxB;
 
@@ -660,11 +515,9 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
             for (; i < m - 3; i += 4) {
                 if (air == 0) {
                     pA2 = pA + i * sda;
-                    sda2 = sda;
                 } else {
                     kernel_dpacp_nn_4_lib4(k, air, pA + i * sda, sda, pU);
                     pA2 = pU;
-                    sda2 = sdu;
                 }
                 j = 0;
                 // main loop
@@ -676,11 +529,9 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
             if (m > i) {
                 if (air == 0) {
                     pA2 = pA + i * sda;
-                    sda2 = sda;
                 } else {
                     kernel_dpacp_nn_4_vs_lib4(k, air, pA + i * sda, sda, pU, m - i);
                     pA2 = pU;
-                    sda2 = sdu;
                 }
                 j = 0;
                 // main loop
@@ -695,11 +546,9 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
             for (; i < m - 3; i += 4) {
                 if (air == 0) {
                     pA2 = pA + i * sda;
-                    sda2 = sda;
                 } else {
                     kernel_dpacp_nn_4_lib4(k, air, pA + i * sda, sda, pU);
                     pA2 = pU;
-                    sda2 = sdu;
                 }
                 j = 0;
                 idxB = 0;
@@ -721,11 +570,9 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
                 j = 0;
                 if (air == 0) {
                     pA2 = pA + i * sda;
-                    sda2 = sda;
                 } else {
                     kernel_dpacp_nn_4_vs_lib4(k, air, pA + i * sda, sda, pU, m - i);
                     pA2 = pU;
-                    sda2 = sdu;
                 }
                 if (bir != 0) {
                     idxB = 0;
@@ -758,11 +605,9 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
             for (; i < m; i += 4) {
                 if (air == 0) {
                     pA2 = pA + i * sda;
-                    sda2 = sda;
                 } else {
                     kernel_dpacp_nn_4_vs_lib4(k, air, pA + i * sda, sda, pU, m - i);
                     pA2 = pU;
-                    sda2 = sdu;
                 }
                 j = 0;
                 // main loop
@@ -777,11 +622,9 @@ void dsyrk_ln(int m, int k, double alpha, struct mat* sA, int ai, int aj, struct
             for (; i < m; i += 4) {
                 if (air == 0) {
                     pA2 = pA + i * sda;
-                    sda2 = sda;
                 } else {
                     kernel_dpacp_nn_4_vs_lib4(k, air, pA + i * sda, sda, pU, m - i);
                     pA2 = pU;
-                    sda2 = sdu;
                 }
                 j = 0;
                 idxB = 0;

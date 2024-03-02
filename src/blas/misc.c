@@ -1660,16 +1660,18 @@ void dtrsc_l(int m, double alpha, struct mat* sA, int ai, int aj) {
 
 
 // copy a strvec into a strvec
-void dveccp(int m, struct vec* sa, int ai, struct vec* sc, int ci) {
-    double* pa = sa->pa + ai;
-    double* pc = sc->pa + ci;
-    kernel_dveccp_inc1(m, pa, pc);
+void dveccp(int m, struct vec* sx, int xi, struct vec* sy, int yi) {
+    double* pa = sx->pa + xi;
+    double* pc = sy->pa + yi;
+    for (int ii = 0; ii < m; ii++) {
+        pc[ii] = pa[ii];
+    }
 }
 
 
 // scale a strvec
-void dvecsc(int m, double alpha, struct vec* sa, int ai) {
-    double* pa = sa->pa + ai;
+void dvecsc(int m, double alpha, struct vec* sx, int xi) {
+    double* pa = sx->pa + xi;
     int ii;
     ii = 0;
     for (; ii < m - 3; ii += 4) {
@@ -1685,9 +1687,9 @@ void dvecsc(int m, double alpha, struct vec* sa, int ai) {
 
 
 // copy and scale a strvec into a strvec
-void dveccpsc(int m, double alpha, struct vec* sa, int ai, struct vec* sc, int ci) {
-    double* pa = sa->pa + ai;
-    double* pc = sc->pa + ci;
+void dveccpsc(int m, double alpha, struct vec* sx, int xi, struct vec* sy, int yi) {
+    double* pa = sx->pa + xi;
+    double* pc = sy->pa + yi;
     int ii;
     ii = 0;
     for (; ii < m - 3; ii += 4) {
@@ -1925,16 +1927,16 @@ void dgead_lib(int m, int n, double alpha, int offsetA, double* A, int sda, int 
     }
 }
 // scale and add a generic strmat into a generic strmat
-void dgead(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj) {
+void dgead(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj) {
     // invalidate stored inverse diagonal
-    sC->use_dA = 0;
+    sB->use_dA = 0;
 
     const int bs = D_PS;
     int sda = sA->cn;
     double* pA = sA->pA + ai / bs * bs * sda + ai % bs + aj * bs;
-    int sdc = sC->cn;
-    double* pC = sC->pA + ci / bs * bs * sdc + ci % bs + cj * bs;
-    dgead_lib(m, n, alpha, ai % bs, pA, sda, ci % bs, pC, sdc);
+    int sdc = sB->cn;
+    double* pC = sB->pA + bi / bs * bs * sdc + bi % bs + bj * bs;
+    dgead_lib(m, n, alpha, ai % bs, pA, sda, bi % bs, pC, sdc);
 }
 
 
@@ -2029,16 +2031,16 @@ void dgetr_lib(int m, int n, double alpha, int offsetA, double* pA, int sda, int
         kernel_dgetr_3_lib4(0, n, nna, alpha, pA, pC, sdc);
 }
 // copy and transpose a generic strmat into a generic strmat
-void dgetr(int m, int n, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj) {
+void dgetr(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj) {
     // invalidate stored inverse diagonal
-    sC->use_dA = 0;
+    sB->use_dA = 0;
 
     const int bs = D_PS;
     int sda = sA->cn;
     double* pA = sA->pA + ai / bs * bs * sda + ai % bs + aj * bs;
-    int sdc = sC->cn;
-    double* pC = sC->pA + ci / bs * bs * sdc + ci % bs + cj * bs;
-    dgetr_lib(m, n, 1.0, ai % bs, pA, sda, ci % bs, pC, sdc);  // TODO remove alpha !!!
+    int sdc = sB->cn;
+    double* pC = sB->pA + bi / bs * bs * sdc + bi % bs + bj * bs;
+    dgetr_lib(m, n, 1.0, ai % bs, pA, sda, bi % bs, pC, sdc);  // TODO remove alpha !!!
 }
 
 // transpose lower triangular matrix
@@ -2149,16 +2151,16 @@ void dtrtr_l_lib(int m, double alpha, int offsetA, double* pA, int sda, int offs
         kernel_dgetr_3_lib4(1, ii, nna, alpha, pA, pC, sdc);
 }
 // copy and transpose a lower triangular strmat into an upper triangular strmat
-void dtrtr_l(int m, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj) {
+void dtrtr_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj) {
     // invalidate stored inverse diagonal
-    sC->use_dA = 0;
+    sB->use_dA = 0;
 
     const int bs = D_PS;
     int sda = sA->cn;
     double* pA = sA->pA + ai / bs * bs * sda + ai % bs + aj * bs;
-    int sdc = sC->cn;
-    double* pC = sC->pA + ci / bs * bs * sdc + ci % bs + cj * bs;
-    dtrtr_l_lib(m, 1.0, ai % bs, pA, sda, ci % bs, pC, sdc);  // TODO remove alpha !!!
+    int sdc = sB->cn;
+    double* pC = sB->pA + bi / bs * bs * sdc + bi % bs + bj * bs;
+    dtrtr_l_lib(m, 1.0, ai % bs, pA, sda, bi % bs, pC, sdc);  // TODO remove alpha !!!
 }
 
 // transpose an aligned upper triangular matrix into an aligned lower triangular matrix

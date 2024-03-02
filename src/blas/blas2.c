@@ -276,15 +276,6 @@ void dsymv_l_mn(int m, int n, double alpha, struct mat* sA, int ai, int aj, stru
 }
 
 
-void dsymv_u(int m, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi, double beta, struct vec* sy, int yi, struct vec* sz, int zi) {
-    if (m <= 0)
-        return;
-
-    printf("\nblasfeo_dsymv_u: feature not implemented yet\n");
-    exit(1);
-}
-
-
 // m >= n
 static void dtrmv_lnn_mn(int m, int n, struct mat* sA, int ai, int aj, struct vec* sx, int xi, struct vec* sz, int zi) {
 
@@ -501,7 +492,7 @@ static void dtrmv_ltn_mn(int m, int n, struct mat* sA, int ai, int aj, struct ve
     double alpha = 1.0;
     double beta = 1.0;
 
-    int ii, jj, ll, ll_max;
+    int jj, ll, ll_max;
 
     jj = 0;
 
@@ -591,14 +582,11 @@ static void dtrmv_ltn_mn(int m, int n, struct mat* sA, int ai, int aj, struct ve
         //		pA += bs*4;
         //		z += 4;
     }
-
-    return;
 }
 
 
 void dtrmv_ltn(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, struct vec* sz, int zi) {
     dtrmv_ltn_mn(m, m, sA, ai, aj, sx, xi, sz, zi);
-    return;
 }
 
 
@@ -621,7 +609,7 @@ static void dtrmv_ltu_mu(int m, int n, struct mat* sA, int ai, int aj, struct ve
     double alpha = 1.0;
     double beta = 1.0;
 
-    int ii, jj, ll, ll_max;
+    int jj, ll, ll_max;
 
     jj = 0;
 
@@ -803,8 +791,6 @@ void dtrmv_utn(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
 
     int ii, idx;
 
-    double* ptrA;
-
     ii = 0;
     idx = m / bs * bs;
     if (m % bs != 0) {
@@ -951,7 +937,6 @@ void dtrsv_lnu(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
     const int bs = 4;
     int sda = sA->cn;
     double* pA = sA->pA + aj * bs;  // TODO ai
-    double* dA = sA->dA;
     double* x = sx->pa + xi;
     double* z = sz->pa + zi;
     int ii;
@@ -1073,7 +1058,6 @@ void dtrsv_ltn(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
         exit(1);
     }
     dtrsv_ltn_mn(m, m, sA, ai, aj, sx, xi, sz, zi);
-    return;
 }
 
 
@@ -1104,7 +1088,6 @@ void dtrsv_ltu(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
     const int bs = 4;
     int sda = sA->cn;
     double* pA = sA->pA + aj * bs;  // TODO ai
-    double* dA = sA->dA;
     double* x = sx->pa + xi;
     double* z = sz->pa + zi;
     int ii;
@@ -1125,7 +1108,6 @@ void dtrsv_ltu(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
     for (; ii < m - 3; ii += 4) {
         kernel_dtrsv_lt_one_4_lib4(ii + 4, &pA[(m - ii - 4) / bs * bs * sda + (m - ii - 4) * bs], sda, &z[m - ii - 4], &z[m - ii - 4], &z[m - ii - 4]);
     }
-    return;
 }
 
 
@@ -1199,7 +1181,6 @@ void dtrsv_unn(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
         // TODO
         kernel_dtrsv_un_inv_4_lib4(ii + 4, &pA[(m - ii - 4) / bs * bs * sda + (m - ii - 4) * bs], &dA[m - ii - 4], &z[m - ii - 4], &z[m - ii - 4], &z[m - ii - 4]);
     }
-    return;
 }
 
 
@@ -1259,10 +1240,4 @@ void dtrsv_utn(int m, struct mat* sA, int ai, int aj, struct vec* sx, int xi, st
         kernel_dtrsv_ut_inv_4_vs_lib4(ii, &pA[ii * bs], sda, &dA[ii], z, &z[ii], &z[ii], m - ii, m - ii);
         ii += 4;
     }
-}
-
-
-void dger(int m, int n, double alpha, struct vec* sx, int xi, struct vec* sy, int yi, struct mat* sC, int ci, int cj, struct mat* sD, int di, int dj) {
-    printf("\nblasfeo_dger: feature not implemented yet\n");
-    exit(1);
 }
