@@ -195,7 +195,7 @@ void vecad_libsp(int kmax, int* idx, double alpha, double* x, double* y) {
 
 
 // insert element into strmat
-void dgein1(double a, struct mat* sA, int ai, int aj) {
+static void dgein1(double a, struct mat* sA, int ai, int aj) {
     if (ai == aj) {
         // invalidate stored inverse diagonal
         sA->use_dA = 0;
@@ -209,7 +209,7 @@ void dgein1(double a, struct mat* sA, int ai, int aj) {
 
 
 // extract element from strmat
-double dgeex1(struct mat* sA, int ai, int aj) {
+static double dgeex1(struct mat* sA, int ai, int aj) {
     const int bs = D_PS;
     int sda = sA->cn;
     double* pA = sA->pA + ai / bs * bs * sda + ai % bs + aj * bs;
@@ -218,14 +218,14 @@ double dgeex1(struct mat* sA, int ai, int aj) {
 
 
 // insert element into strvec
-void vecin1(double a, struct vec* sx, int xi) {
+static void vecin1(double a, struct vec* sx, int xi) {
     double* x = sx->pa + xi;
     x[0] = a;
 }
 
 
 // extract element from strvec
-double vecex1(struct vec* sx, int xi) {
+static double vecex1(struct vec* sx, int xi) {
     double* x = sx->pa + xi;
     return x[0];
 }
@@ -352,17 +352,16 @@ void ddiare(int kmax, double alpha, struct mat* sA, int ai, int aj) {
 
 
 // swap two rows of two matrix structs
-void drowsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj) {
-
+void drowsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj) {
     // invalidate stored inverse diagonal
     sA->use_dA = 0;
-    sC->use_dA = 0;
+    sB->use_dA = 0;
 
     const int bs = D_PS;
     int sda = sA->cn;
     double* pA = sA->pA + ai / bs * bs * sda + ai % bs + aj * bs;
-    int sdc = sC->cn;
-    double* pC = sC->pA + ci / bs * bs * sdc + ci % bs + cj * bs;
+    int sdc = sB->cn;
+    double* pC = sB->pA + bi / bs * bs * sdc + bi % bs + bj * bs;
     kernel_drowsw_lib4(kmax, pA, pC);
 }
 
@@ -422,30 +421,25 @@ void drowex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* 
 }
 
 // insert vector to row
-void drowin_lib(int kmax, double alpha, double* x, double* pD) {
-
+static void drowin_lib(int kmax, double alpha, const double* x, double* pA) {
     const int bs = D_PS;
-
-    int jj, ll;
-
+    int jj;
     for (jj = 0; jj < kmax - 3; jj += 4) {
-        pD[(jj + 0) * bs] = alpha * x[jj + 0];
-        pD[(jj + 1) * bs] = alpha * x[jj + 1];
-        pD[(jj + 2) * bs] = alpha * x[jj + 2];
-        pD[(jj + 3) * bs] = alpha * x[jj + 3];
+        pA[(jj + 0) * bs] = alpha * x[jj + 0];
+        pA[(jj + 1) * bs] = alpha * x[jj + 1];
+        pA[(jj + 2) * bs] = alpha * x[jj + 2];
+        pA[(jj + 3) * bs] = alpha * x[jj + 3];
     }
     for (; jj < kmax; jj++) {
-        pD[(jj) *bs] = alpha * x[jj];
+        pA[(jj) *bs] = alpha * x[jj];
     }
 }
 
 
 // insert a vector into a row
 void drowin(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj) {
-
     // invalidate stored inverse diagonal
     sA->use_dA = 0;
-
     const int bs = D_PS;
     int sda = sA->cn;
     double* pA = sA->pA + ai / bs * bs * sda + ai % bs + aj * bs;
@@ -454,12 +448,9 @@ void drowin(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int 
 }
 
 // add scaled vector to row
-void drowad_lib(int kmax, double alpha, double* x, double* pD) {
-
+void drowad_lib(int kmax, double alpha, const double* x, double* pD) {
     const int bs = D_PS;
-
-    int jj, ll;
-
+    int jj;
     for (jj = 0; jj < kmax - 3; jj += 4) {
         pD[(jj + 0) * bs] += alpha * x[jj + 0];
         pD[(jj + 1) * bs] += alpha * x[jj + 1];
@@ -1704,7 +1695,7 @@ void dveccpsc(int m, double alpha, struct vec* sx, int xi, struct vec* sy, int y
 }
 
 // scales and adds a packed matrix into a packed matrix: B = B + alpha*A
-void dgead_lib(int m, int n, double alpha, int offsetA, double* A, int sda, int offsetB, double* B, int sdb) {
+static void dgead_lib(int m, int n, double alpha, int offsetA, double* A, int sda, int offsetB, double* B, int sdb) {
     if (m <= 0 || n <= 0) {
         return;
     }
@@ -2536,7 +2527,7 @@ void ddiaex_libsp(int kmax, int* idx, double alpha, double* pD, int sdd, double*
     }
 }
 // extract the diagonal of a strmat to a strvec, sparse formulation
-void ddiaex_sp(int kmax, double alpha, int* idx, struct mat* sD, int di, int dj, struct vec* sx, int xi) {
+static void ddiaex_sp(int kmax, double alpha, int* idx, struct mat* sD, int di, int dj, struct vec* sx, int xi) {
     const int bs = D_PS;
     double* x = sx->pa + xi;
     int sdd = sD->cn;
@@ -2587,7 +2578,7 @@ void ddiaad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int 
 
 
 // add scaled strvec to diagonal of strmat, sparse formulation
-void ddiaad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj) {
+void ddiaad_sp(int kmax, double alpha, struct vec* sx, int xi, const int* idx, struct mat* sD, int di, int dj) {
 
     // invalidate stored inverse diagonal
     sD->use_dA = 0;
@@ -2623,7 +2614,7 @@ void ddiaadin_sp(int kmax, double alpha, struct vec* sx, int xi, struct vec* sy,
 }
 
 // add scaled vector to row, sparse formulation
-void drowad_libsp(int kmax, int* idx, double alpha, double* x, double* pD) {
+static void drowad_libsp(int kmax, const int* idx, double alpha, const double* x, double* pD) {
     const int bs = D_PS;
     int ii, jj;
 
@@ -2633,15 +2624,14 @@ void drowad_libsp(int kmax, int* idx, double alpha, double* x, double* pD) {
     }
 }
 // add scaled strvec to row of strmat, sparse formulation
-void drowad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj) {
-
+void drowad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sA, int ai, int aj) {
     // invalidate stored inverse diagonal
-    sD->use_dA = 0;
+    sA->use_dA = 0;
 
     const int bs = D_PS;
     double* x = sx->pa + xi;
-    int sdd = sD->cn;
-    double* pD = sD->pA + di / bs * bs * sdd + di % bs + dj * bs;
+    int sdd = sA->cn;
+    double* pD = sA->pA + ai / bs * bs * sdd + ai % bs + aj * bs;
     drowad_libsp(kmax, idx, alpha, x, pD);
 }
 

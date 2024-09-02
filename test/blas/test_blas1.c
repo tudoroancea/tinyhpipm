@@ -60,7 +60,7 @@ MunitResult test_daxpy_nan(const MunitParameter params[], void* fixture) {
     const double alpha = 0.0;
     daxpy(m, alpha, &x, 0, &y, 0, &z, 0);
     for (int i = 0; i < m; i++) {
-        munit_assert_int(isnan(VECEL(&z, i)), ==, 1);
+        munit_assert_isnan(VECEL(&z, i));
     }
     return MUNIT_OK;
 }
@@ -151,7 +151,7 @@ MunitResult test_dvecmul_nan(const MunitParameter params[], void* fixture) {
 
     dvecmul(m, &x, 0, &y, 0, &z, 0);
     for (int i = 0; i < m; i++) {
-        munit_assert_int(isnan(VECEL(&z, i)), ==, 1);
+        munit_assert_isnan(VECEL(&z, i));
     }
     return MUNIT_OK;
 }
@@ -204,7 +204,7 @@ MunitResult test_dvecmulacc_nan(const MunitParameter params[], void* fixture) {
 
     dvecmulacc(m, &x, 0, &y, 0, &z, 0);
     for (int i = 0; i < m; i++) {
-        munit_assert_int(isnan(VECEL(&z, i)), ==, 1);
+        munit_assert_isnan(VECEL(&z, i));
     }
     return MUNIT_OK;
 }

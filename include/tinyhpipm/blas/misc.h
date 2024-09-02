@@ -2,138 +2,219 @@
 #define TINYHPIPM_BLAS_MISC_H
 #include "tinyhpipm/blas/struct.h"
 
-// --- insert/extract
-//
-// sA[ai, aj] <= a
-// void dgein1(double a, struct mat* sA, int ai, int aj);
-// <= sA[ai, aj]
-// double dgeex1(struct mat* sA, int ai, int aj);
-
-// --- set
-// A <= alpha
-void dgese(int m, int n, double alpha, struct mat* sA, int ai, int aj);  // to keep
-
-// --- copy / scale
-// B <= A
-void dgecp(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
-// A <= alpha*A
-// void dgesc(int m, int n, double alpha, struct mat* sA, int ai, int aj);
-// B <= alpha*A
-// void dgecpsc(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
-// B <= A, A lower triangular
-void dtrcp_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
-// void dtrcpsc_l(int m, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
-// void dtrsc_l(int m, double alpha, struct mat* sA, int ai, int aj);
-
-// --- sum
-// B <= B + alpha*A
-void dgead_lib(int m, int n, double alpha, int offsetA, double* A, int sda, int offsetB, double* B, int sdb);
-void dgead(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
-// y <= y + alpha*x
-// void dvecad(int m, double alpha, struct vec* sx, int xi, struct vec* sy, int yi);
-
-// --- traspositions
-// B <= A'
-void dgetr(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
-
-// B <= A', A lower triangular
-void dtrtr_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);  // to keep
-
-// B <= A', A upper triangular
-// void dtrtr_u(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
-
-/********************************************************************
- * operations on diagonal
- ********************************************************************/
-
-// diag(A) += alpha
-void ddiare(int kmax, double alpha, struct mat* sA, int ai, int aj);  // to keep
-
-// diag(A) <= alpha*x
-// void ddiain(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
-
-// diag(A)[idx] <= alpha*x
-// void ddiain_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj);
-
-// x <= diag(A)
-void ddiaex_lib(int kmax, double alpha, int offset, double* pD, int sdd, double* x);
-void ddiaex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
-
-// x <= diag(A)[idx]
-// void ddiaex_sp(int kmax, double alpha, int* idx, struct mat* sD, int di, int dj, struct vec* sx, int xi);
-
-// diag(A) += alpha*x
-// void ddiaad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
-
-// diag(A)[idx] += alpha*x
-void ddiaex_libsp(int kmax, int* idx, double alpha, double* pD, int sdd, double* x);
-void ddiaad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj);  // to keep
-
-// diag(A)[idx] = y + alpha*x
-// void ddiaadin_sp(int kmax, double alpha, struct vec* sx, int xi, struct vec* sy, int yi, int* idx, struct mat* sD, int di, int dj);
-
-/********************************************************************
- * operations on rows
- ********************************************************************/
-
-void drowin(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
-void drowex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
-void drowad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
-void drowad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj);  // to keep
-void drowsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj);  // to keep
-// void drowpe(int kmax, int* ipiv, struct mat* sA);
-// void drowpei(int kmax, int* ipiv, struct mat* sA);
-
-/********************************************************************
- * operations on columns
- ********************************************************************/
-
-void dcolex(int kmax, struct mat* sA, int ai, int aj, struct vec* sx, int xi);  // to keep
-void dcolin(int kmax, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
-void dcolad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);  // to keep
-void dcolsc(int kmax, double alpha, struct mat* sA, int ai, int aj);  // to keep
-// void dcolsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj);
-// void dcolpe(int kmax, int* ipiv, struct mat* sA);
-// void dcolpei(int kmax, int* ipiv, struct mat* sA);
-
-/********************************************************************
- * operations on vectors
- ********************************************************************/
-
-// a <= alpha
-void dvecse(int m, double alpha, struct vec* sx, int xi);  // to keep
+/***************************************************************************************
+ *  get and set
+ ***************************************************************************************/
 // sx[xi] <= a
 // void dvecin1(double a, struct vec* sx, int xi);
 // <= sx[xi]
 // double dvecex1(struct vec* sx, int xi);
-// y <= x
-void dveccp(int m, struct vec* sx, int xi, struct vec* sy, int yi);  // to keep
-// x <= alpha*x
-void dvecsc(int m, double alpha, struct vec* sx, int xi);  // to keep
-// y <= alpha*x
-void dveccpsc(int m, double alpha, struct vec* sx, int xi, struct vec* sy, int yi);  // to keep
-// z[idx] += alpha * x
-void dvecad_sp(int m, double alpha, struct vec* sx, int xi, int* idx, struct vec* sz, int zi);  // to keep
 // z[idx] <= alpha * x
 // void dvecin_sp(int m, double alpha, struct vec* sx, int xi, int* idx, struct vec* sz, int zi);
 // z <= alpha * x[idx]
-void dvecex_sp(int m, double alpha, int* idx, struct vec* sx, int xi, struct vec* sz, int zi);  // to keep
+void dvecex_sp(int m, double alpha, int* idx, struct vec* sx, int xi, struct vec* sz, int zi);
+// sA[ai, aj] <= a
+// void dgein1(double a, struct mat* sA, int ai, int aj);
+// <= sA[ai, aj]
+// double dgeex1(struct mat* sA, int ai, int aj);
+/*
+ * @brief insert a (scaled) vector into a row (i.e. copies it into the row, no row is added)
+ *        A[ai, aj:aj+kmax] = alpha * x[xi:xi+kmax]
+ *
+ * @param[in] kmax number of elements in the vector
+ * @param[in] alpha scaling factor
+ * @param[in] sx vector struct
+ * @param[in] xi starting index of the vector
+ * @param[in,out] sA matrix struct
+ * @param[in] ai row index
+ * @param[in] aj starting column index
+ */
+void drowin(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+/*
+ * @brief extract a (scaled) vector from a row
+ *        x[xi:xi+kmax] = alpha * A[ai, aj:aj+kmax]
+ *
+ * @param[in] kmax number of elements in the vector
+ * @param[in] alpha scaling factor
+ * @param[in,out] sA matrix struct
+ * @param[in] ai row index
+ * @param[in] aj starting column index
+ * @param[in] sx vector struct
+ * @param[in] xi starting index of the vector
+ */
+void drowex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);
+void dcolex(int kmax, struct mat* sA, int ai, int aj, struct vec* sx, int xi);
+void dcolin(int kmax, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+// diag(A) <= alpha*x
+// void ddiain(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+// diag(A)[idx] <= alpha*x
+// void ddiain_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sD, int di, int dj);
+// x <= alpha * diag(A)
+void ddiaex_lib(int kmax, double alpha, int offset, double* pD, int sdd, double* x);
+void ddiaex(int kmax, double alpha, struct mat* sA, int ai, int aj, struct vec* sx, int xi);
+// x <= diag(A)[idx]
+// void ddiaex_sp(int kmax, double alpha, int* idx, struct mat* sD, int di, int dj, struct vec* sx, int xi);
+
+/*
+ * @brief sets all elements of a vector x to a constant alpha
+ *        x[xi:xi+m] <= alpha
+ *
+ * @param[in] m number of elements
+ * @param[in] alpha constant
+ * @param[in,out] sx vector struct
+ * @param[in] xi starting index
+ */
+void dvecse(int m, double alpha, struct vec* sx, int xi);
+// zero out strvec to strvec with mask
+// void dvecze(int m, struct vec* sm, int mi, struct vec* sv, int vi, struct vec* se, int ei);
+/*
+ * @brief sets all elements of a matrix A to a constant alpha
+ *        A <= alpha
+ *
+ * @param[in] m number of rows
+ * @param[in] n number of columns
+ * @param[in] alpha constant
+ * @param[in,out] sA matrix struct
+ * @param[in] ai starting row index
+ * @param[in] aj starting column index
+ */
+void dgese(int m, int n, double alpha, struct mat* sA, int ai, int aj);
+
+/***************************************************************************************
+ *  copy
+ ***************************************************************************************/
+// y <= x
+void dveccp(int m, struct vec* sx, int xi, struct vec* sy, int yi);
+// B <= A
+void dgecp(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+// B <= A, A lower triangular
+void dtrcp_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+
+
+/***************************************************************************************
+ *  transpositions
+ ***************************************************************************************/
+// B <= A'
+void dgetr(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+// B <= A', A lower triangular
+void dtrtr_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+// B <= A', A upper triangular
+// void dtrtr_u(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+
+/********************************************************************
+ * Swap
+ ********************************************************************/
+/*
+ * @brief swap two rows of two matrix structs
+ *        B[bi, bj:bj+kmax] = A[ai, aj:aj+kmax]
+ *        A[ai, aj:aj+kmax] = B[bi, bj:bj+kmax]
+ *
+ * @param[in] kmax number of elements
+ * @param[in,out] sA matrix struct
+ * @param[in] ai row index
+ * @param[in] aj starting column index
+ * @param[in,out] sB matrix struct
+ * @param[in] bi row index
+ * @param[in] bj starting column index
+ */
+void drowsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+// void dcolsw(int kmax, struct mat* sA, int ai, int aj, struct mat* sC, int ci, int cj);
+
+
+/***************************************************************************************
+ * extended blas level 1 routines
+ ***************************************************************************************/
+// B <= B + alpha*A
+void dgead(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+// y <= y + alpha*x
+// void dvecad(int m, double alpha, struct vec* sx, int xi, struct vec* sy, int yi);
+// diag(A) += alpha*x
+// void ddiaad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+// diag(A)[idx] += alpha*x
+void ddiaad_sp(int kmax, double alpha, struct vec* sx, int xi, const int* idx, struct mat* sD, int di, int dj);
+// diag(A)[idx] = y + alpha*x
+// void ddiaadin_sp(int kmax, double alpha, struct vec* sx, int xi, struct vec* sy, int yi, int* idx, struct mat* sD, int di, int dj);
+// diag(A) += alpha
+void ddiare(int kmax, double alpha, struct mat* sA, int ai, int aj);
+/*
+ * @brief add a (scaled) vector to a row
+ *        A[ai, aj:aj+kmax] += alpha * x[xi:xi+kmax]
+ *
+ * @param[in] kmax number of elements in the vector
+ * @param[in] alpha scaling factor
+ * @param[in] sx vector struct
+ * @param[in] xi starting index of the vector
+ * @param[in,out] sA matrix struct
+ * @param[in] ai row index
+ * @param[in] aj starting column index
+ */
+void drowad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+/*
+ * @brief add a (scaled) vector to a row, sparse formulation
+ *        A[ai, aj:aj+kmax] += alpha * x[xi:xi+kmax]
+ *
+ * @param[in] kmax number of elements in the vector
+ * @param[in] alpha scaling factor
+ * @param[in] sx vector struct
+ * @param[in] xi starting index of the vector
+ * @param[in] idx indices of the elements to add
+ * @param[in,out] sA diagonal struct
+ * @param[in] ai starting index of the diagonal
+ * @param[in] aj starting index of the diagonal
+ */
+void drowad_sp(int kmax, double alpha, struct vec* sx, int xi, int* idx, struct mat* sA, int ai, int aj);
+void dcolad(int kmax, double alpha, struct vec* sx, int xi, struct mat* sA, int ai, int aj);
+
+// z[idx] += alpha * x
+void dvecad_sp(int m, double alpha, struct vec* sx, int xi, int* idx, struct vec* sz, int zi);
 // z += alpha * x[idx]
 // void dvecexad_sp(int m, double alpha, int* idx, struct vec* sx, int xi, struct vec* sz, int zi);
 
+// x <= alpha*x
+void dvecsc(int m, double alpha, struct vec* sx, int xi);
+// y <= alpha*x
+void dveccpsc(int m, double alpha, struct vec* sx, int xi, struct vec* sy, int yi);
+// A <= alpha*A
+// void dgesc(int m, int n, double alpha, struct mat* sA, int ai, int aj);
+void dcolsc(int kmax, double alpha, struct mat* sA, int ai, int aj);
+// B <= alpha*A
+// void dgecpsc(int m, int n, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+// A <= alpha*A, (A lower triangular)
+// void dtrsc_l(int m, double alpha, struct mat* sA, int ai, int aj);
+// B <= alpha*A, (A lower triangular)
+// void dtrcpsc_l(int m, double alpha, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
+
+
+/***************************************************************************************
+ *  clipping
+ ***************************************************************************************/
 // void dveccl(int m, struct vec* sxm, int xim, struct vec* sx, int xi, struct vec* sxp, int xip, struct vec* sz, int zi);
 // void dveccl_mask(int m, struct vec* sxm, int xim, struct vec* sx, int xi, struct vec* sxp, int xip, struct vec* sz, int zi, struct vec* sm, int mi);
 
-// zero out strvec to strvec with mask
-// void dvecze(int m, struct vec* sm, int mi, struct vec* sv, int vi, struct vec* se, int ei);
-
-// compute inf norm of vector
-void dvecnrm_inf(int m, struct vec* sx, int xi, double* ptr_norm);  // to keep
+/***************************************************************************************
+ *  norms
+ ***************************************************************************************/
+/*
+ * @brief compute inf norm of vector
+ *        norm = max_{i=0,...,m-1} |x[xi+i]|
+ *
+ * @param[in] m number of elements
+ * @param[in,out] sx vector struct
+ * @param[in] xi starting index
+ * @param[out] ptr_norm pointer to the computed norm
+ */
+void dvecnrm_inf(int m, struct vec* sx, int xi, double* ptr_norm);
 
 // void dvecnrm_2(int m, struct vec* sx, int xi, double* ptr_norm);
 
+/***************************************************************************************
+ * permutations
+ ***************************************************************************************/
 // void dvecpe(int kmax, int* ipiv, struct vec* sx, int xi);
-
 // void dvecpei(int kmax, int* ipiv, struct vec* sx, int xi);
+// void drowpe(int kmax, int* ipiv, struct mat* sA);
+// void drowpei(int kmax, int* ipiv, struct mat* sA);
+// void dcolpe(int kmax, int* ipiv, struct mat* sA);
+// void dcolpei(int kmax, int* ipiv, struct mat* sA);
 
 #endif  // TINYHPIPM_BLAS_MISC_H
