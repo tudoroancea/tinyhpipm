@@ -19,9 +19,8 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # create a compile_commands.json file
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE STRING "Installation path" FORCE)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=native")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -mcpu=native")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -Wall -Wextra -Wpedantic -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer")
 
 # #################################################################################
 # create targets and install them #################################################

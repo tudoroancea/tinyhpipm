@@ -1,26 +1,24 @@
-#include "../utils/munit.h"  // TODO: make it non-relative
+#include "../utils/munit.h"  // TODO: make munit include non-relative
+#include "../utils/munit_utils.h"  // TODO: make munit include non-relative
 #include "tinyhpipm/blas/struct.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-
-#define NULL_TEST \
-    { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
-
-#define NULL_SUITE \
-    { NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE }
 
 /***************************************************************************************
  *  memsize
  ***************************************************************************************/
 
 MunitResult test_memsize_mat(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     munit_assert_int(memsize_mat(10, 4), ==, (12 * 4 + 4 * 4) * sizeof(double));
     munit_assert_int(memsize_mat(10, 5), ==, (12 * 8 + 4 * 4) * sizeof(double));
     return MUNIT_OK;
 }
 
 MunitResult test_memsize_vec(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     munit_assert_int(memsize_vec(10), ==, 12 * sizeof(double));
     int n = 1;
     for (int i = 0; i < 10; i++) {
@@ -42,6 +40,8 @@ static MunitTest memsize_tests[] = {
  ***************************************************************************************/
 
 MunitResult test_create_mat_1(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat A;
     create_mat(10, 4, &A, munit_malloc(memsize_mat(10, 4)));
     munit_assert_int(A.m, ==, 10);
@@ -53,6 +53,8 @@ MunitResult test_create_mat_1(const MunitParameter params[], void* fixture) {
 }
 
 MunitResult test_create_mat_2(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat A;
     create_mat(5, 11, &A, munit_malloc(memsize_mat(5, 11)));
     munit_assert_int(A.m, ==, 5);
@@ -64,6 +66,8 @@ MunitResult test_create_mat_2(const MunitParameter params[], void* fixture) {
 }
 
 MunitResult test_create_vec(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct vec v;
     create_vec(10, &v, munit_malloc(memsize_vec(10)));
     munit_assert_int(v.m, ==, 10);
@@ -85,6 +89,8 @@ static MunitTest create_tests[] = {
  ***************************************************************************************/
 
 MunitResult test_index_mat(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat A;
     int m = 5, n = 4;
     double* mem = (double*) munit_malloc(memsize_mat(m, n));
@@ -101,6 +107,8 @@ MunitResult test_index_mat(const MunitParameter params[], void* fixture) {
 }
 
 MunitResult test_index_vec(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct vec v;
     int m = 5;
     double* mem = (double*) munit_malloc(memsize_vec(m));
@@ -126,6 +134,8 @@ static MunitTest indexing_tests[] = {
  ***************************************************************************************/
 // pack whole mat
 MunitResult test_pack_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -143,7 +153,8 @@ MunitResult test_pack_mat_all_rows_all_cols(const MunitParameter params[], void*
 }
 // pack only some cols
 MunitResult test_pack_mat_all_rows_some_cols(const MunitParameter params[], void* fixture) {
-
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -166,6 +177,8 @@ MunitResult test_pack_mat_all_rows_some_cols(const MunitParameter params[], void
 }
 // pack only some rows
 MunitResult test_pack_mat_some_rows_all_cols(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -188,6 +201,8 @@ MunitResult test_pack_mat_some_rows_all_cols(const MunitParameter params[], void
 }
 // pack only some rows and cols
 MunitResult test_pack_mat_some_rows_some_cols(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -210,6 +225,8 @@ MunitResult test_pack_mat_some_rows_some_cols(const MunitParameter params[], voi
 }
 // pack whole mat
 MunitResult test_pack_tran_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -226,6 +243,8 @@ MunitResult test_pack_tran_mat_all_rows_all_cols(const MunitParameter params[], 
     return MUNIT_OK;
 }
 MunitResult test_pack_l_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -246,6 +265,8 @@ MunitResult test_pack_l_mat_all_rows_all_cols(const MunitParameter params[], voi
     return MUNIT_OK;
 }
 MunitResult test_pack_u_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -268,6 +289,8 @@ MunitResult test_pack_u_mat_all_rows_all_cols(const MunitParameter params[], voi
 
 
 MunitResult test_pack_vec_all_elts(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct vec sv;
     int m = 15;
     create_vec(m, &sv, munit_malloc(memsize_vec(m)));
@@ -282,6 +305,8 @@ MunitResult test_pack_vec_all_elts(const MunitParameter params[], void* fixture)
     return MUNIT_OK;
 }
 MunitResult test_pack_vec_some_elts(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct vec sv;
     int m = 15;
     create_vec(m, &sv, munit_malloc(memsize_vec(m)));
@@ -318,7 +343,9 @@ static MunitTest packing_tests[] = {
  *  unpack
  ***************************************************************************************/
 
-MunitResult test_unpack_mat(const MunitParameter params[], void* fiture) {
+MunitResult test_unpack_mat(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -335,7 +362,9 @@ MunitResult test_unpack_mat(const MunitParameter params[], void* fiture) {
     return MUNIT_OK;
 }
 
-MunitResult test_unpack_tran_mat(const MunitParameter params[], void* fiture) {
+MunitResult test_unpack_tran_mat(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct mat sA;
     int m = 12, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
@@ -358,7 +387,9 @@ MunitResult test_unpack_tran_mat(const MunitParameter params[], void* fiture) {
     return MUNIT_OK;
 }
 
-MunitResult test_unpack_vec(const MunitParameter params[], void* fiture) {
+MunitResult test_unpack_vec(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     struct vec sv;
     int m = 15;
     create_vec(m, &sv, munit_malloc(memsize_vec(m)));
@@ -394,8 +425,8 @@ static MunitSuite all_suites[] = {
         NULL_SUITE,
 };
 
-static const MunitSuite giga_suite = {"/blas/struct", NULL, all_suites, 1, MUNIT_SUITE_OPTION_NONE};
+static const MunitSuite file_suite = {"/blas/struct", NULL, all_suites, 1, MUNIT_SUITE_OPTION_NONE};
 
 int main(int argc, char* argv[]) {
-    return munit_suite_main(&giga_suite, NULL, argc, argv);
+    return munit_suite_main(&file_suite, NULL, argc, argv);
 }

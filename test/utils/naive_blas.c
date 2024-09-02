@@ -1,8 +1,9 @@
+#include "naive_blas.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-void naive_dgemv_n(int m, int n, double* A, int lda, double* x, double* z) {
+void naive_dgemv_n(int m, int n, const double* A, int lda, const double* x, double* z) {
     for (int ii = 0; ii < m; ii++) {
         z[ii] = 0.0;
         for (int jj = 0; jj < n; jj++) {
@@ -12,7 +13,7 @@ void naive_dgemv_n(int m, int n, double* A, int lda, double* x, double* z) {
 }
 
 
-void naive_dgemm_nn(int m, int n, int k, double* A, int lda, double* B, int ldb, double* C, int ldc) {
+void naive_dgemm_nn(int m, int n, int k, const double* A, int lda, const double* B, int ldb, double* C, int ldc) {
     for (int jj = 0; jj < n; jj++) {
         for (int ii = 0; ii < m; ii++) {
             C[ii + ldc * jj] = 0;
@@ -24,9 +25,9 @@ void naive_dgemm_nn(int m, int n, int k, double* A, int lda, double* B, int ldb,
 }
 
 
-void naive_daxpy(int n, double da, double* dx, double* dy) {
+void naive_daxpy(int n, double a, const double* x, double* y) {
     for (int i = 0; i < n; i++) {
-        dy[i] += da * dx[i];
+        y[i] += a * x[i];
     }
 }
 
@@ -44,7 +45,7 @@ void naive_dzeros(int m, int n, double* A) {
 }
 
 
-void naive_dmcopy(int row, int col, double* A, int lda, double* B, int ldb) {
+void naive_dmcopy(int row, int col, const double* A, int lda, double* B, int ldb) {
     int i, j;
     for (j = 0; j < col; j++) {
         for (i = 0; i < row; i++) {
@@ -54,7 +55,7 @@ void naive_dmcopy(int row, int col, double* A, int lda, double* B, int ldb) {
 }
 
 
-int idamax_3l(int n, double* x) {
+int idamax_3l(int n, const double* x) {
     if (n <= 0) return 0;
     if (n == 1) return 0;
     double dabs;
@@ -139,7 +140,7 @@ void dgetf2_3l(int m, int n, double* A, int lda, int* ipiv, int* info) {
 }
 
 
-void dlaswp_3l(int n, double* A, int lda, int k1, int k2, int* ipiv) {
+void dlaswp_3l(int n, double* A, int lda, int k1, int k2, const int* ipiv) {
     int i, j, k, ix, ix0, i1, i2, n32, ip;
     double temp;
     ix0 = k1;
@@ -180,7 +181,7 @@ void dlaswp_3l(int n, double* A, int lda, int k1, int k2, int* ipiv) {
 
 
 // left lower no-transp unit
-void dtrsm_l_l_n_u_3l(int m, int n, double* A, int lda, double* B, int ldb) {
+void dtrsm_l_l_n_u_3l(int m, int n, const double* A, int lda, double* B, int ldb) {
     if (m == 0 || n == 0) return;
     int i, j, k;
     for (j = 0; j < n; j++) {
@@ -194,7 +195,7 @@ void dtrsm_l_l_n_u_3l(int m, int n, double* A, int lda, double* B, int ldb) {
 
 
 // left upper no-transp non-unit
-void dtrsm_l_u_n_n_3l(int m, int n, double* A, int lda, double* B, int ldb) {
+void dtrsm_l_u_n_n_3l(int m, int n, const double* A, int lda, double* B, int ldb) {
     if (m == 0 || n == 0) return;
     int i, j, k;
     for (j = 0; j < n; j++) {
@@ -232,7 +233,7 @@ void naive_dgesv(int n, int nrhs, double* A, int lda, int* ipiv, double* B, int 
 
 
 /* one norm of a matrix */
-double onenorm(int row, int col, double* ptrA) {
+double onenorm(int row, int col, const double* ptrA) {
     double max, temp;
     int i, j;
     temp = 0;
@@ -249,7 +250,9 @@ double onenorm(int row, int col, double* ptrA) {
 }
 
 
-// computes the Pade approximation of degree m of the matrix A, used in expm
+/*
+ * @brief computes the Pade approximation of degree m of the matrix A, used in expm
+ */
 void padeapprox(int m, int row, double* A) {
     int row2 = row * row;
     /*	int i1 = 1;*/
