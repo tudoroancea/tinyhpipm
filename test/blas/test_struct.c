@@ -139,7 +139,7 @@ MunitResult test_pack_mat_all_rows_all_cols(const MunitParameter params[], void*
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -151,6 +151,7 @@ MunitResult test_pack_mat_all_rows_all_cols(const MunitParameter params[], void*
     }
     return MUNIT_OK;
 }
+
 // pack only some cols
 MunitResult test_pack_mat_all_rows_some_cols(const MunitParameter params[], void* fixture) {
     (void) params;
@@ -158,7 +159,7 @@ MunitResult test_pack_mat_all_rows_some_cols(const MunitParameter params[], void
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -175,6 +176,7 @@ MunitResult test_pack_mat_all_rows_some_cols(const MunitParameter params[], void
     }
     return MUNIT_OK;
 }
+
 // pack only some rows
 MunitResult test_pack_mat_some_rows_all_cols(const MunitParameter params[], void* fixture) {
     (void) params;
@@ -182,7 +184,7 @@ MunitResult test_pack_mat_some_rows_all_cols(const MunitParameter params[], void
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -199,6 +201,7 @@ MunitResult test_pack_mat_some_rows_all_cols(const MunitParameter params[], void
     }
     return MUNIT_OK;
 }
+
 // pack only some rows and cols
 MunitResult test_pack_mat_some_rows_some_cols(const MunitParameter params[], void* fixture) {
     (void) params;
@@ -206,7 +209,7 @@ MunitResult test_pack_mat_some_rows_some_cols(const MunitParameter params[], voi
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -223,6 +226,7 @@ MunitResult test_pack_mat_some_rows_some_cols(const MunitParameter params[], voi
     }
     return MUNIT_OK;
 }
+
 // pack whole mat
 MunitResult test_pack_tran_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
     (void) params;
@@ -230,7 +234,7 @@ MunitResult test_pack_tran_mat_all_rows_all_cols(const MunitParameter params[], 
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);  // A is to be understood of dims n x m
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -242,13 +246,14 @@ MunitResult test_pack_tran_mat_all_rows_all_cols(const MunitParameter params[], 
     }
     return MUNIT_OK;
 }
+
 MunitResult test_pack_l_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
     (void) params;
     (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);  // A is to be understood of dims m x n
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -264,13 +269,14 @@ MunitResult test_pack_l_mat_all_rows_all_cols(const MunitParameter params[], voi
     }
     return MUNIT_OK;
 }
+
 MunitResult test_pack_u_mat_all_rows_all_cols(const MunitParameter params[], void* fixture) {
     (void) params;
     (void) fixture;
     struct mat sA;
     int m = 15, n = 12;
     create_mat(m, n, &sA, munit_malloc(memsize_mat(m, n)));
-    double* A = (double*) munit_malloc(m * n);  // A is to be understood of dims m x n
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     for (int k = 0; k < m * n; k++) {
         A[k] = (double) k;
     }
@@ -287,14 +293,13 @@ MunitResult test_pack_u_mat_all_rows_all_cols(const MunitParameter params[], voi
     return MUNIT_OK;
 }
 
-
 MunitResult test_pack_vec_all_elts(const MunitParameter params[], void* fixture) {
     (void) params;
     (void) fixture;
     struct vec sv;
     int m = 15;
     create_vec(m, &sv, munit_malloc(memsize_vec(m)));
-    double* v = (double*) munit_malloc(m);
+    double* v = (double*) munit_calloc(m, sizeof(double));
     for (int k = 0; k < m; k++) {
         v[k] = (double) k;
     }
@@ -304,13 +309,14 @@ MunitResult test_pack_vec_all_elts(const MunitParameter params[], void* fixture)
     }
     return MUNIT_OK;
 }
+
 MunitResult test_pack_vec_some_elts(const MunitParameter params[], void* fixture) {
     (void) params;
     (void) fixture;
     struct vec sv;
     int m = 15;
     create_vec(m, &sv, munit_malloc(memsize_vec(m)));
-    double* v = (double*) munit_malloc(m);
+    double* v = (double*) munit_calloc(m, sizeof(double));
     for (int k = 0; k < m; k++) {
         v[k] = (double) k;
     }
@@ -354,7 +360,7 @@ MunitResult test_unpack_mat(const MunitParameter params[], void* fixture) {
             MATEL(&sA, i, j) = (double) (j * m + i);
         }
     }
-    double* A = (double*) munit_malloc(m * n);  // A is to be understood of dims m x n
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     unpack_mat(m, n, &sA, 0, 0, A, m);
     for (int k = 0; k < m * n; k++) {
         munit_assert_double(A[k], ==, (double) k);
@@ -373,7 +379,7 @@ MunitResult test_unpack_tran_mat(const MunitParameter params[], void* fixture) {
             MATEL(&sA, i, j) = (double) (j * m + i);
         }
     }
-    double* A = (double*) munit_malloc(m * n);  // A is to be understood of dims m x n
+    double* A = (double*) munit_calloc(m * n, sizeof(double));  // A is to be understood of dims m x n
     unpack_tran_mat(m, n, &sA, 0, 0, A, m);
     struct vec sv;
     create_vec(m * n, &sv, munit_malloc(memsize_vec(m * n)));
@@ -396,7 +402,7 @@ MunitResult test_unpack_vec(const MunitParameter params[], void* fixture) {
     for (int i = 0; i < m; i++) {
         VECEL(&sv, i) = (double) i;
     }
-    double* v = (double*) munit_malloc(m);
+    double* v = (double*) munit_calloc(m, sizeof(double));
     unpack_vec(m, &sv, 0, v, 1);
     for (int k = 0; k < m; k++) {
         munit_assert_double(v[k], ==, (double) k);
