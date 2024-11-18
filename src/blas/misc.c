@@ -1652,10 +1652,10 @@ void dtrsc_l(int m, double alpha, struct mat* sA, int ai, int aj) {
 
 // copy a strvec into a strvec
 void dveccp(int m, struct vec* sx, int xi, struct vec* sy, int yi) {
-    double* pa = sx->pa + xi;
-    double* pc = sy->pa + yi;
+    double* px = sx->pa + xi;
+    double* py = sy->pa + yi;
     for (int ii = 0; ii < m; ii++) {
-        pc[ii] = pa[ii];
+        py[ii] = px[ii];
     }
 }
 

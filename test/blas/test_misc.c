@@ -12,37 +12,29 @@
  *  get and set
  ***************************************************************************************/
 
-MunitResult test_dgese(const MunitParameter params[], void* fixture) {
+MunitResult test_dvecex_sp(const MunitParameter params[], void* fixture) {
     (void) params;
     (void) fixture;
-    const int m = 5, n = 7;
-    struct mat A;
-    create_mat(m, n, &A, munit_malloc(memsize_mat(m, n)));
-
-    double alpha = 1.0;
-    dgese(m, n, alpha, &A, 0, 0);
-    for (int i = 0; i < m; ++i) {
-        for (int j = 0; j < n; ++j) {
-            munit_assert_double(MATEL(&A, i, j), ==, alpha);
-        }
-    }
-
-    alpha = 2.0;
-    dgese(m - 1, n - 1, alpha, &A, 1, 1);
-    for (int i = 1; i < m; ++i) {
-        for (int j = 1; j < n; ++j) {
-            munit_assert_double(MATEL(&A, i, j), ==, alpha);
-        }
-    }
-
-    alpha = 3.0;
-    dgese(m - 1, n - 1, alpha, &A, 0, 1);
-    for (int i = 0; i < m - 1; ++i) {
-        for (int j = 1; j < n; ++j) {
-            munit_assert_double(MATEL(&A, i, j), ==, alpha);
-        }
-    }
-
+    return MUNIT_OK;
+}
+MunitResult test_drowin(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
+    return MUNIT_OK;
+}
+MunitResult test_drowex(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
+    return MUNIT_OK;
+}
+MunitResult test_dcolin(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
+    return MUNIT_OK;
+}
+MunitResult test_dcolex(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
     return MUNIT_OK;
 }
 MunitResult test_ddiaex(const MunitParameter params[], void* fixture) {
@@ -78,10 +70,54 @@ MunitResult test_ddiaex(const MunitParameter params[], void* fixture) {
 
     return MUNIT_OK;
 }
+MunitResult test_dvecse(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
+    return MUNIT_OK;
+}
+MunitResult test_dgese(const MunitParameter params[], void* fixture) {
+    (void) params;
+    (void) fixture;
+    const int m = 5, n = 7;
+    struct mat A;
+    create_mat(m, n, &A, munit_malloc(memsize_mat(m, n)));
+
+    double alpha = 1.0;
+    dgese(m, n, alpha, &A, 0, 0);
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            munit_assert_double(MATEL(&A, i, j), ==, alpha);
+        }
+    }
+
+    alpha = 2.0;
+    dgese(m - 1, n - 1, alpha, &A, 1, 1);
+    for (int i = 1; i < m; ++i) {
+        for (int j = 1; j < n; ++j) {
+            munit_assert_double(MATEL(&A, i, j), ==, alpha);
+        }
+    }
+
+    alpha = 3.0;
+    dgese(m - 1, n - 1, alpha, &A, 0, 1);
+    for (int i = 0; i < m - 1; ++i) {
+        for (int j = 1; j < n; ++j) {
+            munit_assert_double(MATEL(&A, i, j), ==, alpha);
+        }
+    }
+
+    return MUNIT_OK;
+}
 
 static MunitTest get_set_tests[] = {
-        {"/dgese", test_dgese, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/dvecex_sp", test_dvecex_sp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/drowin", test_drowin, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/drowex", test_drowex, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/dcolin", test_dcolin, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/dcolex", test_dcolex, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
         {"/ddiaex", test_ddiaex, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/dvecse", test_dvecse, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+        {"/dgese", test_dgese, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
         NULL_TEST};
 
 

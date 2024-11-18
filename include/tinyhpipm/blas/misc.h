@@ -11,7 +11,18 @@
 // double dvecex1(struct vec* sx, int xi);
 // z[idx] <= alpha * x
 // void dvecin_sp(int m, double alpha, struct vec* sx, int xi, int* idx, struct vec* sz, int zi);
-// z <= alpha * x[idx]
+/*
+ *@brief extract part of a vector x into a vector y based on a sparsity pattern and scale it
+ *       y[idx] = alpha * x[idx]
+ *
+ * @param[in] m number of elements in the vector
+ * @param[in] alpha scaling factor
+ * @param[in] idx indices of the elements to extract, all relative to the starting index of the vector
+ * @param[in] sx vector struct
+ * @param[in] xi starting index of the vector
+ * @param[out] sz vector struct
+ * @param[in] zi starting index of the vector
+ */
 void dvecex_sp(int m, double alpha, int* idx, struct vec* sx, int xi, struct vec* sz, int zi);
 // sA[ai, aj] <= a
 // void dgein1(double a, struct mat* sA, int ai, int aj);
@@ -83,13 +94,45 @@ void dgese(int m, int n, double alpha, struct mat* sA, int ai, int aj);
 /***************************************************************************************
  *  copy
  ***************************************************************************************/
-// y <= x
+/*
+ * @brief Copy part of a vector into another vector.
+ *        y[yi:yi+m] = x[xi:xi+m]
+ *
+ * @param[in] m number of elements to copy
+ * @param[in] sx source vector struct
+ * @param[in] xi starting index of source vector
+ * @param[out] sy destination vector struct
+ * @param[in] yi starting index of destination vector
+ */
 void dveccp(int m, struct vec* sx, int xi, struct vec* sy, int yi);
-// B <= A
+/*
+ * @brief copy part of a general matrix A into another matrix B
+ *        B[bi:bi+m, bj:bj+n] = A[ai:ai+m, aj:aj+n]
+ *
+ * @param[in] m number of rows to copy
+ * @param[in] n number of columns to copy
+ * @param[in,out] sA source matrix struct
+ * @param[in] ai starting row index
+ * @param[in] aj starting column index
+ * @param[in,out] sB destination matrix struct
+ * @param[in] bi starting row index
+ * @param[in] bj starting column index
+ */
 void dgecp(int m, int n, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
-// B <= A, A lower triangular
+/*
+ * @brief copy part of the lower triangular part of a matrix A into another matrix B
+ *        B[bi:bi+m, bj:bj+n] = A[ai:ai+m, aj:aj+n]
+ *
+ * @param[in] m number of rows to copy
+ * @param[in] n number of columns to copy
+ * @param[in,out] sA source matrix struct
+ * @param[in] ai starting row index
+ * @param[in] aj starting column index
+ * @param[in,out] sB destination matrix struct
+ * @param[in] bi starting row index
+ * @param[in] bj starting column index
+ */
 void dtrcp_l(int m, struct mat* sA, int ai, int aj, struct mat* sB, int bi, int bj);
-
 
 /***************************************************************************************
  *  transpositions
