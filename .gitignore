@@ -40,3 +40,5 @@ change_name.sh
 cmake
 doc
 examples
+src.old
+include.old

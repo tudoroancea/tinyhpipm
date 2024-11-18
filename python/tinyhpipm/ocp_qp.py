@@ -9,84 +9,83 @@ from ctypes import (
     cast,
     create_string_buffer,
 )
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 
-from tinyhpipm.common import FloatOrInt, hpipm_lib_name
+from tinyhpipm.common import FloatOrInt, tinyhpipm_lib_name
 
-
-class hpipm_ocp_qp_dim:
+class ocp_qp_dim:
     def __init__(self, N: int):
-        # load hpipm shared library
-        __hpipm = CDLL(hpipm_lib_name)
-        self.__hpipm = __hpipm
+        # load tinyhpipm shared library
+        __tinyhpipm = CDLL(tinyhpipm_lib_name)
+        self.__tinyhpipm = __tinyhpipm
 
         # C dim struct
-        dim_struct_size = __hpipm.d_ocp_qp_dim_strsize()
+        dim_struct_size = __tinyhpipm.d_ocp_qp_dim_strsize()
         dim_struct = cast(create_string_buffer(dim_struct_size), c_void_p)
         self.dim_struct = dim_struct
 
         # C dim internal memory
-        dim_mem_size = __hpipm.d_ocp_qp_dim_memsize(N)
+        dim_mem_size = __tinyhpipm.d_ocp_qp_dim_memsize(N)
         dim_mem = cast(create_string_buffer(dim_mem_size), c_void_p)
         self.dim_mem = dim_mem
 
         # create C dim
-        __hpipm.d_ocp_qp_dim_create(N, self.dim_struct, self.dim_mem)
+        __tinyhpipm.d_ocp_qp_dim_create(N, self.dim_struct, self.dim_mem)
 
-    def set(self, field: str, value: int, idx_start: int, idx_end: int = None):
-        self.__hpipm.d_ocp_qp_dim_set.argtypes = [c_char_p, c_int, c_int, c_void_p]
+    def set(self, field: str, value: int, idx_start: int, idx_end: Optional[int] = None):
+        self.__tinyhpipm.d_ocp_qp_dim_set.argtypes = [c_char_p, c_int, c_int, c_void_p]
         field_name_b = field.encode("utf-8")
         if idx_end is None:
-            self.__hpipm.d_ocp_qp_dim_set(
+            self.__tinyhpipm.d_ocp_qp_dim_set(
                 c_char_p(field_name_b), idx_start, value, self.dim_struct
             )
         else:
             for i in range(idx_start, idx_end + 1):
-                self.__hpipm.d_ocp_qp_dim_set(
+                self.__tinyhpipm.d_ocp_qp_dim_set(
                     c_char_p(field_name_b), i, value, self.dim_struct
                 )
 
     def print_c_struct(self):
-        self.__hpipm.d_ocp_qp_dim_print(self.dim_struct)
+        self.__tinyhpipm.d_ocp_qp_dim_print(self.dim_struct)
 
     def codegen(self, file_name: str, mode: str):
         file_name_b = file_name.encode("utf-8")
         mode_b = mode.encode("utf-8")
-        self.__hpipm.d_ocp_qp_dim_codegen(
+        self.__tinyhpipm.d_ocp_qp_dim_codegen(
             c_char_p(file_name_b), c_char_p(mode_b), self.dim_struct
         )
 
 
-class hpipm_ocp_qp:
-    def __init__(self, dim: hpipm_ocp_qp_dim):
+class ocp_qp:
+    def __init__(self, dim: ocp_qp_dim):
         # save dim internally
         self.dim = dim
 
-        # load hpipm shared library
-        __hpipm = CDLL(hpipm_lib_name)
-        self.__hpipm = __hpipm
+        # load tinyhpipm shared library
+        __tinyhpipm = CDLL(tinyhpipm_lib_name)
+        self.__tinyhpipm = __tinyhpipm
 
         # C qp struct
-        qp_struct_size = __hpipm.d_ocp_qp_strsize()
+        qp_struct_size = __tinyhpipm.d_ocp_qp_strsize()
         qp_struct = cast(create_string_buffer(qp_struct_size), c_void_p)
         self.qp_struct = qp_struct
 
         # C qp internal memory
-        qp_mem_size = __hpipm.d_ocp_qp_memsize(dim.dim_struct)
+        qp_mem_size = __tinyhpipm.d_ocp_qp_memsize(dim.dim_struct)
         qp_mem = cast(create_string_buffer(qp_mem_size), c_void_p)
         self.qp_mem = qp_mem
 
         # create C qp
-        __hpipm.d_ocp_qp_create(dim.dim_struct, qp_struct, qp_mem)
+        __tinyhpipm.d_ocp_qp_create(dim.dim_struct, qp_struct, qp_mem)
 
     def set(
         self,
         field: str,
         value: Union[np.ndarray, float, int],
         idx_start: int,
-        idx_end: int = None,
+        idx_end: Optional[int] = None,
     ):
         # cast to np array
         value = np.atleast_1d(value)
@@ -100,71 +99,71 @@ class hpipm_ocp_qp:
             tmp = cast(value_cm.ctypes.data, POINTER(c_double))
         field_name_b = field.encode("utf-8")
         if idx_end is None:
-            self.__hpipm.d_ocp_qp_set(
+            self.__tinyhpipm.d_ocp_qp_set(
                 c_char_p(field_name_b), idx_start, tmp, self.qp_struct
             )
         else:
             for i in range(idx_start, idx_end + 1):
-                self.__hpipm.d_ocp_qp_set(
+                self.__tinyhpipm.d_ocp_qp_set(
                     c_char_p(field_name_b), i, tmp, self.qp_struct
                 )
 
     def print_c_struct(self):
-        self.__hpipm.d_ocp_qp_print(self.dim.dim_struct, self.qp_struct)
+        self.__tinyhpipm.d_ocp_qp_print(self.dim.dim_struct, self.qp_struct)
 
     def codegen(self, file_name, mode):
         file_name_b = file_name.encode("utf-8")
         mode_b = mode.encode("utf-8")
-        self.__hpipm.d_ocp_qp_codegen(
+        self.__tinyhpipm.d_ocp_qp_codegen(
             c_char_p(file_name_b), c_char_p(mode_b), self.dim.dim_struct, self.qp_struct
         )
 
 
-class hpipm_ocp_qp_sol:
-    def __init__(self, dim: hpipm_ocp_qp_dim):
+class ocp_qp_sol:
+    def __init__(self, dim: ocp_qp_dim):
         # save dim internally
         self.dim = dim
 
-        # load hpipm shared library
-        __hpipm = CDLL(hpipm_lib_name)
-        self.__hpipm = __hpipm
+        # load tinyhpipm shared library
+        __tinyhpipm = CDLL(tinyhpipm_lib_name)
+        self.__tinyhpipm = __tinyhpipm
 
         # C qp struct
-        qp_sol_struct_size = __hpipm.d_ocp_qp_sol_strsize()
+        qp_sol_struct_size = __tinyhpipm.d_ocp_qp_sol_strsize()
         qp_sol_struct = cast(create_string_buffer(qp_sol_struct_size), c_void_p)
         self.qp_sol_struct = qp_sol_struct
 
         # C qp internal memory
-        qp_sol_mem_size = __hpipm.d_ocp_qp_sol_memsize(dim.dim_struct)
+        qp_sol_mem_size = __tinyhpipm.d_ocp_qp_sol_memsize(dim.dim_struct)
         qp_sol_mem = cast(create_string_buffer(qp_sol_mem_size), c_void_p)
         self.qp_sol_mem = qp_sol_mem
 
         # create C qp
-        __hpipm.d_ocp_qp_sol_create(dim.dim_struct, qp_sol_struct, qp_sol_mem)
+        __tinyhpipm.d_ocp_qp_sol_create(dim.dim_struct, qp_sol_struct, qp_sol_mem)
 
         # getter functions for controls, states and slacks
         self.__getters = {
             "u": {
-                "n_var": __hpipm.d_ocp_qp_dim_get_nu,
-                "var": __hpipm.d_ocp_qp_sol_get_u,
+                "n_var": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "var": __tinyhpipm.d_ocp_qp_sol_get_u,
             },
             "x": {
-                "n_var": __hpipm.d_ocp_qp_dim_get_nx,
-                "var": __hpipm.d_ocp_qp_sol_get_x,
+                "n_var": __tinyhpipm.d_ocp_qp_dim_get_nx,
+                "var": __tinyhpipm.d_ocp_qp_sol_get_x,
             },
             "sl": {
-                "n_var": __hpipm.d_ocp_qp_dim_get_ns,
-                "var": __hpipm.d_ocp_qp_sol_get_sl,
+                "n_var": __tinyhpipm.d_ocp_qp_dim_get_ns,
+                "var": __tinyhpipm.d_ocp_qp_sol_get_sl,
             },
             "su": {
-                "n_var": __hpipm.d_ocp_qp_dim_get_ns,
-                "var": __hpipm.d_ocp_qp_sol_get_su,
+                "n_var": __tinyhpipm.d_ocp_qp_dim_get_ns,
+                "var": __tinyhpipm.d_ocp_qp_sol_get_su,
             },
         }
 
     def get(self, field, idx_start, idx_end=None):
         if field not in self.__getters:
-            raise NameError("hpipm_ocp_qp_sol.get: wrong field")
+            raise NameError("tinyhpipm_ocp_qp_sol.get: wrong field")
         else:
             return self.__get(self.__getters[field], idx_start, idx_end)
 
@@ -188,11 +187,11 @@ class hpipm_ocp_qp_sol:
         return var if len(var) > 1 else var[0]
 
     def print_c_struct(self):
-        self.__hpipm.d_ocp_qp_sol_print(self.dim.dim_struct, self.qp_sol_struct)
+        self.__tinyhpipm.d_ocp_qp_sol_print(self.dim.dim_struct, self.qp_sol_struct)
 
 
-class hpipm_ocp_qp_solver_arg:
-    def __init__(self, dim: hpipm_ocp_qp_dim, mode):
+class ocp_qp_solver_arg:
+    def __init__(self, dim: ocp_qp_dim, mode):
         c_mode = 0
         if mode == "speed_abs":
             c_mode = 0
@@ -203,30 +202,30 @@ class hpipm_ocp_qp_solver_arg:
         elif mode == "robust":
             c_mode = 3
         else:
-            raise NameError("hpipm_ocp_qp_solver_arg: wrong mode")
+            raise NameError("tinyhpipm_ocp_qp_solver_arg: wrong mode")
 
         # save dim internally
         self.dim = dim
 
-        # load hpipm shared library
-        __hpipm = CDLL(hpipm_lib_name)
-        self.__hpipm = __hpipm
+        # load tinyhpipm shared library
+        __tinyhpipm = CDLL(tinyhpipm_lib_name)
+        self.__tinyhpipm = __tinyhpipm
 
         # C qp struct
-        arg_struct_size = __hpipm.d_ocp_qp_ipm_arg_strsize()
+        arg_struct_size = __tinyhpipm.d_ocp_qp_ipm_arg_strsize()
         arg_struct = cast(create_string_buffer(arg_struct_size), c_void_p)
         self.arg_struct = arg_struct
 
         # C qp internal memory
-        arg_mem_size = __hpipm.d_ocp_qp_ipm_arg_memsize(dim.dim_struct)
+        arg_mem_size = __tinyhpipm.d_ocp_qp_ipm_arg_memsize(dim.dim_struct)
         arg_mem = cast(create_string_buffer(arg_mem_size), c_void_p)
         self.arg_mem = arg_mem
 
         # create C qp
-        __hpipm.d_ocp_qp_ipm_arg_create(dim.dim_struct, arg_struct, arg_mem)
+        __tinyhpipm.d_ocp_qp_ipm_arg_create(dim.dim_struct, arg_struct, arg_mem)
 
         # initialize default arguments
-        __hpipm.d_ocp_qp_ipm_arg_set_default(c_mode, arg_struct)  # mode==SPEED
+        __tinyhpipm.d_ocp_qp_ipm_arg_set_default(c_mode, arg_struct)  # mode==SPEED
 
     def set(self, field, value):
         if (
@@ -245,15 +244,17 @@ class hpipm_ocp_qp_solver_arg:
             tmp_in[0][0] = value
             tmp = cast(tmp_in.ctypes.data, POINTER(c_int))
         else:
-            raise NameError("hpipm_ocp_qp_solver_arg.set: wrong field")
+            raise NameError("tinyhpipm_ocp_qp_solver_arg.set: wrong field")
 
         field_name_b = field.encode("utf-8")
-        self.__hpipm.d_ocp_qp_ipm_arg_set(c_char_p(field_name_b), tmp, self.arg_struct)
+        self.__tinyhpipm.d_ocp_qp_ipm_arg_set(
+            c_char_p(field_name_b), tmp, self.arg_struct
+        )
 
     def codegen(self, file_name, mode):
         file_name_b = file_name.encode("utf-8")
         mode_b = mode.encode("utf-8")
-        self.__hpipm.d_ocp_qp_ipm_arg_codegen(
+        self.__tinyhpipm.d_ocp_qp_ipm_arg_codegen(
             c_char_p(file_name_b),
             c_char_p(mode_b),
             self.dim.dim_struct,
@@ -261,26 +262,26 @@ class hpipm_ocp_qp_solver_arg:
         )
 
 
-class hpipm_ocp_qp_solver:
-    def __init__(self, dim: hpipm_ocp_qp_dim, arg):
-        # load hpipm shared library
-        __hpipm = CDLL(hpipm_lib_name)
-        self.__hpipm = __hpipm
+class ocp_qp_solver:
+    def __init__(self, dim: ocp_qp_dim, arg):
+        # load tinyhpipm shared library
+        __tinyhpipm = CDLL(tinyhpipm_lib_name)
+        self.__tinyhpipm = __tinyhpipm
 
         # set up ipm workspace struct
-        sizeof_d_ocp_qp_ipm_workspace = __hpipm.d_ocp_qp_ipm_ws_strsize()
+        sizeof_d_ocp_qp_ipm_workspace = __tinyhpipm.d_ocp_qp_ipm_ws_strsize()
         ipm_ws_struct = cast(
             create_string_buffer(sizeof_d_ocp_qp_ipm_workspace), c_void_p
         )
         self.ipm_ws_struct = ipm_ws_struct
 
         # allocate memory for ipm workspace
-        ipm_size = __hpipm.d_ocp_qp_ipm_ws_memsize(dim.dim_struct, arg.arg_struct)
+        ipm_size = __tinyhpipm.d_ocp_qp_ipm_ws_memsize(dim.dim_struct, arg.arg_struct)
         ipm_ws_mem = cast(create_string_buffer(ipm_size), c_void_p)
         self.ipm_ws_mem = ipm_ws_mem
 
         # create C ws
-        __hpipm.d_ocp_qp_ipm_ws_create(
+        __tinyhpipm.d_ocp_qp_ipm_ws_create(
             dim.dim_struct, arg.arg_struct, ipm_ws_struct, ipm_ws_mem
         )
 
@@ -291,47 +292,47 @@ class hpipm_ocp_qp_solver:
         # getter functions for feedback matrices
         self.__getters = {
             "ric_Lr": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nu,
-                "n_col": __hpipm.d_ocp_qp_dim_get_nu,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_Lr,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "n_col": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_Lr,
             },
             "ric_Ls": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nx,
-                "n_col": __hpipm.d_ocp_qp_dim_get_nu,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_Ls,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nx,
+                "n_col": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_Ls,
             },
             "ric_P": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nx,
-                "n_col": __hpipm.d_ocp_qp_dim_get_nx,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_P,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nx,
+                "n_col": __tinyhpipm.d_ocp_qp_dim_get_nx,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_P,
             },
             "ric_lr": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nu,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_lr,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_lr,
             },
             "ric_p": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nx,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_p,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nx,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_p,
             },
             "ric_K": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nu,
-                "n_col": __hpipm.d_ocp_qp_dim_get_nx,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_K,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "n_col": __tinyhpipm.d_ocp_qp_dim_get_nx,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_K,
             },
             "ric_k": {
-                "n_row": __hpipm.d_ocp_qp_dim_get_nu,
-                "var": __hpipm.d_ocp_qp_ipm_get_ric_k,
+                "n_row": __tinyhpipm.d_ocp_qp_dim_get_nu,
+                "var": __tinyhpipm.d_ocp_qp_ipm_get_ric_k,
             },
         }
 
     def solve(self, qp, qp_sol):
-        self.__hpipm.d_ocp_qp_ipm_solve(
+        self.__tinyhpipm.d_ocp_qp_ipm_solve(
             qp.qp_struct, qp_sol.qp_sol_struct, self.arg.arg_struct, self.ipm_ws_struct
         )
 
     def get_feedback(self, qp, field, idx_start, idx_end=None):
         if field not in self.__getters:
-            raise NameError("hpipm_ocp_qp_solver.get: wrong field")
+            raise NameError("tinyhpipm_ocp_qp_solver.get: wrong field")
         else:
             if idx_end is None:
                 idx_end = idx_start
@@ -364,15 +365,15 @@ class hpipm_ocp_qp_solver:
             # get iters
             iters = np.zeros((1, 1), dtype=int)
             tmp = cast(iters.ctypes.data, POINTER(c_int))
-            self.__hpipm.d_ocp_qp_ipm_get_iter(self.ipm_ws_struct, tmp)
+            self.__tinyhpipm.d_ocp_qp_ipm_get_iter(self.ipm_ws_struct, tmp)
             # get stat_m
             stat_m = np.zeros((1, 1), dtype=int)
             tmp = cast(stat_m.ctypes.data, POINTER(c_int))
-            self.__hpipm.d_ocp_qp_ipm_get_stat_m(self.ipm_ws_struct, tmp)
+            self.__tinyhpipm.d_ocp_qp_ipm_get_stat_m(self.ipm_ws_struct, tmp)
             # get stat pointer
             res = np.zeros((iters[0][0] + 1, stat_m[0][0]))
             ptr = c_void_p()
-            self.__hpipm.d_ocp_qp_ipm_get_stat(self.ipm_ws_struct, byref(ptr))
+            self.__tinyhpipm.d_ocp_qp_ipm_get_stat(self.ipm_ws_struct, byref(ptr))
             tmp = cast(ptr, POINTER(c_double))
             for ii in range(iters[0][0] + 1):
                 for jj in range(stat_m[0][0]):
@@ -390,7 +391,9 @@ class hpipm_ocp_qp_solver:
             res = np.zeros((1, 1))
             tmp = cast(res.ctypes.data, POINTER(c_double))
         else:
-            raise NameError("hpipm_ocp_qp_solver.get: wrong field")
+            raise NameError("tinyhpipm_ocp_qp_solver.get: wrong field")
         field_name_b = field.encode("utf-8")
-        self.__hpipm.d_ocp_qp_ipm_get(c_char_p(field_name_b), self.ipm_ws_struct, tmp)
+        self.__tinyhpipm.d_ocp_qp_ipm_get(
+            c_char_p(field_name_b), self.ipm_ws_struct, tmp
+        )
         return res[0][0]

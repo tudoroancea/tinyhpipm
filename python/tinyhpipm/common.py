@@ -13,7 +13,7 @@ def dynamic_library_extension():
         raise NameError("dynamic_library_extension: unknown platform")
 
 
-hpipm_lib_name = "libhpipm_dynamic" + dynamic_library_extension()
+tinyhpipm_lib_name = "libtinyhpipm_dynamic" + dynamic_library_extension()
 
 
 FloatOrInt = Union[float, int]
